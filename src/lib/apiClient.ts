@@ -49,9 +49,17 @@ async function fetchWrapper(endpoint: string, options: RequestInit = {}) {
   let response = await fetch(`${API_URL}${endpoint}`, config);
 
   if (response.status === 401) {
+    let errorData;
+    try {
+      errorData = await response.clone().json();
+    } catch {
+      errorData = null;
+    }
+    const realMessage = errorData?.error?.message || errorData?.message || "Session expired or invalid credentials";
+
     if (endpoint === '/auth/refresh-token' || endpoint === '/auth/login') {
       handleAuthFailure();
-      throw new ApiError("Session expired or invalid credentials", 401);
+      throw new ApiError(realMessage, 401, errorData);
     }
 
     if (!isRefreshing) {

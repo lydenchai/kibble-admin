@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiClient, ApiError } from "../../../lib/apiClient";
+import { EyeOff, Eye } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showNew, setShowNew] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +20,7 @@ export default function LoginPage() {
 
     try {
       const response = await apiClient.post("/auth/login", { email, password });
-      
+
       if (response.success && response.data?.accessToken) {
         localStorage.setItem("accessToken", response.data.accessToken);
         // Refresh the router to pick up the token on client side, and push to dashboard
@@ -48,7 +50,10 @@ export default function LoginPage() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email-address">
+              <label
+                className="block text-sm font-medium text-gray-700 mb-1"
+                htmlFor="email-address"
+              >
                 Email address
               </label>
               <input
@@ -57,27 +62,41 @@ export default function LoginPage() {
                 type="email"
                 autoComplete="email"
                 required
-                 className="block w-full rounded-lg border border-gray-200 bg-gray-50/50 py-2.5 px-4 text-gray-900 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all sm:text-sm"
+                className="block w-full rounded-lg border border-gray-200 bg-gray-50/50 py-2.5 px-4 text-gray-900 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all sm:text-sm"
                 placeholder="admin@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
+            <div className="relative">
+              <label
+                className="block text-sm font-medium text-gray-700 mb-1"
+                htmlFor="password"
+              >
                 Password
               </label>
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showNew ? "text" : "password"}
                 autoComplete="current-password"
                 required
-                 className="block w-full rounded-lg border border-gray-200 bg-gray-50/50 py-2.5 px-4 text-gray-900 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all sm:text-sm"
+                className="block w-full rounded-lg border border-gray-200 bg-gray-50/50 py-2.5 px-4 text-gray-900 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all sm:text-sm"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button
+                type="button"
+                onClick={() => setShowNew(!showNew)}
+                className="absolute right-3 top-12 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+              >
+                {showNew ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
             </div>
           </div>
 
