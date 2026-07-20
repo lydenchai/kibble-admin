@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { apiClient } from "../../../lib/apiClient";
+import { updateSettingsAction, fetchSettingsAction } from "../../../actions/settings.actions";
 
 
 interface StoreSettings {
@@ -18,7 +19,8 @@ export default function SettingsPage() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await apiClient.get("/settings");
+        const token = localStorage.getItem('accessToken');
+        const res = await fetchSettingsAction(token);
         if (res.success) {
           setSettings(res.data);
         }
@@ -35,7 +37,8 @@ export default function SettingsPage() {
     e.preventDefault();
     setSaving(true);
     try {
-      const res = await apiClient.put("/settings", settings);
+      const token = localStorage.getItem('accessToken');
+      const res = await updateSettingsAction(settings, token);
       if (res.success) {
         alert("Settings saved successfully!");
       } else {

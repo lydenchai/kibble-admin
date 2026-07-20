@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { fetchCategoryByIdAction } from "../../../../lib/actions/category.actions";
+import { fetchCategoryByIdAction } from "../../../../actions/category.actions";
 import CategoryForm from "../_components/CategoryForm";
 
 export default function EditCategoryPage({ params }: { params: Promise<{ id: string }> }) {

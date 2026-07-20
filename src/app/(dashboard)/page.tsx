@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { apiClient } from "../../lib/apiClient";
+import { fetchDashboardAnalyticsAction } from "../../actions/analytics.actions";
 
 
 interface DashboardData {
@@ -23,7 +23,8 @@ export default function Home() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await apiClient.get("/analytics/dashboard");
+        const token = localStorage.getItem('accessToken');
+        const res = await fetchDashboardAnalyticsAction(token);
         if (res.success) {
           setData(res.data);
         } else {

@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { apiClient } from "../../../../lib/apiClient";
-import { fetchCategoriesAction } from "../../../../lib/actions/category.actions";
+import { fetchCategoriesAction } from "../../../../actions/category.actions";
 import { FiPlus as FiPlusBase, FiTrash2 as FiTrash2Base, FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase } from "react-icons/fi";
-import { CategoryType } from "@/src/app/_types/category";
+import { CategoryType } from "@/app/_types/category";
+import { createProductAction, updateProductAction } from "@/actions/product.actions";
+ 
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiTrash2 = FiTrash2Base as React.ElementType;
@@ -95,16 +96,18 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
         images: formData.images.filter((i: string) => i.trim() !== "")
       };
 
+      const token = localStorage.getItem("accessToken");
+
       if (initialData?._id) {
-        await apiClient.put(`/products/${initialData._id}`, payload);
+        await updateProductAction(initialData._id, payload, token);
       } else {
-        await apiClient.post("/products", payload);
+        await createProductAction(payload, token);
       }
       
       router.push("/products");
       router.refresh();
-    } catch (err: unknown) {
-      setError((err as Error).message || "An error occurred while saving the product");
+    } catch (err: any) {
+      setError(err.message || "An error occurred while saving the product");
     } finally {
       setSaving(false);
     }

@@ -5,7 +5,11 @@ import { FiSearch as FiSearchBase, FiBell as FiBellBase } from "react-icons/fi";
 const FiSearch = FiSearchBase as React.ElementType;
 const FiBell = FiBellBase as React.ElementType;
 
+import { useNotifications } from "@/components/notifications/NotificationProvider";
+
 export default function Header() {
+  const { unreadCount, clearUnread } = useNotifications();
+
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-10">
       <div className="flex-1 max-w-lg">
@@ -20,9 +24,16 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors relative">
+        <button 
+          onClick={clearUnread}
+          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors relative"
+        >
           <FiBell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+          {unreadCount > 0 && (
+            <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white flex items-center justify-center text-[10px] font-bold rounded-full border border-white">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          )}
         </button>
         <div className="h-8 w-px bg-gray-200"></div>
         <button className="flex items-center gap-2 p-1.5 hover:bg-gray-100 rounded-lg transition-colors">

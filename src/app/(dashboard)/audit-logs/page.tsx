@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiClient } from "../../../lib/apiClient";
+import { fetchAuditLogsAction } from "../../../actions/audit.actions";
 import { AuditLogType } from "../../_types/auditLog";
 
 const getActionColor = (action: string) => {
@@ -22,7 +22,8 @@ export default function AuditLogsPage() {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await apiClient.get("/audit-logs");
+        const token = localStorage.getItem('accessToken');
+        const res = await fetchAuditLogsAction(token);
         if (res.success) {
           setLogs(res.data || []);
         } else {

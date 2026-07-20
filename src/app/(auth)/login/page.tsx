@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiClient, ApiError } from "../../../lib/apiClient";
+import { loginAction } from "../../../actions/auth.actions";
 import { EyeOff, Eye } from "lucide-react"
 
 export default function LoginPage() {
@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await apiClient.post("/auth/login", { email, password });
+      const response = await loginAction({ email, password });
 
       if (response.success && response.data?.accessToken) {
         localStorage.setItem("accessToken", response.data.accessToken);
@@ -28,12 +28,8 @@ export default function LoginPage() {
       } else {
         setError("Invalid response from server");
       }
-    } catch (err: unknown) {
-      if (err instanceof ApiError) {
-        setError(err.message || "Invalid credentials");
-      } else {
-        setError("An unexpected error occurred");
-      }
+    } catch (err: any) {
+      setError(err.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }

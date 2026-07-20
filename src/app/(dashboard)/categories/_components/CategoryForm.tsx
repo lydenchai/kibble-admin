@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createCategoryAction, updateCategoryAction } from "../../../../lib/actions/category.actions";
+import { createCategoryAction, updateCategoryAction } from "../../../../actions/category.actions";
 import { FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase, FiImage as FiImageBase } from "react-icons/fi";
 
 const FiSave = FiSaveBase as React.ElementType;
@@ -31,10 +31,11 @@ export default function CategoryForm({ initialData }: { initialData?: any }) {
     setSaving(true);
 
     try {
+      const token = localStorage.getItem('accessToken');
       if (initialData?._id) {
-        await updateCategoryAction(initialData._id, formData);
+        await updateCategoryAction(initialData._id, formData, token);
       } else {
-        await createCategoryAction(formData);
+        await createCategoryAction(formData, token);
       }
       
       router.push("/categories");

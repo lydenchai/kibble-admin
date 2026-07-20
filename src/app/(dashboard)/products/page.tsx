@@ -11,6 +11,8 @@ const FiSearch = FiSearchBase as React.ElementType;
 const FiFilter = FiFilterBase as React.ElementType;
 const FiBox = FiBoxBase as React.ElementType;
 
+import { deleteProductAction, fetchProductsAction } from "../../../actions/product.actions";
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +25,8 @@ export default function ProductsPage() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await apiClient.get(`/products?page=${page}&limit=${limit}&showInactive=true`);
+      const token = localStorage.getItem("accessToken");
+      const res = await fetchProductsAction(page, limit, token);
       if (res.success) {
         setProducts(res.data);
         setTotal(res.pagination?.total || 0);
@@ -45,7 +48,8 @@ export default function ProductsPage() {
     
     try {
       setIsDeleting(id);
-      await apiClient.delete(`/products/${id}`);
+      const token = localStorage.getItem("accessToken");
+      await deleteProductAction(id, token);
       setProducts(products.filter(p => p._id !== id));
     } catch (err) {
       console.error("Failed to delete product", err);

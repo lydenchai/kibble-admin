@@ -15,6 +15,7 @@ import {
 } from "react-icons/fi";
 import { apiClient } from "../../lib/apiClient";
 import { useRouter } from "next/navigation";
+import { logoutAction } from "../../actions/auth.actions";
 
 const FiHome = FiHomeBase as React.ElementType;
 const FiBox = FiBoxBase as React.ElementType;
@@ -44,7 +45,8 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      await apiClient.post("/auth/logout", {});
+      const token = localStorage.getItem("accessToken");
+      await logoutAction(token);
     } catch (err) {
       console.error(err);
     } finally {

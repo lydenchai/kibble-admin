@@ -36,6 +36,7 @@ async function fetchWrapper(endpoint: string, options: RequestInit = {}) {
   
   const headers = new Headers(options.headers || {});
   headers.set("Content-Type", "application/json");
+  headers.set("X-App-Type", "admin");
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
@@ -67,6 +68,7 @@ async function fetchWrapper(endpoint: string, options: RequestInit = {}) {
       try {
         const refreshRes = await fetch(`${API_URL}/auth/refresh-token`, {
           method: "POST",
+          headers: { "X-App-Type": "admin" },
           credentials: "include" // Send refresh token cookie
         });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { apiClient } from "../../../../lib/apiClient";
+import { fetchProductByIdAction } from "../../../../actions/product.actions";
 import ProductForm from "../_components/ProductForm";
 
 export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
@@ -14,9 +14,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await apiClient.get(`/products/admin/${resolvedParams.id}`);
-        if (res.success) {
-          setProduct(res.data);
+        const token = localStorage.getItem("accessToken");
+        const res = await fetchProductByIdAction(resolvedParams.id, token);
+        if (res.success || res._id) { // Handle both wrapper or direct return
+          setProduct(res.data || res);
         } else {
           setError("Product not found");
         }

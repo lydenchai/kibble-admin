@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { fetchCategoriesAction, deleteCategoryAction } from "../../../lib/actions/category.actions";
+import { fetchCategoriesAction, deleteCategoryAction } from "../../../actions/category.actions";
 import { FiPlus as FiPlusBase, FiTag as FiTagBase, FiEdit as FiEditBase, FiTrash2 as FiTrash2Base } from "react-icons/fi";
 import { CategoryType } from "../../_types/category";
 
@@ -42,7 +42,8 @@ export default function CategoriesPage() {
     
     try {
       setIsDeleting(id);
-      await deleteCategoryAction(id);
+      const token = localStorage.getItem('accessToken');
+      await deleteCategoryAction(id, token);
       setCategories(categories.filter(c => c._id !== id));
     } catch (err) {
       console.error("Failed to delete category", err);
