@@ -27,6 +27,7 @@ function onRefreshed(token: string) {
 function handleAuthFailure() {
   if (typeof window !== "undefined" && !window.location.pathname.includes('/login')) {
     localStorage.removeItem("accessToken");
+    document.cookie = "is_authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.href = "/login";
   }
 }

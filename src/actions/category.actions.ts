@@ -1,6 +1,6 @@
 "use server";
 
-import { CategoryType } from "@/app/_types/category";
+import { CategoryType } from "@/types/category";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 

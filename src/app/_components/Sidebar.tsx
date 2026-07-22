@@ -56,10 +56,11 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col h-screen sticky top-0">
-      <div className="h-16 flex items-center px-6 border-b border-slate-800">
-        <span className="text-xl font-bold text-white tracking-wide">
-          Kibble Admin
+    <aside className="w-64 bg-[#0B1120] text-slate-300 flex flex-col h-screen sticky top-0 border-r border-slate-800/50 shadow-xl">
+      <div className="h-16 flex items-center px-6 border-b border-slate-800/50 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-600/10 to-transparent"></div>
+        <span className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent tracking-wide relative z-10 flex items-center gap-2">
+          <FiStar className="w-5 h-5 text-brand-500" /> Kibble Admin
         </span>
       </div>
 
@@ -72,27 +73,32 @@ export default function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 text-[14px] ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden ${
                 isActive
-                  ? "bg-slate-800 text-white font-medium shadow-sm"
-                  : "hover:bg-slate-800/50 hover:text-white"
+                  ? "text-white shadow-lg shadow-brand-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-white/5 hover:translate-x-1"
               }`}
             >
+              {isActive && (
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-600 to-brand-500 opacity-90"></div>
+              )}
               <item.icon
-                className={`w-5 h-5 ${isActive ? "text-blue-400" : "text-slate-500"}`}
+                className={`w-5 h-5 transition-all duration-300 relative z-10 ${
+                  isActive ? "text-white" : "text-slate-500 group-hover:text-brand-400 group-hover:scale-110"
+                }`}
               />
-              {item.name}
+              <span className="relative z-10">{item.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-800">
+      <div className="p-4 border-t border-slate-800/50">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-[14px] text-slate-400 hover:bg-red-500 hover:text-white transition-colors duration-200 cursor-pointer"
+          className="flex items-center gap-3 px-3 py-2 w-full rounded-xl text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-300 cursor-pointer group"
         >
-          <FiLogOut className="w-5 h-5" />
+          <FiLogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           Sign out
         </button>
       </div>

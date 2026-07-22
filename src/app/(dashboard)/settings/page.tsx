@@ -1,15 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiClient } from "../../../lib/apiClient";
 import { updateSettingsAction, fetchSettingsAction } from "../../../actions/settings.actions";
-
-
-interface StoreSettings {
-  storeName?: string;
-  contactEmail?: string;
-  paymentGateways?: { stripeEnabled?: boolean; paypalEnabled?: boolean };
-}
+import { StoreSettings } from "@/types/store-setting";
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<StoreSettings | null>(null);

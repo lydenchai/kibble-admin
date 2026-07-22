@@ -1,19 +1,9 @@
 "use client";
 
+import { NotificationContextType } from '@/types/notificaton';
+import { Toast } from '@/types/toast';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { MdOutlineNotificationsActive } from 'react-icons/md';
-
-interface Toast {
-  id: string;
-  title: string;
-  message: string;
-}
-
-interface NotificationContextType {
-  addToast: (title: string, message: string) => void;
-  unreadCount: number;
-  clearUnread: () => void;
-}
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
@@ -27,13 +17,17 @@ export const useNotifications = () => {
 
 export const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [allNotifications, setAllNotifications] = useState<Toast[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
   const clearUnread = () => setUnreadCount(0);
 
   const addToast = (title: string, message: string) => {
     const id = Date.now().toString();
-    setToasts((prev) => [...prev, { id, title, message }]);
+    const newToast = { id, title, message };
+    
+    setToasts((prev) => [...prev, newToast]);
+    setAllNotifications((prev) => [newToast, ...prev].slice(0, 50)); // Keep last 50
     setUnreadCount((prev) => prev + 1);
 
     // Auto remove after 5 seconds
@@ -74,7 +68,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
   }, []);
 
   return (
-    <NotificationContext.Provider value={{ addToast, unreadCount, clearUnread }}>
+    <NotificationContext.Provider value={{ addToast, unreadCount, clearUnread, allNotifications }}>
       {children}
       
       {/* Toast Container */}

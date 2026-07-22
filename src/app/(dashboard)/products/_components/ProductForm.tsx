@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchCategoriesAction } from "../../../../actions/category.actions";
 import { FiPlus as FiPlusBase, FiTrash2 as FiTrash2Base, FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase } from "react-icons/fi";
-import { CategoryType } from "@/app/_types/category";
+import { CategoryType } from "@/types/category";
 import { createProductAction, updateProductAction } from "@/actions/product.actions";
  
 
@@ -28,6 +28,8 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
     petType: initialData?.petType || "dog",
     isActive: initialData?.isActive ?? true,
     tags: initialData?.tags?.join(", ") || "",
+    ratingAvg: initialData?.ratingAvg || 0,
+    ratingCount: initialData?.ratingCount || 0,
     images: initialData?.images || [""],
     variants: initialData?.variants || [
       { sku: "", price: 0, compareAtPrice: 0, stock: 0, size: "", weight: "", flavor: "" }
@@ -92,6 +94,8 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
     try {
       const payload = {
         ...formData,
+        ratingAvg: Number(formData.ratingAvg),
+        ratingCount: Number(formData.ratingCount),
         tags: formData.tags.split(",").map((t: string) => t.trim()).filter(Boolean),
         images: formData.images.filter((i: string) => i.trim() !== "")
       };
@@ -164,6 +168,16 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
                 <textarea required name="description" value={formData.description} onChange={handleChange} rows={5} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Rating Average (0-5)</label>
+                  <input type="number" step="0.1" min="0" max="5" name="ratingAvg" value={formData.ratingAvg} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Rating Count</label>
+                  <input type="number" min="0" name="ratingCount" value={formData.ratingCount} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                </div>
               </div>
             </div>
           </div>

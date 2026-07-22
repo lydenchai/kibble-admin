@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { apiClient } from "../../../lib/apiClient";
 import { FiPlus as FiPlusBase, FiSearch as FiSearchBase, FiFilter as FiFilterBase, FiBox as FiBoxBase, FiEdit, FiTrash } from "react-icons/fi";
-import { ProductType } from "../../_types/product";
+import { ProductType } from "../../../types/product";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiSearch = FiSearchBase as React.ElementType;
@@ -139,14 +139,14 @@ export default function ProductsPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                         ${basePrice.toFixed(2)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          product.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      <td className="px-6 py-5 whitespace-nowrap">
+                        <span className={`px-3 py-1.5 inline-flex text-xs font-bold rounded-full shadow-sm ${
+                          product.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                         }`}>
                           {product.isActive ? 'Active' : 'Inactive'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td className="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex justify-end gap-3">
                           <Link
                             href={`/products/${product._id}`}

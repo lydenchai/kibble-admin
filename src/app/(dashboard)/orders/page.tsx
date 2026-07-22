@@ -1,24 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { FiSearch as FiSearchBase, FiFilter as FiFilterBase, FiShoppingCart as FiShoppingCartBase, FiEye as FiEyeBase } from "react-icons/fi";
-import { apiClient } from "@/lib/apiClient";
-import { updateOrderStatusAction, fetchOrdersAction } from "@/actions/order.actions";
+import { updateOrderAction, fetchOrdersAction } from "@/actions/order.actions";
+import { Order } from "@/types/order";
 
 const FiSearch = FiSearchBase as React.ElementType;
 const FiFilter = FiFilterBase as React.ElementType;
 const FiShoppingCart = FiShoppingCartBase as React.ElementType;
 const FiEye = FiEyeBase as React.ElementType;
-
-interface Order {
-  _id: string;
-  user: { name: string; email: string };
-  total: number;
-  status: string;
-  paymentStatus: string;
-  createdAt: string;
-}
-
 
 export default function OrdersPage() {
   const [search, setSearch] = useState("");
@@ -46,7 +37,7 @@ export default function OrdersPage() {
   const handleStatusChange = async (orderId: string, newStatus: string) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const data = await updateOrderStatusAction(orderId, newStatus, token);
+      const data = await updateOrderAction(orderId, { status: newStatus }, token);
       if (data && data.success) {
         setOrders(orders.map(o => o._id === orderId ? { ...o, status: newStatus } : o));
       }
@@ -128,16 +119,16 @@ export default function OrdersPage() {
                       <div className="text-sm font-medium text-gray-900">{order.user?.name || 'A customer'}</div>
                       <div className="text-sm text-gray-500">{order.user?.email || 'N/A'}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-5 whitespace-nowrap">
                       <select
                         value={order.status}
                         onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                        className={`text-xs font-semibold rounded-full px-2 py-1 border-none focus:ring-2 focus:ring-brand-500 cursor-pointer ${
-                          order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        className={`text-xs font-bold rounded-full px-3 py-1.5 border-none focus:ring-2 focus:ring-brand-500 cursor-pointer shadow-sm ${
+                          order.status === 'pending' ? 'bg-amber-100 text-amber-800' :
                           order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
-                          order.status === 'shipped' ? 'bg-indigo-100 text-indigo-800' :
-                          order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                          order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                          order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
+                          order.status === 'delivered' ? 'bg-emerald-100 text-emerald-800' :
+                          order.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
                           'bg-gray-100 text-gray-800'
                         }`}
                       >
@@ -148,13 +139,13 @@ export default function OrdersPage() {
                         <option value="cancelled" className="bg-white text-gray-900">Cancelled</option>
                       </select>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                    <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-900 font-bold">
                       ${order.total.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button className="text-gray-400 hover:text-brand-600 transition-colors">
+                      <Link href={`/orders/${order._id}`} className="inline-block p-2 text-gray-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors">
                         <FiEye className="w-5 h-5" />
-                      </button>
+                      </Link>
                     </td>
                   </tr>
                 ))

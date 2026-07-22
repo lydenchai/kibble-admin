@@ -41,6 +41,12 @@ export async function loginAction(credentials: any) {
       }
     }
 
+    (await cookies()).set('is_authenticated', 'true', {
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 // 7 days
+    });
+
     return data;
   } catch (error: any) {
     console.error("Failed to login:", error);
@@ -69,6 +75,7 @@ export async function logoutAction(token: string | null) {
     }
 
     (await cookies()).delete('admin_refresh_token');
+    (await cookies()).delete('is_authenticated');
 
     const data = await res.json();
     return data;

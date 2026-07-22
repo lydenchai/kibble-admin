@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { fetchCategoriesAction, deleteCategoryAction } from "../../../actions/category.actions";
 import { FiPlus as FiPlusBase, FiTag as FiTagBase, FiEdit as FiEditBase, FiTrash2 as FiTrash2Base } from "react-icons/fi";
-import { CategoryType } from "../../_types/category";
+import { CategoryType } from "../../../types/category";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiTag = FiTagBase as React.ElementType;

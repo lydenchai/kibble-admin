@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchAuditLogsAction } from "../../../actions/audit.actions";
-import { AuditLogType } from "../../_types/auditLog";
+import { AuditLogType } from "../../../types/auditLog";
 
 const getActionColor = (action: string) => {
   switch (action) {
