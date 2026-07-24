@@ -51,50 +51,59 @@ export default function CategoryForm({ initialData }: { initialData?: any }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
-          <p className="text-red-700">{error}</p>
+        <div className="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-xl">
+          <p className="text-rose-700 font-medium text-sm">{error}</p>
         </div>
       )}
 
-      <div className="flex items-center justify-between">
-        <button type="button" onClick={() => router.back()} className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer">
-          <FiArrowLeft className="w-5 h-5" />
-          Back to Categories
+      {/* Top Action Header */}
+      <div className="flex items-center justify-between gap-4 border-b border-stone-200/80 pb-6">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-xs font-bold text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
+        >
+          <FiArrowLeft className="w-4 h-4" />
+          <span>Back to Categories</span>
         </button>
         <button 
           type="submit" 
           disabled={saving}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
+          className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-xs disabled:opacity-50 cursor-pointer"
         >
-          <FiSave className="w-5 h-5" />
-          {saving ? "Saving..." : (initialData ? "Save Changes" : "Create Category")}
+          <FiSave className="w-4 h-4" />
+          <span>{saving ? "Saving..." : (initialData ? "Save Category Changes" : "Create New Category")}</span>
         </button>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
-        <h2 className="text-xl font-bold text-gray-900">Category Details</h2>
+      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-6 max-w-2xl">
+        <div>
+          <h2 className="text-lg font-extrabold text-stone-900">Category Details</h2>
+          <p className="text-xs text-stone-400 mt-0.5">Define category title and featured banner image</p>
+        </div>
         
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Category Name *</label>
+          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Category Name *</label>
           <input 
             required 
             type="text" 
             name="name" 
             value={formData.name} 
             onChange={handleChange} 
-            placeholder="e.g. Dog Food"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+            placeholder="e.g. Dog Food & Treats"
+            className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium" 
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Image URL</label>
           <div className="flex items-center gap-4">
             {formData.image ? (
-              <img src={formData.image} alt="Preview" className="w-16 h-16 rounded-lg object-cover border border-gray-200" />
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={formData.image} alt="Preview" className="w-16 h-16 rounded-xl object-cover border border-stone-200 shadow-xs" />
             ) : (
-              <div className="w-16 h-16 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400">
-                <FiImage className="w-6 h-6" />
+              <div className="w-16 h-16 rounded-xl bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-400 text-xl">
+                🏷️
               </div>
             )}
             <input 
@@ -102,11 +111,11 @@ export default function CategoryForm({ initialData }: { initialData?: any }) {
               name="image" 
               value={formData.image} 
               onChange={handleChange} 
-              placeholder="https://example.com/image.jpg"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+              placeholder="https://images.unsplash.com/..."
+              className="flex-1 px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium" 
             />
           </div>
-          <p className="text-xs text-gray-500 mt-2">Provide an absolute URL to the category image.</p>
+          <p className="text-[11px] text-stone-400 mt-2">Provide an absolute web URL for the category banner image.</p>
         </div>
       </div>
     </form>

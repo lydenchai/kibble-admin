@@ -6,7 +6,6 @@ import { fetchCategoriesAction } from "../../../../actions/category.actions";
 import { FiPlus as FiPlusBase, FiTrash2 as FiTrash2Base, FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase } from "react-icons/fi";
 import { CategoryType } from "@/types/category";
 import { createProductAction, updateProductAction } from "@/actions/product.actions";
- 
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiTrash2 = FiTrash2Base as React.ElementType;
@@ -120,44 +119,71 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
-          <p className="text-red-700">{error}</p>
+        <div className="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-xl">
+          <p className="text-rose-700 font-medium text-sm">{error}</p>
         </div>
       )}
 
-      <div className="flex items-center justify-between">
-        <button type="button" onClick={() => router.back()} className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer">
-          <FiArrowLeft className="w-5 h-5" />
-          Back to Products
+      {/* Top Action Header */}
+      <div className="flex items-center justify-between gap-4 border-b border-stone-200/80 pb-6">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-xs font-bold text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
+        >
+          <FiArrowLeft className="w-4 h-4" />
+          <span>Back to Products</span>
         </button>
         <button 
           type="submit" 
           disabled={saving}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50 disabled:hover:bg-blue-600 cursor-pointer"
+          className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-xs disabled:opacity-50 cursor-pointer"
         >
-          <FiSave className="w-5 h-5" />
-          {saving ? "Saving..." : (initialData ? "Save Changes" : "Create Product")}
+          <FiSave className="w-4 h-4" />
+          <span>{saving ? "Saving..." : (initialData ? "Save Product Changes" : "Create New Product")}</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           {/* Basic Info */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Basic Information</h2>
-            <div className="space-y-4">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs">
+            <h2 className="text-lg font-extrabold text-stone-900 mb-6">Basic Information</h2>
+            <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Product Name *</label>
-                <input required type="text" name="name" value={formData.name} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Product Title *</label>
+                <input
+                  required
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="e.g. Organic Salmon Adult Dog Food"
+                  className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Brand *</label>
-                  <input required type="text" name="brand" value={formData.brand} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Brand *</label>
+                  <input
+                    required
+                    type="text"
+                    name="brand"
+                    value={formData.brand}
+                    onChange={handleChange}
+                    placeholder="e.g. Royal Canin"
+                    className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-                  <select required name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Category *</label>
+                  <select
+                    required
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium cursor-pointer"
+                  >
                     <option value="">Select Category</option>
                     {categories.map(c => (
                       <option key={c._id} value={c._id}>{c.name}</option>
@@ -166,69 +192,104 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
-                <textarea required name="description" value={formData.description} onChange={handleChange} rows={5} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Description *</label>
+                <textarea
+                  required
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={5}
+                  placeholder="Detailed product overview..."
+                  className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Rating Average (0-5)</label>
-                  <input type="number" step="0.1" min="0" max="5" name="ratingAvg" value={formData.ratingAvg} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Rating Avg (0-5)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="5"
+                    name="ratingAvg"
+                    value={formData.ratingAvg}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Rating Count</label>
-                  <input type="number" min="0" name="ratingCount" value={formData.ratingCount} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Rating Count</label>
+                  <input
+                    type="number"
+                    min="0"
+                    name="ratingCount"
+                    value={formData.ratingCount}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+                  />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Variants */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          {/* Variants & Pricing */}
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Variants & Pricing</h2>
-              <button type="button" onClick={addVariant} className="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                <FiPlus className="w-4 h-4" /> Add Variant
+              <div>
+                <h2 className="text-lg font-extrabold text-stone-900">Variants & Pricing</h2>
+                <p className="text-xs text-stone-400 mt-0.5">Manage SKUs, stock levels, and size/flavor options</p>
+              </div>
+              <button
+                type="button"
+                onClick={addVariant}
+                className="text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <FiPlus className="w-3.5 h-3.5" /> Add Variant
               </button>
             </div>
             
             <div className="space-y-6">
               {formData.variants.map((variant: { sku: string, price: number, compareAtPrice?: number, stock: number, size?: string, weight?: string, flavor?: string }, index: number) => (
-                <div key={index} className="p-4 border border-gray-200 rounded-lg bg-gray-50/50 relative">
+                <div key={index} className="p-5 border border-stone-200/80 rounded-2xl bg-stone-50/30 relative">
                   {formData.variants.length > 1 && (
-                    <button type="button" onClick={() => removeVariant(index)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500">
-                      <FiTrash2 className="w-5 h-5" />
+                    <button
+                      type="button"
+                      onClick={() => removeVariant(index)}
+                      className="absolute top-4 right-4 text-stone-400 hover:text-rose-600 transition-colors p-1 cursor-pointer"
+                    >
+                      <FiTrash2 className="w-4 h-4" />
                     </button>
                   )}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">SKU *</label>
-                      <input required type="text" value={variant.sku} onChange={(e) => handleVariantChange(index, 'sku', e.target.value)} className="w-full px-3 py-1.5 border border-gray-300 rounded focus:ring-blue-500 focus:outline-none" />
+                      <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">SKU *</label>
+                      <input required type="text" value={variant.sku} onChange={(e) => handleVariantChange(index, 'sku', e.target.value)} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Price *</label>
-                      <input required type="number" min="0" step="0.01" value={variant.price} onChange={(e) => handleVariantChange(index, 'price', Number(e.target.value))} className="w-full px-3 py-1.5 border border-gray-300 rounded focus:ring-blue-500 focus:outline-none" />
+                      <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">Price ($) *</label>
+                      <input required type="number" min="0" step="0.01" value={variant.price} onChange={(e) => handleVariantChange(index, 'price', Number(e.target.value))} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Compare At</label>
-                      <input type="number" min="0" step="0.01" value={variant.compareAtPrice} onChange={(e) => handleVariantChange(index, 'compareAtPrice', Number(e.target.value))} className="w-full px-3 py-1.5 border border-gray-300 rounded focus:ring-blue-500 focus:outline-none" />
+                      <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">Compare At ($)</label>
+                      <input type="number" min="0" step="0.01" value={variant.compareAtPrice} onChange={(e) => handleVariantChange(index, 'compareAtPrice', Number(e.target.value))} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Stock *</label>
-                      <input required type="number" min="0" value={variant.stock} onChange={(e) => handleVariantChange(index, 'stock', Number(e.target.value))} className="w-full px-3 py-1.5 border border-gray-300 rounded focus:ring-blue-500 focus:outline-none" />
+                      <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">Stock *</label>
+                      <input required type="number" min="0" value={variant.stock} onChange={(e) => handleVariantChange(index, 'stock', Number(e.target.value))} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Size</label>
-                      <input type="text" placeholder="e.g. Large" value={variant.size} onChange={(e) => handleVariantChange(index, 'size', e.target.value)} className="w-full px-3 py-1.5 border border-gray-300 rounded focus:ring-blue-500 focus:outline-none" />
+                      <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">Size</label>
+                      <input type="text" placeholder="e.g. Large" value={variant.size} onChange={(e) => handleVariantChange(index, 'size', e.target.value)} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Weight</label>
-                      <input type="text" placeholder="e.g. 5kg" value={variant.weight} onChange={(e) => handleVariantChange(index, 'weight', e.target.value)} className="w-full px-3 py-1.5 border border-gray-300 rounded focus:ring-blue-500 focus:outline-none" />
+                      <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">Weight</label>
+                      <input type="text" placeholder="e.g. 5kg" value={variant.weight} onChange={(e) => handleVariantChange(index, 'weight', e.target.value)} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Flavor</label>
-                      <input type="text" placeholder="e.g. Chicken" value={variant.flavor} onChange={(e) => handleVariantChange(index, 'flavor', e.target.value)} className="w-full px-3 py-1.5 border border-gray-300 rounded focus:ring-blue-500 focus:outline-none" />
+                      <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">Flavor</label>
+                      <input type="text" placeholder="e.g. Chicken" value={variant.flavor} onChange={(e) => handleVariantChange(index, 'flavor', e.target.value)} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
                     </div>
                   </div>
                 </div>
@@ -237,57 +298,86 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
           </div>
         </div>
 
+        {/* Sidebar Organization Settings */}
         <div className="space-y-8">
-          {/* Status & Organization */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
-            <h2 className="text-xl font-bold text-gray-900">Organization</h2>
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-6">
+            <h2 className="text-lg font-extrabold text-stone-900">Organization & Visibility</h2>
             
-            <label className="flex items-center space-x-3 cursor-pointer">
-              <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleChange} className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
-              <span className="font-medium text-gray-700">Product is Active</span>
+            <label className="flex items-center space-x-3 cursor-pointer p-3 bg-stone-50/50 rounded-xl border border-stone-200/60">
+              <input
+                type="checkbox"
+                name="isActive"
+                checked={formData.isActive}
+                onChange={handleChange}
+                className="w-4 h-4 text-brand-600 rounded border-stone-300 focus:ring-brand-500"
+              />
+              <span className="font-bold text-xs text-stone-800">Product is Active & Visible</span>
             </label>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Target Pet Type *</label>
-              <select required name="petType" value={formData.petType} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
-                <option value="dog">Dog</option>
-                <option value="cat">Cat</option>
-                <option value="bird">Bird</option>
-                <option value="small-pet">Small Pet</option>
-                <option value="fish">Fish</option>
-                <option value="reptile">Reptile</option>
-                <option value="other">Other</option>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Pet Type Target *</label>
+              <select
+                name="petType"
+                value={formData.petType}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium cursor-pointer"
+              >
+                <option value="dog">🐕 Dog</option>
+                <option value="cat">🐈 Cat</option>
+                <option value="bird">🦜 Bird</option>
+                <option value="small-pet">🐹 Small Pet</option>
+                <option value="fish">🐠 Fish</option>
+                <option value="reptile">🦎 Reptile</option>
+                <option value="other">🐾 Other</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
-              <input type="text" name="tags" value={formData.tags} onChange={handleChange} placeholder="e.g. sale, premium, grain-free" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-              <p className="text-xs text-gray-500 mt-1">Comma separated</p>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Product Tags</label>
+              <input
+                type="text"
+                name="tags"
+                value={formData.tags}
+                onChange={handleChange}
+                placeholder="organic, dry-food, puppy"
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+              />
+              <p className="text-[11px] text-stone-400 mt-1">Separate tags with commas</p>
             </div>
           </div>
 
-          {/* Media */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Media</h2>
-              <button type="button" onClick={addImage} className="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                <FiPlus className="w-4 h-4" /> Add URL
+          {/* Media Images */}
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-extrabold text-stone-900">Product Images</h2>
+              <button
+                type="button"
+                onClick={addImage}
+                className="text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <FiPlus className="w-3.5 h-3.5" /> Add Image URL
               </button>
             </div>
+
             <div className="space-y-3">
-              {formData.images.map((img: string, index: number) => (
-                <div key={index} className="flex items-center gap-2">
-                  <input 
-                    type="url" 
-                    placeholder="https://example.com/image.jpg" 
-                    value={img} 
-                    onChange={(e) => handleImageChange(index, e.target.value)} 
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" 
-                  /> 
-                  <button type="button" disabled={formData.images.length === 1} onClick={() => removeImage(index)} className="p-2 text-gray-400 hover:text-red-500 disabled:hover:text-gray-400">
-                    <FiTrash2 className="w-5 h-5" />
-                  </button>
+              {formData.images.map((img: string, idx: number) => (
+                <div key={idx} className="flex gap-2 items-center">
+                  <input
+                    type="url"
+                    value={img}
+                    onChange={(e) => handleImageChange(idx, e.target.value)}
+                    placeholder="https://images.unsplash.com/..."
+                    className="flex-1 px-3 py-2 bg-stone-50/50 border border-stone-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all"
+                  />
+                  {formData.images.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeImage(idx)}
+                      className="text-stone-400 hover:text-rose-600 transition-colors p-2 cursor-pointer"
+                    >
+                      <FiTrash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

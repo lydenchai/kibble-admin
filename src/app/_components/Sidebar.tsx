@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   FiHome as FiHomeBase,
   FiBox as FiBoxBase,
@@ -13,9 +13,6 @@ import {
   FiLogOut as FiLogOutBase,
   FiTag as FiTagBase,
 } from "react-icons/fi";
-import { apiClient } from "../../lib/apiClient";
-import { useRouter } from "next/navigation";
-import { logoutAction } from "../../actions/auth.actions";
 
 const FiHome = FiHomeBase as React.ElementType;
 const FiBox = FiBoxBase as React.ElementType;
@@ -26,9 +23,10 @@ const FiSettings = FiSettingsBase as React.ElementType;
 const FiStar = FiStarBase as React.ElementType;
 const FiLogOut = FiLogOutBase as React.ElementType;
 const FiTag = FiTagBase as React.ElementType;
+import { logoutAction } from "../../actions/auth.actions";
 
 const navItems = [
-  { name: "Dashboard", href: "/", icon: FiHome },
+  { name: "Overview", href: "/", icon: FiHome },
   { name: "Products", href: "/products", icon: FiBox },
   { name: "Categories", href: "/categories", icon: FiTag },
   { name: "Orders", href: "/orders", icon: FiShoppingCart },
@@ -56,50 +54,63 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 bg-[#0B1120] text-slate-300 flex flex-col h-screen sticky top-0 border-r border-slate-800/50 shadow-xl">
-      <div className="h-16 flex items-center px-6 border-b border-slate-800/50 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-600/10 to-transparent"></div>
-        <span className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent tracking-wide relative z-10 flex items-center gap-2">
-          <FiStar className="w-5 h-5 text-brand-500" /> Kibble Admin
-        </span>
+    <aside className="w-64 bg-white text-stone-800 flex flex-col h-screen sticky top-0 border-r border-stone-200/80 z-20">
+      {/* Brand Header */}
+      <div className="h-20 flex items-center px-6 border-b border-stone-100 justify-between">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-brand-600 text-white flex items-center justify-center text-base font-black shadow-xs group-hover:scale-105 transition-transform">
+            🐾
+          </div>
+          <div>
+            <span className="text-base font-black text-stone-900 tracking-tight block">
+              Kibble Admin
+            </span>
+            <span className="text-xs font-semibold text-stone-400 uppercase tracking-wider block -mt-0.5">
+              Workspace
+            </span>
+          </div>
+        </Link>
       </div>
 
-      <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+      {/* Nav Menu */}
+      <nav className="flex-1 py-6 px-3.5 space-y-1.5 overflow-y-auto">
+        <div className="px-3 mb-2.5 text-xs font-extrabold uppercase tracking-widest text-stone-400">
+          Management
+        </div>
         {navItems.map((item) => {
           const isActive =
             pathname === item.href ||
             (item.href !== "/" && pathname.startsWith(item.href));
+          const Icon = item.icon as any;
           return (
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden ${
+              className={`flex items-center gap-3.5 px-4 py-3 rounded-xl transition-all duration-200 text-sm cursor-pointer ${
                 isActive
-                  ? "text-white shadow-lg shadow-brand-500/20"
-                  : "text-slate-400 hover:text-white hover:bg-white/5 hover:translate-x-1"
+                  ? "bg-brand-50 text-brand-600 font-extrabold border border-brand-200/80 shadow-xs"
+                  : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 font-semibold"
               }`}
             >
-              {isActive && (
-                <div className="absolute inset-0 bg-gradient-to-r from-brand-600 to-brand-500 opacity-90"></div>
-              )}
-              <item.icon
-                className={`w-5 h-5 transition-all duration-300 relative z-10 ${
-                  isActive ? "text-white" : "text-slate-500 group-hover:text-brand-400 group-hover:scale-110"
+              <Icon
+                className={`w-4.5 h-4.5 transition-colors ${
+                  isActive ? "text-brand-600" : "text-stone-400 group-hover:text-stone-700"
                 }`}
               />
-              <span className="relative z-10">{item.name}</span>
+              <span>{item.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-800/50">
+      {/* Logout */}
+      <div className="p-4 border-t border-stone-100">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2 w-full rounded-xl text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-300 cursor-pointer group"
+          className="flex items-center gap-3 px-4 py-2.5 w-full rounded-xl text-sm font-bold text-stone-500 hover:bg-rose-50 hover:text-rose-600 transition-colors cursor-pointer"
         >
-          <FiLogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          Sign out
+          <FiLogOut className="w-4.5 h-4.5" />
+          <span>Sign out</span>
         </button>
       </div>
     </aside>

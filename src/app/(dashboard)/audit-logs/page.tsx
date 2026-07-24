@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { fetchAuditLogsAction } from "../../../actions/audit.actions";
 import { AuditLogType } from "../../../types/auditLog";
+import Pagination from "@/components/ui/Pagination";
 
 const getActionColor = (action: string) => {
   switch (action) {
-    case 'CREATE': return 'bg-green-100 text-green-800';
-    case 'UPDATE': return 'bg-blue-100 text-blue-800';
-    case 'DELETE': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
+    case 'CREATE': return 'bg-emerald-50 text-emerald-700 border-emerald-200/60';
+    case 'UPDATE': return 'bg-sky-50 text-sky-700 border-sky-200/60';
+    case 'DELETE': return 'bg-rose-50 text-rose-700 border-rose-200/60';
+    default: return 'bg-stone-100 text-stone-700 border-stone-200';
   }
 };
 
@@ -40,52 +41,60 @@ export default function AuditLogsPage() {
     fetchLogs();
   }, []);
 
-  if (loading) return <div className="p-8">Loading audit logs...</div>;
+  if (loading) return <div className="p-8 text-sm text-stone-400 font-medium">Loading security audit logs...</div>;
 
   const paginatedLogs = logs.slice((page - 1) * limit, page * limit);
   const total = logs.length;
 
   return (
-      <div className="p-8 max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-gray-900">Audit Logs</h1>
-        
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+    <div className="p-8 max-w-7xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Security Audit Logs</h1>
+          <p className="text-sm sm:text-base text-stone-500 mt-1">Trace all system administrative events, resource mutations, and security changes</p>
+        </div>
+      </div>
+
+      {/* Table Container */}
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-stone-100">
+            <thead className="bg-stone-50/70">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Timestamp</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Admin User</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Action</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Resource</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Event Details</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white divide-y divide-stone-100">
               {paginatedLogs.map((log) => (
-                <tr key={log._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <tr key={log._id} className="hover:bg-stone-50/50 transition-colors">
+                  <td className="px-6 py-4.5 whitespace-nowrap text-sm font-mono text-stone-500">
                     {new Date(log.createdAt).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {log.user?.name || "System"}
+                  <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-900">
+                    {log.user?.name || "System Automated"}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getActionColor(log.action)}`}>
+                  <td className="px-6 py-4.5 whitespace-nowrap">
+                    <span className={`px-3 py-1 inline-flex text-xs font-black rounded-full border ${getActionColor(log.action)}`}>
                       {log.action}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-800">
                     {log.resource}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                  <td className="px-6 py-4.5 text-xs text-stone-500 max-w-xs truncate font-mono">
                     {log.details}
                   </td>
                 </tr>
               ))}
               {logs.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500 text-sm">
-                    No audit logs found.
+                  <td colSpan={5} className="px-6 py-12 text-center text-stone-400 text-sm font-medium">
+                    No security audit logs recorded yet.
                   </td>
                 </tr>
               )}
@@ -93,30 +102,15 @@ export default function AuditLogsPage() {
           </table>
         </div>
 
-        {/* Pagination Controls */}
-        {total > 0 && (
-          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between bg-gray-50/50">
-            <div className="text-sm text-gray-500">
-              Showing <span className="font-medium">{(page - 1) * limit + 1}</span> to <span className="font-medium">{Math.min(page * limit, total)}</span> of <span className="font-medium">{total}</span> results
-            </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => setPage(p => Math.max(1, p - 1))} 
-                disabled={page === 1}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Previous
-              </button>
-              <button 
-                onClick={() => setPage(p => p + 1)} 
-                disabled={page * limit >= total}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Reusable Pagination */}
+        <Pagination
+          page={page}
+          limit={limit}
+          total={total}
+          onPageChange={setPage}
+          itemLabel="events"
+        />
       </div>
+    </div>
   );
 }

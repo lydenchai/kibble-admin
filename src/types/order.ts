@@ -20,4 +20,5 @@ export interface Order {
   courier?: string;
   trackingUrl?: string;
   deliveredAt?: string;
+  totalPrice?: number;
 }

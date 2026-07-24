@@ -80,7 +80,7 @@ export default function OrderDetailPage() {
       }, token);
       if (data && data.success) {
         setOrder({ ...order, trackingNumber, courier, trackingUrl });
-        alert("Tracking updated successfully!");
+        alert("Tracking info updated successfully!");
       } else {
         alert("Failed to update tracking");
       }
@@ -94,20 +94,20 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <div className="p-8 max-w-5xl mx-auto flex justify-center items-center h-64">
-        <div className="text-gray-500 text-lg">Loading order details...</div>
+      <div className="p-8 max-w-5xl mx-auto flex justify-center items-center h-64 text-xs font-medium text-stone-400">
+        Loading order details...
       </div>
     );
   }
 
   if (error || !order) {
     return (
-      <div className="p-8 max-w-5xl mx-auto">
-        <div className="bg-red-50 text-red-600 p-4 rounded-lg">
+      <div className="p-8 max-w-5xl mx-auto space-y-4">
+        <div className="bg-rose-50 text-rose-700 p-4 rounded-xl text-xs font-bold border border-rose-200">
           {error || "Order not found"}
         </div>
-        <button onClick={() => router.back()} className="mt-4 text-blue-600 hover:underline">
-          &larr; Back to Orders
+        <button onClick={() => router.back()} className="text-xs font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1">
+          <FiArrowLeft className="w-3.5 h-3.5" /> Back to Orders
         </button>
       </div>
     );
@@ -115,137 +115,140 @@ export default function OrderDetailPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-amber-100 text-amber-800';
-      case 'processing': return 'bg-blue-100 text-blue-800';
-      case 'shipped': return 'bg-purple-100 text-purple-800';
-      case 'delivered': return 'bg-emerald-100 text-emerald-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'pending': return 'bg-amber-50 text-amber-700 border-amber-200/60';
+      case 'processing': return 'bg-sky-50 text-sky-700 border-sky-200/60';
+      case 'shipped': return 'bg-purple-50 text-purple-700 border-purple-200/60';
+      case 'delivered': return 'bg-emerald-50 text-emerald-700 border-emerald-200/60';
+      case 'cancelled': return 'bg-rose-50 text-rose-700 border-rose-200/60';
+      default: return 'bg-stone-100 text-stone-700 border-stone-200';
     }
   };
 
   return (
-    <div className="p-8 max-w-5xl mx-auto pb-20">
-      <div className="mb-6">
-        <Link href="/orders" className="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-2 w-fit transition-colors">
-          <FiArrowLeft /> Back to Orders
+    <div className="p-8 max-w-6xl mx-auto space-y-8 pb-20">
+      {/* Back button & Order Header */}
+      <div className="space-y-4">
+        <Link href="/orders" className="text-xs font-bold text-stone-500 hover:text-stone-900 inline-flex items-center gap-1.5 transition-colors">
+          <FiArrowLeft className="w-3.5 h-3.5" /> Back to Orders
         </Link>
-      </div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            Order #{order._id.substring(order._id.length - 8).toUpperCase()}
-            <span className={`text-xs font-bold px-3 py-1 rounded-full shadow-sm ${getStatusColor(order.status)}`}>
-              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-            </span>
-          </h1>
-          <p className="text-gray-500 mt-1">
-            Placed on {new Date(order.createdAt).toLocaleString()}
-          </p>
-        </div>
-        
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-gray-700">Update Status:</span>
-          <select
-            value={order.status}
-            onChange={(e) => handleStatusChange(e.target.value)}
-            disabled={isUpdating}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none bg-white shadow-sm disabled:opacity-50"
-          >
-            <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200/80 pb-6">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight font-mono">
+                Order #{order._id.substring(order._id.length - 8).toUpperCase()}
+              </h1>
+              <span className={`text-[11px] font-extrabold px-3 py-1 rounded-full border ${getStatusColor(order.status)}`}>
+                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-stone-500 mt-1">
+              Placed on {new Date(order.createdAt).toLocaleString()}
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Update Status:</span>
+            <select
+              value={order.status}
+              onChange={(e) => handleStatusChange(e.target.value)}
+              disabled={isUpdating}
+              className="border border-stone-200 rounded-xl px-3.5 py-2 text-xs font-bold focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none bg-stone-50/50 hover:bg-white text-stone-900 transition-colors disabled:opacity-50 cursor-pointer"
+            >
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column - Order Items */}
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="p-6 border-b border-gray-100 bg-gray-50/50">
-              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <FiPackage className="text-gray-400" /> Items Ordered
+          <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
+            <div className="p-5 border-b border-stone-100 bg-stone-50/40">
+              <h2 className="text-sm font-extrabold text-stone-900 flex items-center gap-2">
+                <FiPackage className="text-stone-400" /> Items Ordered
               </h2>
             </div>
-            <div className="p-0">
+            <div className="p-0 overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-gray-100 text-xs uppercase text-gray-500">
-                    <th className="px-6 py-4 font-medium">Product</th>
-                    <th className="px-6 py-4 font-medium text-center">Qty</th>
-                    <th className="px-6 py-4 font-medium text-right">Price</th>
-                    <th className="px-6 py-4 font-medium text-right">Total</th>
+                  <tr className="border-b border-stone-100 text-[11px] uppercase font-extrabold text-stone-400 bg-stone-50/20">
+                    <th className="px-6 py-3.5">Product</th>
+                    <th className="px-6 py-3.5 text-center">Qty</th>
+                    <th className="px-6 py-3.5 text-right">Price</th>
+                    <th className="px-6 py-3.5 text-right">Total</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-stone-100">
                   {order.items.map((item) => (
-                    <tr key={item.sku} className="hover:bg-gray-50/50">
+                    <tr key={item.sku} className="hover:bg-stone-50/50 transition-colors">
                       <td className="px-6 py-4">
-                        <p className="font-medium text-gray-900">{item.name}</p>
-                        <p className="text-xs text-gray-500 mt-1">SKU: {item.sku}</p>
+                        <p className="text-xs font-bold text-stone-900">{item.name}</p>
+                        <p className="text-[11px] font-mono text-stone-400 mt-0.5">SKU: {item.sku}</p>
                       </td>
-                      <td className="px-6 py-4 text-center text-gray-700">{item.quantity}</td>
-                      <td className="px-6 py-4 text-right text-gray-700">${item.price.toFixed(2)}</td>
-                      <td className="px-6 py-4 text-right font-medium text-gray-900">${(item.price * item.quantity).toFixed(2)}</td>
+                      <td className="px-6 py-4 text-center text-xs font-semibold text-stone-700">{item.quantity}</td>
+                      <td className="px-6 py-4 text-right text-xs font-semibold text-stone-700">${item.price.toFixed(2)}</td>
+                      <td className="px-6 py-4 text-right text-xs font-extrabold text-stone-900">${(item.price * item.quantity).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="p-6 bg-gray-50/50 border-t border-gray-100 flex flex-col gap-2 items-end">
-              <div className="flex justify-between w-full sm:w-64 text-sm text-gray-600">
+            <div className="p-6 bg-stone-50/40 border-t border-stone-100 flex flex-col gap-2 items-end">
+              <div className="flex justify-between w-full sm:w-64 text-xs font-medium text-stone-600">
                 <span>Subtotal</span>
-                <span>${order.subtotal.toFixed(2)}</span>
+                <span>${(order.subtotal || 0).toFixed(2)}</span>
               </div>
-              <div className="flex justify-between w-full sm:w-64 text-sm text-gray-600">
+              <div className="flex justify-between w-full sm:w-64 text-xs font-medium text-stone-600">
                 <span>Shipping</span>
-                <span>${order.shipping.toFixed(2)}</span>
+                <span>${(order.shipping || 0).toFixed(2)}</span>
               </div>
-              <div className="flex justify-between w-full sm:w-64 text-sm text-gray-600">
+              <div className="flex justify-between w-full sm:w-64 text-xs font-medium text-stone-600">
                 <span>Tax</span>
-                <span>${order.tax.toFixed(2)}</span>
+                <span>${(order.tax || 0).toFixed(2)}</span>
               </div>
               {order.discount > 0 && (
-                <div className="flex justify-between w-full sm:w-64 text-sm text-green-600">
+                <div className="flex justify-between w-full sm:w-64 text-xs font-bold text-emerald-600">
                   <span>Discount</span>
                   <span>-${order.discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between w-full sm:w-64 text-lg font-bold text-gray-900 mt-2 pt-2 border-t border-gray-200">
+              <div className="flex justify-between w-full sm:w-64 text-base font-black text-stone-900 mt-2 pt-2 border-t border-stone-200/80">
                 <span>Total</span>
-                <span>${order.total.toFixed(2)}</span>
+                <span>${(order.total || order.totalPrice || 0).toFixed(2)}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column - Customer Info */}
+        {/* Right Column - Customer & Shipping Cards */}
         <div className="space-y-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <FiCheckCircle className="text-gray-400" /> Customer Details
+          <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 p-6 space-y-3">
+            <h2 className="text-sm font-extrabold text-stone-900 flex items-center gap-2">
+              <FiCheckCircle className="text-stone-400" /> Customer Details
             </h2>
             {order.user ? (
-              <div className="text-sm">
-                <p className="font-medium text-gray-900">{order.user.name}</p>
-                <p className="text-gray-500 mt-1">{order.user.email}</p>
-                <p className="text-gray-500 mt-1">{order.user.phone || "No phone provided"}</p>
+              <div className="text-xs space-y-1">
+                <p className="font-bold text-stone-900">{order.user.name}</p>
+                <p className="text-stone-500">{order.user.email}</p>
+                <p className="text-stone-400">{order.user.phone || "No phone provided"}</p>
               </div>
             ) : (
-              <p className="text-sm text-gray-500">Guest Checkout / Deleted User</p>
+              <p className="text-xs text-stone-400">Guest Checkout / Deleted User</p>
             )}
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <FiTruck className="text-gray-400" /> Shipping Address
+          <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 p-6 space-y-3">
+            <h2 className="text-sm font-extrabold text-stone-900 flex items-center gap-2">
+              <FiTruck className="text-stone-400" /> Shipping Address
             </h2>
             {order.shippingAddress ? (
-              <div className="text-sm text-gray-700 space-y-1">
+              <div className="text-xs text-stone-700 leading-relaxed font-medium">
                 <p>
                   {[
                     order.shippingAddress?.street,
@@ -258,70 +261,72 @@ export default function OrderDetailPage() {
                 </p> 
               </div>
             ) : (
-              <p className="text-sm text-gray-500">No shipping address</p>
+              <p className="text-xs text-stone-400">No shipping address recorded</p>
             )}
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <FiPackage className="text-gray-400" /> Shipping Tracking
+          <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 p-6 space-y-4">
+            <h2 className="text-sm font-extrabold text-stone-900 flex items-center gap-2">
+              <FiPackage className="text-stone-400" /> Shipping Tracking
             </h2>
             <form onSubmit={handleUpdateTracking} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Courier</label>
+                <label className="block text-[11px] font-extrabold text-stone-500 uppercase tracking-wider mb-1.5">Courier</label>
                 <input
                   type="text"
                   value={courier}
                   onChange={(e) => setCourier(e.target.value)}
                   placeholder="e.g. FedEx, UPS"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                  className="w-full bg-stone-50/50 border border-stone-200 rounded-xl px-3.5 py-2 text-xs font-medium focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none transition-all text-stone-900"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Tracking Number</label>
+                <label className="block text-[11px] font-extrabold text-stone-500 uppercase tracking-wider mb-1.5">Tracking Number</label>
                 <input
                   type="text"
                   value={trackingNumber}
                   onChange={(e) => setTrackingNumber(e.target.value)}
                   placeholder="e.g. 1Z9999999999999999"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                  className="w-full bg-stone-50/50 border border-stone-200 rounded-xl px-3.5 py-2 text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none transition-all text-stone-900"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Tracking URL</label>
+                <label className="block text-[11px] font-extrabold text-stone-500 uppercase tracking-wider mb-1.5">Tracking URL</label>
                 <input
                   type="url"
                   value={trackingUrl}
                   onChange={(e) => setTrackingUrl(e.target.value)}
                   placeholder="https://..."
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                  className="w-full bg-stone-50/50 border border-stone-200 rounded-xl px-3.5 py-2 text-xs font-medium focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none transition-all text-stone-900"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isUpdatingTracking}
-                className="w-full bg-brand-600 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-brand-700 transition-colors disabled:opacity-50"
+                className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl px-4 py-2.5 text-xs transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
               >
                 {isUpdatingTracking ? "Saving..." : "Save Tracking Info"}
               </button>
             </form>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <FiCreditCard className="text-gray-400" /> Payment Info
+          <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 p-6 space-y-3">
+            <h2 className="text-sm font-extrabold text-stone-900 flex items-center gap-2">
+              <FiCreditCard className="text-stone-400" /> Payment Info
             </h2>
-            <div className="text-sm">
-              <p className="flex justify-between mb-2">
-                <span className="text-gray-500">Method</span>
-                <span className="font-medium capitalize">{order.paymentMethod}</span>
-              </p>
-              <p className="flex justify-between">
-                <span className="text-gray-500">Status</span>
-                <span className={`font-semibold capitalize ${order.paymentStatus === 'paid' ? 'text-green-600' : 'text-amber-600'}`}>
+            <div className="text-xs space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-stone-500">Method</span>
+                <span className="font-bold text-stone-900 capitalize">{order.paymentMethod}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-stone-500">Status</span>
+                <span className={`font-extrabold capitalize px-2 py-0.5 rounded-full text-[10px] ${
+                  order.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-amber-50 text-amber-700 border border-amber-200/60'
+                }`}>
                   {order.paymentStatus}
                 </span>
-              </p>
+              </div>
             </div>
           </div>
         </div>

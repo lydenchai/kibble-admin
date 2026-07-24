@@ -5,6 +5,7 @@ import Link from "next/link";
 import { fetchCategoriesAction, deleteCategoryAction } from "../../../actions/category.actions";
 import { FiPlus as FiPlusBase, FiTag as FiTagBase, FiEdit as FiEditBase, FiTrash2 as FiTrash2Base } from "react-icons/fi";
 import { CategoryType } from "../../../types/category";
+import Pagination from "@/components/ui/Pagination";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiTag = FiTagBase as React.ElementType;
@@ -33,7 +34,6 @@ export default function CategoriesPage() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCategories();
   }, [page, limit]);
 
@@ -54,86 +54,92 @@ export default function CategoriesPage() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <h1 className="text-3xl font-bold text-gray-900">Categories</h1>
+    <div className="p-8 max-w-7xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Categories</h1>
+          <p className="text-sm sm:text-base text-stone-500 mt-1">Organize products into pet supplies categories</p>
+        </div>
         <Link 
           href="/categories/new"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors"
+          className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-xs"
         >
-          <FiPlus className="w-5 h-5" />
-          Add Category
+          <FiPlus className="w-4.5 h-4.5" />
+          <span>Add Category</span>
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      {/* Table Container */}
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-stone-100">
+            <thead className="bg-stone-50/70">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">No.</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Image</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Category Name</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Slug</th>
+                <th className="px-6 py-4 text-right text-xs font-black text-stone-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white divide-y divide-stone-100">
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500">Loading categories...</td>
+                  <td colSpan={5} className="px-6 py-12 text-center text-sm text-stone-400 font-medium">Loading categories...</td>
                 </tr>
               ) : categories.length > 0 ? (
                 categories.map((category, index) => (
-                  <tr key={category._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{(page - 1) * limit + index + 1}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                  <tr key={category._id} className="hover:bg-stone-50/50 transition-colors">
+                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-400">{(page - 1) * limit + index + 1}</td>
+                    <td className="px-6 py-4.5 whitespace-nowrap">
                       {category.image ? (
-                        <img src={category.image} alt={category.name} className="h-10 w-10 rounded-md object-cover border border-gray-200" />
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={category.image} alt={category.name} className="h-10 w-10 rounded-xl object-cover border border-stone-200 shadow-xs" />
                       ) : (
-                        <div className="h-10 w-10 rounded-md bg-gray-100 border border-gray-200 flex items-center justify-center">
-                          <FiTag className="text-gray-400" />
+                        <div className="h-10 w-10 rounded-xl bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-400 text-sm font-bold">
+                          🏷️
                         </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{category.name}</div>
+                    <td className="px-6 py-4.5 whitespace-nowrap">
+                      <div className="text-sm font-bold text-stone-900">{category.name}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-mono font-semibold text-stone-500">
                       {category.slug}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end gap-3">
+                    <td className="px-6 py-4.5 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end gap-2">
                         <Link
-                            href={`/categories/${category._id}`}
-                            className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all cursor-pointer"
-                            title="Edit Product"
-                          >
-                            <FiEdit size={18} />
-                          </Link>
-                          <button
-                            className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
-                            title="Delete Product"
-                            onClick={() => handleDelete(category._id)} 
-                            disabled={isDeleting === category._id}
-                          >
-                            <FiTrash2 size={18} />
-                          </button>
+                          href={`/categories/${category._id}`}
+                          className="p-2 text-stone-400 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors cursor-pointer"
+                          title="Edit Category"
+                        >
+                          <FiEdit size={18} />
+                        </Link>
+                        <button
+                          className="p-2 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
+                          title="Delete Category"
+                          onClick={() => handleDelete(category._id)} 
+                          disabled={isDeleting === category._id}
+                        >
+                          <FiTrash2 size={18} />
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={5} className="px-6 py-12 text-center text-stone-400">
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <FiTag className="w-8 h-8 text-gray-400" />
+                      <div className="w-12 h-12 bg-stone-100 rounded-2xl flex items-center justify-center mb-3 text-xl">
+                        🏷️
                       </div>
-                      <p className="text-lg font-medium text-gray-900">No categories found</p>
-                      <p className="text-sm text-gray-500 mt-1 mb-4">Get started by creating a new category.</p>
-                      <Link href="/categories/new" className="text-blue-600 font-medium hover:underline">
-                        + Create Category
+                      <p className="text-base font-bold text-stone-900">No categories found</p>
+                      <p className="text-xs text-stone-400 mt-0.5 mb-4">Get started by creating a new product category.</p>
+                      <Link href="/categories/new" className="px-4 py-2 bg-brand-50 text-brand-600 text-xs font-bold rounded-xl hover:bg-brand-100 transition-colors">
+                        Create Category
                       </Link>
                     </div>
                   </td>
@@ -143,30 +149,14 @@ export default function CategoriesPage() {
           </table>
         </div>
 
-        {/* Pagination Controls */}
-        {total > 0 && (
-          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between bg-gray-50/50">
-            <div className="text-sm text-gray-500">
-              Showing <span className="font-medium">{(page - 1) * limit + 1}</span> to <span className="font-medium">{Math.min(page * limit, total)}</span> of <span className="font-medium">{total}</span> results
-            </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => setPage(p => Math.max(1, p - 1))} 
-                disabled={page === 1}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Previous
-              </button>
-              <button 
-                onClick={() => setPage(p => p + 1)} 
-                disabled={page * limit >= total}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Reusable Pagination */}
+        <Pagination
+          page={page}
+          limit={limit}
+          total={total}
+          onPageChange={setPage}
+          itemLabel="categories"
+        />
       </div>
     </div>
   );

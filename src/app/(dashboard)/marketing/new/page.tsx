@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createCouponAction } from "../../../../actions/marketing.actions";
+import { FiArrowLeft as FiArrowLeftBase } from "react-icons/fi";
+
+const FiArrowLeft = FiArrowLeftBase as React.ElementType;
 
 export default function CreateCouponPage() {
   const router = useRouter();
@@ -53,15 +56,26 @@ export default function CreateCouponPage() {
   };
 
   return (
-    <div className="p-8 max-w-3xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Create Coupon</h1>
-        <p className="text-gray-500 mt-2">Create a new discount code for your customers.</p>
+    <div className="p-8 max-w-4xl mx-auto space-y-8">
+      {/* Back Button & Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200/80 pb-6">
+        <div>
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-500 hover:text-stone-900 transition-colors cursor-pointer mb-2"
+          >
+            <FiArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Marketing</span>
+          </button>
+          <h1 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">Create Promo Coupon</h1>
+          <p className="text-xs sm:text-sm text-stone-500 mt-1">Configure discount codes, usage limits, and minimum order requirements</p>
+        </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-6">
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 p-6 sm:p-8">
         {error && (
-          <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg text-sm">
+          <div className="mb-6 p-4 bg-rose-50 text-rose-700 border-l-4 border-rose-500 rounded-xl text-xs font-medium">
             {error}
           </div>
         )}
@@ -69,26 +83,26 @@ export default function CreateCouponPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Coupon Code</label>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Coupon Code *</label>
               <input
                 type="text"
                 name="code"
                 required
-                placeholder="e.g. SUMMER2024"
+                placeholder="e.g. KIBBLE15"
                 value={formData.code}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 uppercase"
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-mono font-bold uppercase tracking-wider"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Discount Type</label>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Discount Type *</label>
               <select
                 name="type"
                 required
                 value={formData.type}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium cursor-pointer"
               >
                 <option value="percentage">Percentage (%)</option>
                 <option value="fixed">Fixed Amount ($)</option>
@@ -96,7 +110,7 @@ export default function CreateCouponPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Discount Value</label>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Discount Value *</label>
               <input
                 type="number"
                 name="value"
@@ -106,12 +120,12 @@ export default function CreateCouponPage() {
                 placeholder={formData.type === 'percentage' ? 'e.g. 15' : 'e.g. 10.00'}
                 value={formData.value}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Order Value ($)</label>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Minimum Order Value ($)</label>
               <input
                 type="number"
                 name="minOrderValue"
@@ -120,24 +134,24 @@ export default function CreateCouponPage() {
                 placeholder="0.00"
                 value={formData.minOrderValue}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Expiry Date *</label>
               <input
                 type="date"
                 name="expiry"
                 required
                 value={formData.expiry}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium cursor-pointer"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Usage Limit (Total uses)</label>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Usage Limit (Total uses)</label>
               <input
                 type="number"
                 name="usageLimit"
@@ -145,37 +159,37 @@ export default function CreateCouponPage() {
                 placeholder="Leave empty for unlimited"
                 value={formData.usageLimit}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
               />
             </div>
           </div>
 
-          <div className="flex items-center">
+          <label className="flex items-center space-x-3 p-3 bg-stone-50/50 rounded-xl border border-stone-200/60 cursor-pointer">
             <input
               type="checkbox"
               id="isActive"
               name="isActive"
               checked={formData.isActive}
               onChange={handleChange}
-              className="h-4 w-4 text-brand-600 focus:ring-brand-500 border-gray-300 rounded cursor-pointer"
+              className="w-4 h-4 text-brand-600 rounded border-stone-300 focus:ring-brand-500"
             />
-            <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900 cursor-pointer">
-              Active (Customers can use this coupon immediately)
-            </label>
-          </div>
+            <span className="text-xs font-bold text-stone-800">
+              Active (Customers can apply this coupon code at checkout immediately)
+            </span>
+          </label>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-stone-100">
             <button
               type="button"
               onClick={() => router.push("/marketing")}
-              className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+              className="px-6 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl text-xs transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Creating..." : "Create Coupon"}
             </button>

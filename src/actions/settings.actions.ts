@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 export async function updateSettingsAction(payload: any, token: string | null) {
   if (!token) {
-    throw new Error('You must be logged in to update settings');
+    return { success: false, error: 'You must be logged in to update settings', isAuthError: true };
   }
 
   try {
@@ -19,20 +19,24 @@ export async function updateSettingsAction(payload: any, token: string | null) {
     });
 
     if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.error?.message || 'Failed to update settings');
+      const error = await res.json().catch(() => ({}));
+      const msg = error.error?.message || error.message || 'Failed to update settings';
+      const isAuth = res.status === 401 || msg.toLowerCase().includes('token') || msg.toLowerCase().includes('expired');
+      return { success: false, error: msg, isAuthError: isAuth };
     }
 
     const data = await res.json();
-    return data;
+    return { success: true, data: data.data || data };
   } catch (error: any) {
     console.error("Failed to update settings:", error);
-    throw error;
+    return { success: false, error: error.message || 'Failed to update settings' };
   }
 }
 
 export async function fetchSettingsAction(token: string | null) {
-  if (!token) throw new Error('You must be logged in to fetch settings');
+  if (!token) {
+    return { success: false, error: 'You must be logged in to fetch settings', isAuthError: true };
+  }
 
   try {
     const res = await fetch(`${API_URL}/settings`, {
@@ -46,13 +50,15 @@ export async function fetchSettingsAction(token: string | null) {
 
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));
-      throw new Error(error.error?.message || 'Failed to fetch settings');
+      const msg = error.error?.message || error.message || 'Failed to fetch settings';
+      const isAuth = res.status === 401 || msg.toLowerCase().includes('token') || msg.toLowerCase().includes('expired');
+      return { success: false, error: msg, isAuthError: isAuth };
     }
 
     const data = await res.json();
-    return data;
+    return { success: true, data: data.data || data };
   } catch (error: any) {
     console.error("Failed to fetch settings:", error);
-    throw error;
+    return { success: false, error: error.message || 'Failed to fetch settings' };
   }
 }

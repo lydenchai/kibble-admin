@@ -2,16 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { apiClient } from "../../../lib/apiClient";
 import { FiPlus as FiPlusBase, FiSearch as FiSearchBase, FiFilter as FiFilterBase, FiBox as FiBoxBase, FiEdit, FiTrash } from "react-icons/fi";
 import { ProductType } from "../../../types/product";
+import { deleteProductAction, fetchProductsAction } from "../../../actions/product.actions";
+import Pagination from "@/components/ui/Pagination";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiSearch = FiSearchBase as React.ElementType;
 const FiFilter = FiFilterBase as React.ElementType;
 const FiBox = FiBoxBase as React.ElementType;
-
-import { deleteProductAction, fetchProductsAction } from "../../../actions/product.actions";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -39,7 +38,6 @@ export default function ProductsPage() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProducts();
   }, [page, limit]);
 
@@ -65,53 +63,58 @@ export default function ProductsPage() {
   );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <h1 className="text-3xl font-bold text-gray-900">Products</h1>
+    <div className="p-8 max-w-7xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Products Catalog</h1>
+          <p className="text-sm sm:text-base text-stone-500 mt-1">Manage pet food, treats, and accessories inventory</p>
+        </div>
         <Link 
           href="/products/new"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors"
+          className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-xs"
         >
-          <FiPlus className="w-5 h-5" />
-          Add Product
+          <FiPlus className="w-4.5 h-4.5" />
+          <span>Add Product</span>
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row gap-4 justify-between bg-gray-50/50">
+      {/* Table Container */}
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
+        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40">
           <div className="relative w-full sm:max-w-md">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
             <input
               type="text"
-              placeholder="Search products by name or brand..."
+              placeholder="Search products by title or brand..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm font-medium text-stone-900"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors">
-            <FiFilter className="w-4 h-4" />
-            Filters
+          <button className="flex items-center gap-2 px-4 py-2.5 border border-stone-200 rounded-xl bg-white hover:bg-stone-50 text-sm font-bold text-stone-700 transition-colors cursor-pointer">
+            <FiFilter className="w-4 h-4 text-stone-400" />
+            <span>Filters</span>
           </button>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-stone-100">
+            <thead className="bg-stone-50/70">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inventory</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price (Base)</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">No.</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Product Info</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Inventory</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Category</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Base Price</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-right text-xs font-black text-stone-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white divide-y divide-stone-100">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">Loading products...</td>
+                  <td colSpan={7} className="px-6 py-12 text-center text-sm text-stone-400 font-medium">Loading catalog...</td>
                 </tr>
               ) : filteredProducts.length > 0 ? (
                 filteredProducts.map((product, index) => {
@@ -119,44 +122,47 @@ export default function ProductsPage() {
                   const basePrice = product.variants.length > 0 ? (product.variants[0].price as number) : 0;
                   
                   return (
-                    <tr key={product._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center">
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                            <div className="text-sm text-gray-500">{product.brand} • {product.petType}</div>
+                    <tr key={product._id} className="hover:bg-stone-50/50 transition-colors">
+                      <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-400">{index + 1}</td>
+                      <td className="px-6 py-4.5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center text-stone-700 font-bold text-base shrink-0">
+                            🐾
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-stone-900">{product.name}</div>
+                            <div className="text-xs text-stone-500 font-semibold">{product.brand} • {product.petType}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {totalStock} in stock<br/>
-                        <span className="text-xs text-gray-400">({product.variants.length} variants)</span>
+                      <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-800">
+                        {totalStock} in stock
+                        <span className="block text-xs text-stone-400 font-medium">({product.variants.length} variants)</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4.5 whitespace-nowrap text-sm font-semibold text-stone-700">
                         {product.category?.name || "Uncategorized"}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                      <td className="px-6 py-4.5 whitespace-nowrap text-sm font-black text-stone-900">
                         ${basePrice.toFixed(2)}
                       </td>
-                      <td className="px-6 py-5 whitespace-nowrap">
-                        <span className={`px-3 py-1.5 inline-flex text-xs font-bold rounded-full shadow-sm ${
-                          product.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                      <td className="px-6 py-4.5 whitespace-nowrap">
+                        <span className={`px-3 py-1 inline-flex text-xs font-black rounded-full ${
+                          product.isActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-rose-50 text-rose-700 border border-rose-200/60'
                         }`}>
                           {product.isActive ? 'Active' : 'Inactive'}
                         </span>
                       </td>
-                      <td className="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex justify-end gap-3">
+                      <td className="px-6 py-4.5 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex justify-end gap-2">
                           <Link
                             href={`/products/${product._id}`}
-                            className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all cursor-pointer"
+                            className="p-2 text-stone-400 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors cursor-pointer"
                             title="Edit Product"
                           >
                             <FiEdit size={18} />
                           </Link>
                           <button
-                            className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
+                            className="p-2 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
                             title="Delete Product"
                             onClick={() => handleDelete(product._id)} 
                             disabled={isDeleting === product._id}
@@ -170,15 +176,15 @@ export default function ProductsPage() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={7} className="px-6 py-12 text-center text-stone-400">
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <FiBox className="w-8 h-8 text-gray-400" />
+                      <div className="w-12 h-12 bg-stone-100 rounded-2xl flex items-center justify-center mb-3 text-xl">
+                        🔍
                       </div>
-                      <p className="text-lg font-medium text-gray-900">No products found</p>
-                      <p className="text-sm text-gray-500 mt-1 mb-4">Get started by creating a new product.</p>
-                      <Link href="/products/new" className="text-blue-600 font-medium hover:underline">
-                        + Create Product
+                      <p className="text-base font-bold text-stone-900">No products found</p>
+                      <p className="text-xs text-stone-400 mt-0.5 mb-4">Get started by adding a new item to your store catalog.</p>
+                      <Link href="/products/new" className="px-4 py-2 bg-brand-50 text-brand-600 text-xs font-bold rounded-xl hover:bg-brand-100 transition-colors">
+                        Add New Product
                       </Link>
                     </div>
                   </td>
@@ -187,29 +193,15 @@ export default function ProductsPage() {
             </tbody>
           </table>
         </div>
-        
-        {/* Pagination Controls */}
-        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between bg-gray-50/50">
-          <div className="text-sm text-gray-500">
-            Showing <span className="font-medium">{total === 0 ? 0 : (page - 1) * limit + 1}</span> to <span className="font-medium">{Math.min(page * limit, total)}</span> of <span className="font-medium">{total}</span> results
-          </div>
-          <div className="flex gap-2">
-            <button 
-              onClick={() => setPage(p => Math.max(1, p - 1))} 
-              disabled={page === 1 || loading}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Previous
-            </button>
-            <button 
-              onClick={() => setPage(p => p + 1)} 
-              disabled={page * limit >= total || loading}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Next
-            </button>
-          </div>
-        </div>
+
+        {/* Reusable Pagination */}
+        <Pagination
+          page={page}
+          limit={limit}
+          total={total}
+          onPageChange={setPage}
+          itemLabel="products"
+        />
       </div>
     </div>
   );

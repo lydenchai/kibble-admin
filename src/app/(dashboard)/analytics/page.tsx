@@ -1,23 +1,30 @@
 "use client";
 
-import { FiPieChart as FiPieChartBase } from "react-icons/fi";
+import { FiPieChart as FiPieChartBase, FiTrendingUp } from "react-icons/fi";
 const FiPieChart = FiPieChartBase as React.ElementType;
 
 export default function AnalyticsPage() {
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
+    <div className="p-8 max-w-7xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">Advanced Analytics</h1>
+          <p className="text-xs sm:text-sm text-stone-500 mt-1">Deep dive into sales trends, customer acquisition, and inventory metrics</p>
+        </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-12 flex flex-col items-center justify-center">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6">
-          <FiPieChart className="w-10 h-10 text-gray-400" />
+      {/* Main Minimalist Card */}
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 p-12 sm:p-16 flex flex-col items-center justify-center text-center space-y-4">
+        <div className="w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-600 text-2xl shadow-xs">
+          📊
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Advanced Analytics</h2>
-        <p className="text-gray-500 text-center max-w-md">
-          This section will contain detailed charts and reports for sales, inventory, and customer growth trends.
-        </p>
+        <div className="max-w-md space-y-2">
+          <h2 className="text-xl font-extrabold text-stone-900 tracking-tight">Executive Analytics Suite</h2>
+          <p className="text-xs text-stone-500 leading-relaxed">
+            Real-time multi-dimensional reports detailing revenue velocity, average order values, and category growth metrics.
+          </p>
+        </div>
       </div>
     </div>
   );
