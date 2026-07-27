@@ -1,121 +1,71 @@
 "use server";
 
 import { CategoryType } from "@/types/category";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+import { serverFetch } from "@/lib/serverApiClient";
 
 export async function fetchCategoriesAction(page?: number, limit?: number) {
-  let url = `${API_URL}/categories`;
   const params = new URLSearchParams();
   if (page) params.append("page", page.toString());
   if (limit) params.append("limit", limit.toString());
-  
-  const queryString = params.toString();
-  if (queryString) {
-    url += `?${queryString}`;
-  }
-  
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-App-Type': 'admin'
-    }
-  });
 
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.error?.message || "Failed to fetch categories");
+  const queryString = params.toString() ? `?${params.toString()}` : "";
+  const res = await serverFetch<CategoryType[]>(`/categories${queryString}`, { method: "GET" });
+
+  if (!res.success) {
+    throw new Error(res.error || "Failed to fetch categories");
   }
 
-  const data = await res.json();
   return {
-    data: data.data as CategoryType[],
-    total: data.pagination?.total || 0,
+    data: (res.data || []) as CategoryType[],
+    total: res.pagination?.total || 0,
   };
 }
 
 export async function fetchCategoryByIdAction(id: string) {
-  const res = await fetch(`${API_URL}/categories/${id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-App-Type': 'admin'
-    }
-  });
-
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.error?.message || "Failed to fetch category");
+  const res = await serverFetch<CategoryType>(`/categories/${id}`, { method: "GET" });
+  if (!res.success) {
+    throw new Error(res.error || "Failed to fetch category");
   }
-
-  const data = await res.json();
-  return data.data as CategoryType;
+  return res.data;
 }
 
-export async function createCategoryAction(payload: any, token: string | null) {
-  if (!token) throw new Error("You must be logged in to create a category");
-  
-  const res = await fetch(`${API_URL}/categories`, {
+export async function createCategoryAction(payload: any, token?: string | null) {
+  const res = await serverFetch("/categories", {
     method: "POST",
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'X-App-Type': 'admin'
-    },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    token,
+    requireAuth: true,
   });
 
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.error?.message || "Failed to create category");
+  if (!res.success) {
+    throw new Error(res.error || "Failed to create category");
   }
-
-  const data = await res.json();
-  return data.data;
+  return res.data;
 }
 
-export async function updateCategoryAction(id: string, payload: any, token: string | null) {
-  if (!token) throw new Error("You must be logged in to update a category");
-  
-  const res = await fetch(`${API_URL}/categories/${id}`, {
+export async function updateCategoryAction(id: string, payload: any, token?: string | null) {
+  const res = await serverFetch(`/categories/${id}`, {
     method: "PUT",
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'X-App-Type': 'admin'
-    },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    token,
+    requireAuth: true,
   });
 
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.error?.message || "Failed to update category");
+  if (!res.success) {
+    throw new Error(res.error || "Failed to update category");
   }
-
-  const data = await res.json();
-  return data.data;
+  return res.data;
 }
 
-export async function deleteCategoryAction(id: string, token: string | null) {
-  if (!token) throw new Error("You must be logged in to delete a category");
-  
-  const res = await fetch(`${API_URL}/categories/${id}`, {
+export async function deleteCategoryAction(id: string, token?: string | null) {
+  const res = await serverFetch(`/categories/${id}`, {
     method: "DELETE",
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'X-App-Type': 'admin'
-    }
+    token,
+    requireAuth: true,
   });
 
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.error?.message || "Failed to delete category");
+  if (!res.success) {
+    throw new Error(res.error || "Failed to delete category");
   }
-
-  if (res.status === 204) return { success: true };
-
-  const data = await res.json();
-  return data;
+  return { success: true };
 }

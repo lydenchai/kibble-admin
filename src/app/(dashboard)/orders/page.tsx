@@ -1,21 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FiSearch as FiSearchBase, FiFilter as FiFilterBase, FiShoppingCart as FiShoppingCartBase, FiEye as FiEyeBase } from "react-icons/fi";
+import { FiSearch as FiSearchBase, FiEye as FiEyeBase } from "react-icons/fi";
 import { updateOrderAction, fetchOrdersAction } from "@/actions/order.actions";
 import { Order } from "@/types/order";
 import Pagination from "@/components/ui/Pagination";
 
 const FiSearch = FiSearchBase as React.ElementType;
-const FiFilter = FiFilterBase as React.ElementType;
-const FiShoppingCart = FiShoppingCartBase as React.ElementType;
 const FiEye = FiEyeBase as React.ElementType;
 
 export default function OrdersPage() {
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -57,10 +55,15 @@ export default function OrdersPage() {
     }
   };
 
-  const filteredOrders = orders.filter(order => 
-    order._id.toLowerCase().includes(search.toLowerCase()) || 
-    (order.user?.name || "").toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredOrders = orders.filter(order => {
+    const matchesSearch =
+      order._id.toLowerCase().includes(search.toLowerCase()) ||
+      (order.user?.name || "").toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus = statusFilter === "all" || order.status.toLowerCase() === statusFilter.toLowerCase();
+
+    return matchesSearch && matchesStatus;
+  });
 
   const total = filteredOrders.length;
   const paginatedOrders = filteredOrders.slice((page - 1) * limit, page * limit);
@@ -84,14 +87,32 @@ export default function OrdersPage() {
               type="text"
               placeholder="Search orders by ID or customer..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm font-medium text-stone-900"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 border border-stone-200 rounded-xl bg-white hover:bg-stone-50 text-sm font-bold text-stone-700 transition-colors cursor-pointer">
-            <FiFilter className="w-4 h-4 text-stone-400" />
-            <span>Filters</span>
-          </button>
+
+          <div className="flex items-center gap-3">
+            {/* Status Filter Dropdown */}
+            <select
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setPage(1);
+              }}
+              className="px-3.5 py-2.5 border border-stone-200 rounded-xl bg-white text-xs font-bold text-stone-700 focus:outline-none focus:border-stone-400 transition-colors cursor-pointer"
+            >
+              <option value="all">All Order Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -99,10 +120,10 @@ export default function OrdersPage() {
             <thead className="bg-stone-50/70">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Order ID</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Date</th>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Total Amount</th>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Total</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Date</th>
                 <th className="px-6 py-4 text-right text-xs font-black text-stone-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
@@ -111,40 +132,33 @@ export default function OrdersPage() {
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-sm text-stone-400 font-medium">Loading orders...</td>
                 </tr>
-              ) : paginatedOrders.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-stone-400">
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="w-12 h-12 bg-stone-100 rounded-2xl flex items-center justify-center mb-3 text-xl">
-                        🛒
-                      </div>
-                      <p className="text-base font-bold text-stone-900">No orders found</p>
-                      <p className="text-xs text-stone-400 mt-0.5">No transactions match your search filter.</p>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
+              ) : paginatedOrders.length > 0 ? (
                 paginatedOrders.map((order) => (
                   <tr key={order._id} className="hover:bg-stone-50/50 transition-colors">
-                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-mono font-bold text-brand-600">
-                      #{order._id.slice(-8).toUpperCase()}
-                    </td>
-                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-semibold text-stone-500">
-                      {new Date(order.createdAt).toLocaleDateString()}
+                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-mono font-bold text-stone-900">
+                      #{order._id.substring(order._id.length - 6).toUpperCase()}
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap">
                       <div className="text-sm font-bold text-stone-900">{order.user?.name || "Guest Customer"}</div>
-                      <div className="text-xs text-stone-400 font-medium">{order.user?.email || "No email"}</div>
+                      <div className="text-xs text-stone-500 font-medium">{order.user?.email || "N/A"}</div>
+                    </td>
+                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-black text-stone-900">
+                      ${(order.totalPrice || 0).toFixed(2)}
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap">
                       <select
                         value={order.status}
                         onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                        className={`text-xs font-black rounded-full px-3 py-1 border cursor-pointer focus:outline-none ${
-                          order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60' :
-                          order.status === 'shipped' ? 'bg-sky-50 text-sky-700 border-sky-200/60' :
-                          order.status === 'processing' ? 'bg-amber-50 text-amber-700 border-amber-200/60' :
-                          'bg-stone-100 text-stone-700 border-stone-200'
+                        className={`px-3 py-1 text-xs font-black rounded-full border cursor-pointer focus:outline-none transition-colors ${
+                          order.status === 'delivered'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                            : order.status === 'shipped'
+                            ? 'bg-blue-50 text-blue-700 border-blue-200/60'
+                            : order.status === 'processing'
+                            ? 'bg-amber-50 text-amber-700 border-amber-200/60'
+                            : order.status === 'cancelled'
+                            ? 'bg-rose-50 text-rose-700 border-rose-200/60'
+                            : 'bg-stone-100 text-stone-700 border-stone-200'
                         }`}
                       >
                         <option value="pending">Pending</option>
@@ -154,20 +168,32 @@ export default function OrdersPage() {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-black text-stone-900">
-                      ${(order.totalPrice || 0).toFixed(2)}
+                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-medium text-stone-500">
+                      {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap text-right text-sm font-medium">
-                      <Link
-                        href={`/orders/${order._id}`}
-                        className="inline-flex items-center gap-1 p-2 text-stone-400 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors cursor-pointer"
-                        title="View Order Details"
+                      <button
+                        onClick={() => router.push(`/orders/${order._id}`)}
+                        className="p-2 text-stone-400 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-colors cursor-pointer"
+                        title="View Details"
                       >
                         <FiEye size={18} />
-                      </Link>
+                      </button>
                     </td>
                   </tr>
                 ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-stone-400">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-12 h-12 bg-stone-100 rounded-2xl flex items-center justify-center mb-3 text-xl">
+                        🛒
+                      </div>
+                      <p className="text-base font-bold text-stone-900">No orders found</p>
+                      <p className="text-xs text-stone-400 mt-0.5">No customer transactions match your filter criteria.</p>
+                    </div>
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>

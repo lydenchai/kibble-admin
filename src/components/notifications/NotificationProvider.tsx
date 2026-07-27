@@ -49,17 +49,12 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
       }
     });
 
-    eventSource.onerror = (error) => {
-      console.error('SSE connection error:', error);
-      // Close the connection on error to avoid infinite reconnect loops if server is down permanently
-      eventSource.close();
-      
-      // Attempt to reconnect after 5 seconds
-      setTimeout(() => {
-        // SSE natively tries to reconnect, but closing and recreating can sometimes be cleaner if auth/tokens are involved.
-        // For now, let's just let the browser handle standard reconnect if we didn't close it, but since we closed it:
-        // We actually shouldn't implement complex retry logic here for simplicity, just let EventSource do its thing by removing `eventSource.close()`.
-      }, 5000);
+    eventSource.onerror = () => {
+      // EventSource natively auto-reconnects on disconnection.
+      // Avoid calling eventSource.close() here so it can automatically reconnect when backend is available.
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('SSE notification stream disconnected. Reconnecting...');
+      }
     };
 
     return () => {

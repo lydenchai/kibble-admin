@@ -3,22 +3,26 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { fetchCategoriesAction, deleteCategoryAction } from "../../../actions/category.actions";
-import { FiPlus as FiPlusBase, FiTag as FiTagBase, FiEdit as FiEditBase, FiTrash2 as FiTrash2Base } from "react-icons/fi";
+import { FiPlus as FiPlusBase, FiTag as FiTagBase, FiEdit as FiEditBase, FiTrash2 as FiTrash2Base, FiSearch as FiSearchBase } from "react-icons/fi";
 import { CategoryType } from "../../../types/category";
 import Pagination from "@/components/ui/Pagination";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiTag = FiTagBase as React.ElementType;
 const FiEdit = FiEditBase as React.ElementType;
 const FiTrash2 = FiTrash2Base as React.ElementType;
+const FiSearch = FiSearchBase as React.ElementType;
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [total, setTotal] = useState(0);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const fetchCategories = async () => {
     try {
@@ -37,21 +41,25 @@ export default function CategoriesPage() {
     fetchCategories();
   }, [page, limit]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this category? Products using this category might break!")) return;
-    
+  const handleConfirmDelete = async () => {
+    if (!deleteTargetId) return;
+
     try {
-      setIsDeleting(id);
-      const token = localStorage.getItem('accessToken');
-      await deleteCategoryAction(id, token);
-      setCategories(categories.filter(c => c._id !== id));
+      setIsDeleting(deleteTargetId);
+      await deleteCategoryAction(deleteTargetId);
+      setCategories(categories.filter(c => c._id !== deleteTargetId));
     } catch (err) {
       console.error("Failed to delete category", err);
-      alert("Failed to delete category");
     } finally {
       setIsDeleting(null);
+      setDeleteTargetId(null);
     }
   };
+
+  const filteredCategories = categories.filter(c =>
+    c.name.toLowerCase().includes(search.toLowerCase()) ||
+    c.slug.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">
@@ -72,6 +80,20 @@ export default function CategoriesPage() {
 
       {/* Table Container */}
       <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
+        {/* Search Bar */}
+        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40">
+          <div className="relative w-full sm:max-w-md">
+            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
+            <input
+              type="text"
+              placeholder="Search categories by name or slug..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm font-medium text-stone-900"
+            />
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-stone-100">
             <thead className="bg-stone-50/70">
@@ -88,8 +110,8 @@ export default function CategoriesPage() {
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-sm text-stone-400 font-medium">Loading categories...</td>
                 </tr>
-              ) : categories.length > 0 ? (
-                categories.map((category, index) => (
+              ) : filteredCategories.length > 0 ? (
+                filteredCategories.map((category, index) => (
                   <tr key={category._id} className="hover:bg-stone-50/50 transition-colors">
                     <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-400">{(page - 1) * limit + index + 1}</td>
                     <td className="px-6 py-4.5 whitespace-nowrap">
@@ -120,7 +142,7 @@ export default function CategoriesPage() {
                         <button
                           className="p-2 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
                           title="Delete Category"
-                          onClick={() => handleDelete(category._id)} 
+                          onClick={() => setDeleteTargetId(category._id)} 
                           disabled={isDeleting === category._id}
                         >
                           <FiTrash2 size={18} />
@@ -137,7 +159,7 @@ export default function CategoriesPage() {
                         🏷️
                       </div>
                       <p className="text-base font-bold text-stone-900">No categories found</p>
-                      <p className="text-xs text-stone-400 mt-0.5 mb-4">Get started by creating a new product category.</p>
+                      <p className="text-xs text-stone-400 mt-0.5 mb-4">No categories match your search filter.</p>
                       <Link href="/categories/new" className="px-4 py-2 bg-brand-50 text-brand-600 text-xs font-bold rounded-xl hover:bg-brand-100 transition-colors">
                         Create Category
                       </Link>
@@ -158,6 +180,18 @@ export default function CategoriesPage() {
           itemLabel="categories"
         />
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={Boolean(deleteTargetId)}
+        onClose={() => setDeleteTargetId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Category?"
+        message="Are you sure you want to delete this category? Products associated with this category might break."
+        confirmText="Delete Category"
+        variant="danger"
+        isLoading={Boolean(isDeleting)}
+      />
     </div>
   );
 }

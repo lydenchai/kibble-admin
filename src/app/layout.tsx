@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { NotificationProvider } from "@/components/notifications/NotificationProvider";
+import QueryProvider from "@/providers/QueryProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,9 +26,11 @@ export default function RootLayout({
       className={`${inter.variable} font-sans h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        <NotificationProvider>
-          {children}
-        </NotificationProvider>
+        <QueryProvider>
+          <NotificationProvider>
+            {children}
+          </NotificationProvider>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -59,11 +59,11 @@ export default function SettingsPage() {
   };
 
   if (loading) return (
-    <div className="p-8 max-w-4xl mx-auto text-xs text-stone-400 font-medium">Loading store settings...</div>
+    <div className="p-8 max-w-7xl mx-auto text-xs text-stone-400 font-medium">Loading store settings...</div>
   );
 
   return (
-    <form onSubmit={handleSave} className="p-8 max-w-4xl mx-auto space-y-8">
+    <form onSubmit={handleSave} className="p-8 max-w-7xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200/80 pb-6">
         <div>

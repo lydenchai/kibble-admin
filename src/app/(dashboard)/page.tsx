@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiClient } from "../../lib/apiClient";
+import { fetchDashboardAnalyticsAction } from "@/actions/analytics.actions";
 import { DashboardData } from "@/types/dashboard-data";
 import {
   AreaChart,
@@ -28,8 +28,9 @@ export default function Home() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await apiClient.get('/analytics/dashboard');
-        if (res && res.success) {
+        const token = localStorage.getItem("accessToken");
+        const res = await fetchDashboardAnalyticsAction(token);
+        if (res && res.success && res.data) {
           setData(res.data);
         } else {
           setData(null);

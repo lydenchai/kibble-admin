@@ -6,6 +6,7 @@ import { fetchCategoriesAction } from "../../../../actions/category.actions";
 import { FiPlus as FiPlusBase, FiTrash2 as FiTrash2Base, FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase } from "react-icons/fi";
 import { CategoryType } from "@/types/category";
 import { createProductAction, updateProductAction } from "@/actions/product.actions";
+import { productSchema } from "@/lib/validations/product.schema";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiTrash2 = FiTrash2Base as React.ElementType;
@@ -88,17 +89,24 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSaving(true);
 
     try {
       const payload = {
         ...formData,
         ratingAvg: Number(formData.ratingAvg),
         ratingCount: Number(formData.ratingCount),
-        tags: formData.tags.split(",").map((t: string) => t.trim()).filter(Boolean),
+        tags: formData.tags ? formData.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : [],
         images: formData.images.filter((i: string) => i.trim() !== "")
       };
 
+      // Zod Validation
+      const validation = productSchema.safeParse(payload);
+      if (!validation.success) {
+        setError(validation.error.issues[0]?.message || "Invalid product data");
+        return;
+      }
+
+      setSaving(true);
       const token = localStorage.getItem("accessToken");
 
       if (initialData?._id) {

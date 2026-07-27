@@ -4,9 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAction } from "../../../actions/auth.actions";
 import { EyeOff, Eye, Mail, Lock, ShieldCheck } from "lucide-react";
+import { loginSchema } from "@/lib/validations/auth.schema";
+import { useAdminStore } from "@/store/useAdminStore";
 
 export default function LoginPage() {
   const router = useRouter();
+  const setAuth = useAdminStore((s) => s.setAuth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,13 +19,21 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Zod Validation
+    const validation = loginSchema.safeParse({ email, password });
+    if (!validation.success) {
+      setError(validation.error.issues[0]?.message || "Invalid credentials format");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const response = await loginAction({ email, password });
 
       if (response.success && response.data?.accessToken) {
-        localStorage.setItem("accessToken", response.data.accessToken);
+        setAuth(response.data.accessToken, response.data.user);
         router.push("/");
       } else {
         setError("Invalid response from server");

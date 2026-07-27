@@ -1,14 +1,26 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { FiSearch as FiSearchBase, FiBell as FiBellBase, FiExternalLink as FiExternalLinkBase } from "react-icons/fi";
+import {
+  FiBell as FiBellBase,
+  FiExternalLink as FiExternalLinkBase,
+  FiMenu as FiMenuBase,
+  FiSidebar as FiSidebarBase,
+} from "react-icons/fi";
 
-const FiSearch = FiSearchBase as React.ElementType;
 const FiBell = FiBellBase as React.ElementType;
 const FiExternalLink = FiExternalLinkBase as React.ElementType;
+const FiMenu = FiMenuBase as React.ElementType;
+const FiSidebar = FiSidebarBase as React.ElementType;
+
 import { useNotifications } from "@/components/notifications/NotificationProvider";
 
-export default function Header() {
+interface HeaderProps {
+  onToggleSidebar?: () => void;
+  isSidebarCollapsed?: boolean;
+}
+
+export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderProps) {
   const { unreadCount, clearUnread, allNotifications } = useNotifications();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -31,18 +43,24 @@ export default function Header() {
   };
 
   return (
-    <header className="h-16 bg-white/80 backdrop-blur-md border-b border-stone-200/80 flex items-center justify-between px-8 sticky top-0 z-10">
-      <div className="flex-1 max-w-md">
-        <div className="relative group">
-          <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4 group-focus-within:text-stone-900 transition-colors" />
-          <input
-            type="text"
-            placeholder="Type to search..."
-            className="w-full pl-9 pr-4 py-2 bg-stone-100/60 border border-transparent rounded-full text-sm font-medium focus:outline-none focus:bg-white focus:border-stone-300 transition-all text-stone-800"
-          />
-        </div>
+    <header className="h-16 bg-white/80 backdrop-blur-md border-b border-stone-200/80 flex items-center justify-between px-6 sticky top-0 z-10">
+      {/* Sidebar Toggle Button */}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition-colors cursor-pointer flex items-center justify-center border border-stone-200/60"
+        >
+          {isSidebarCollapsed ? (
+            <FiMenu className="w-5 h-5" />
+          ) : (
+            <FiSidebar className="w-5 h-5" />
+          )}
+        </button>
       </div>
 
+      {/* Right Actions */}
       <div className="flex items-center gap-3">
         {/* Storefront Button */}
         <a
@@ -59,53 +77,52 @@ export default function Header() {
 
         {/* Notifications */}
         <div className="relative" ref={dropdownRef}>
-          <button 
+          <button
             onClick={toggleDropdown}
-            className="p-2 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-full transition-colors relative cursor-pointer"
+            className="p-2.5 text-stone-500 hover:text-stone-800 hover:bg-stone-100 rounded-full transition-colors relative cursor-pointer"
             aria-label="Notifications"
           >
             <FiBell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-brand-600 rounded-full ring-2 ring-white" />
+              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white animate-pulse" />
             )}
           </button>
 
+          {/* Notifications Dropdown */}
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-stone-100 p-2 z-50 animate-in fade-in-50 zoom-in-95 duration-150">
-              <div className="px-3 py-2 border-b border-stone-100 flex items-center justify-between">
-                <h3 className="font-bold text-stone-900 text-xs uppercase tracking-wider">Notifications</h3>
-                <span className="text-xs font-bold text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
-                  {allNotifications.length}
+            <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-stone-100 py-3 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="px-4 pb-3 border-b border-stone-100 flex justify-between items-center">
+                <h3 className="font-extrabold text-stone-900 text-sm">Notifications</h3>
+                <span className="text-[11px] font-bold bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full">
+                  {allNotifications.length} Total
                 </span>
               </div>
-              <div className="max-h-[260px] overflow-y-auto space-y-1 mt-1">
+
+              <div className="max-h-80 overflow-y-auto divide-y divide-stone-50">
                 {allNotifications.length === 0 ? (
-                  <div className="px-4 py-6 text-center text-stone-400 text-sm">
+                  <div className="p-6 text-center text-xs text-stone-400 font-medium">
                     No new notifications
                   </div>
                 ) : (
-                  allNotifications.map((n) => (
-                    <div key={n.id} className="p-3 hover:bg-stone-50 rounded-xl transition-colors border-b border-stone-50 last:border-0">
-                      <h4 className="text-sm font-bold text-stone-900">{n.title}</h4>
-                      <p className="text-xs text-stone-500 mt-0.5">{n.message}</p>
+                  allNotifications.map((notif) => (
+                    <div
+                      key={notif.id}
+                      className="p-3.5 hover:bg-stone-50/80 transition-colors flex gap-3 items-start cursor-pointer"
+                    >
+                      <div className="w-2 h-2 rounded-full bg-brand-500 mt-1.5 shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-stone-900 leading-snug">{notif.title}</p>
+                        <p className="text-[11px] text-stone-500 truncate mt-0.5">{notif.message}</p>
+                        <span className="text-[10px] text-stone-400 font-medium mt-1 block">
+                          {(notif as any).time || "Just now"}
+                        </span>
+                      </div>
                     </div>
                   ))
                 )}
               </div>
             </div>
           )}
-        </div>
-
-        <div className="h-4 w-px bg-stone-200"></div>
-
-        {/* User Pill */}
-        <div className="flex items-center gap-2.5 pl-1">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-brand-600 text-white font-bold text-sm flex items-center justify-center shadow-xs">
-            A
-          </div>
-          <span className="text-sm font-bold text-stone-800 hidden sm:inline-block">
-            Admin
-          </span>
         </div>
       </div>
     </header>

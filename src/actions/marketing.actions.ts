@@ -1,68 +1,38 @@
 "use server";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+import { serverFetch } from "@/lib/serverApiClient";
 
-export async function fetchCouponsAction(page: number, limit: number, token: string | null) {
-  if (!token) throw new Error("Unauthorized");
-
-  const queryParams = new URLSearchParams();
-  queryParams.append('page', page.toString());
-  queryParams.append('limit', limit.toString());
-
-  const res = await fetch(`${API_URL}/marketing/coupons?${queryParams.toString()}`, {
+export async function fetchCouponsAction(page: number = 1, limit: number = 10, token?: string | null) {
+  return serverFetch(`/marketing/coupons?page=${page}&limit=${limit}`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-      "X-App-Type": "admin",
-    },
+    token,
+    requireAuth: true,
   });
-
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || "Failed to fetch coupons");
-  }
-
-  return res.json();
 }
 
-export async function createCouponAction(data: any, token: string | null) {
-  if (!token) throw new Error("Unauthorized");
-
-  const res = await fetch(`${API_URL}/marketing/coupons`, {
+export async function createCouponAction(payload: any, token?: string | null) {
+  const res = await serverFetch("/marketing/coupons", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-      "X-App-Type": "admin",
-    },
-    body: JSON.stringify(data)
+    body: JSON.stringify(payload),
+    token,
+    requireAuth: true,
   });
 
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || "Failed to create coupon");
+  if (!res.success) {
+    throw new Error(res.error || "Failed to create coupon");
   }
-
-  return res.json();
+  return res.data;
 }
 
-export async function deleteCouponAction(id: string, token: string | null) {
-  if (!token) throw new Error("Unauthorized");
-
-  const res = await fetch(`${API_URL}/marketing/coupons/${id}`, {
+export async function deleteCouponAction(id: string, token?: string | null) {
+  const res = await serverFetch(`/marketing/coupons/${id}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-      "X-App-Type": "admin",
-    }
+    token,
+    requireAuth: true,
   });
 
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || "Failed to delete coupon");
+  if (!res.success) {
+    throw new Error(res.error || "Failed to delete coupon");
   }
-
   return { success: true };
 }

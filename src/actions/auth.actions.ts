@@ -3,6 +3,11 @@ import { cookies } from "next/headers";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+export async function getAuthToken(): Promise<string | null> {
+  const cookieStore = await cookies();
+  return cookieStore.get('accessToken')?.value || null;
+}
+
 export async function loginAction(credentials: any) {
   try {
     const res = await fetch(`${API_URL}/auth/login`, {
@@ -20,31 +25,37 @@ export async function loginAction(credentials: any) {
     }
 
     const data = await res.json();
-    
-    // We get refresh_token as a Set-Cookie header from the backend.
-    // In server actions, passing it along to the client via a response is handled automatically by NextJS 
-    // if we forward cookies, but since fetch in Server Action won't automatically set the cookie on the user's browser,
-    // we need to manually extract it and set it using Next.js cookies(), or the backend handles it.
-    // Wait, since the backend sends a Set-Cookie header, does fetch in Server Action forward it?
-    // Not automatically. We must read the Set-Cookie header and set it.
+    const cookieStore = await cookies();
+
+    // Store Access Token as HttpOnly cookie
+    if (data.data?.accessToken) {
+      cookieStore.set('accessToken', data.data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 // 7 days
+      });
+    }
+
     const setCookieHeader = res.headers.get('set-cookie');
     if (setCookieHeader) {
-      // Very basic parsing for development. In production use a library.
       const match = setCookieHeader.match(/admin_refresh_token=([^;]+)/);
       if (match) {
-        (await cookies()).set('admin_refresh_token', match[1], {
+        cookieStore.set('admin_refresh_token', match[1], {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
           path: '/',
-          maxAge: 7 * 24 * 60 * 60 // 7 days
+          maxAge: 7 * 24 * 60 * 60
         });
       }
     }
 
-    (await cookies()).set('is_authenticated', 'true', {
+    cookieStore.set('is_authenticated', 'true', {
       secure: process.env.NODE_ENV === 'production',
       path: '/',
-      maxAge: 7 * 24 * 60 * 60 // 7 days
+      maxAge: 7 * 24 * 60 * 60
     });
 
     return data;
@@ -54,46 +65,44 @@ export async function loginAction(credentials: any) {
   }
 }
 
-export async function logoutAction(token: string | null) {
-  if (!token) {
-    return { success: true };
-  }
+export async function logoutAction(token?: string | null) {
+  const cookieStore = await cookies();
+  const authToken = token || cookieStore.get('accessToken')?.value || null;
 
   try {
-    const res = await fetch(`${API_URL}/auth/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'X-App-Type': 'admin'
-      }
-    });
-
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.error?.message || 'Failed to logout');
+    if (authToken) {
+      await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+          'X-App-Type': 'admin'
+        }
+      });
     }
-
-    (await cookies()).delete('admin_refresh_token');
-    (await cookies()).delete('is_authenticated');
-
-    const data = await res.json();
-    return data;
-  } catch (error: any) {
-    console.error("Failed to logout:", error);
-    throw error;
+  } catch (err) {
+    console.error("Logout API call error:", err);
+  } finally {
+    cookieStore.delete('accessToken');
+    cookieStore.delete('admin_refresh_token');
+    cookieStore.delete('is_authenticated');
   }
+
+  return { success: true };
 }
 
-export async function fetchProfileAction(token: string | null) {
-  if (!token) throw new Error("You must be logged in to fetch profile");
+export async function fetchProfileAction(token?: string | null) {
+  const cookieStore = await cookies();
+  const authToken = token || cookieStore.get('accessToken')?.value || null;
+
+  if (!authToken) throw new Error("You must be logged in to fetch profile");
 
   try {
     const res = await fetch(`${API_URL}/auth/profile`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${authToken}`,
         'X-App-Type': 'admin'
       }
     });

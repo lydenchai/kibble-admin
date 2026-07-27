@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createCategoryAction, updateCategoryAction } from "../../../../actions/category.actions";
 import { FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase, FiImage as FiImageBase } from "react-icons/fi";
+import { categorySchema } from "@/lib/validations/category.schema";
 
 const FiSave = FiSaveBase as React.ElementType;
 const FiArrowLeft = FiArrowLeftBase as React.ElementType;
@@ -28,6 +29,14 @@ export default function CategoryForm({ initialData }: { initialData?: any }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Zod Validation
+    const validation = categorySchema.safeParse(formData);
+    if (!validation.success) {
+      setError(validation.error.issues[0]?.message || "Invalid category data");
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -76,46 +85,40 @@ export default function CategoryForm({ initialData }: { initialData?: any }) {
         </button>
       </div>
 
-      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-6 max-w-2xl">
+      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-6">
         <div>
           <h2 className="text-lg font-extrabold text-stone-900">Category Details</h2>
-          <p className="text-xs text-stone-400 mt-0.5">Define category title and featured banner image</p>
-        </div>
-        
-        <div>
-          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Category Name *</label>
-          <input 
-            required 
-            type="text" 
-            name="name" 
-            value={formData.name} 
-            onChange={handleChange} 
-            placeholder="e.g. Dog Food & Treats"
-            className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium" 
-          />
+          <p className="text-xs text-stone-400 mt-0.5">Basic category metadata and cover thumbnail</p>
         </div>
 
-        <div>
-          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Image URL</label>
-          <div className="flex items-center gap-4">
-            {formData.image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={formData.image} alt="Preview" className="w-16 h-16 rounded-xl object-cover border border-stone-200 shadow-xs" />
-            ) : (
-              <div className="w-16 h-16 rounded-xl bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-400 text-xl">
-                🏷️
-              </div>
-            )}
-            <input 
-              type="url" 
-              name="image" 
-              value={formData.image} 
-              onChange={handleChange} 
-              placeholder="https://images.unsplash.com/..."
-              className="flex-1 px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium" 
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Category Name *</label>
+            <input
+              type="text"
+              name="name"
+              required
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="e.g. Dog Food, Cat Toys"
+              className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
             />
           </div>
-          <p className="text-[11px] text-stone-400 mt-2">Provide an absolute web URL for the category banner image.</p>
+
+          <div>
+            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Image URL</label>
+            <div className="relative">
+              <FiImage className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4" />
+              <input
+                type="url"
+                name="image"
+                value={formData.image}
+                onChange={handleChange}
+                placeholder="https://example.com/category-image.jpg"
+                className="w-full pl-10 pr-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </form>

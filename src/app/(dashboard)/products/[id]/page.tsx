@@ -16,10 +16,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       try {
         const token = localStorage.getItem("accessToken");
         const res = await fetchProductByIdAction(resolvedParams.id, token);
-        if (res.success || res._id) { // Handle both wrapper or direct return
-          setProduct(res.data || res);
+        if (res.success && res.data) {
+          setProduct(res.data);
         } else {
-          setError("Product not found");
+          setError(res.error || "Product not found");
         }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
@@ -32,22 +32,25 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     fetchProduct();
   }, [resolvedParams.id]);
 
-  if (loading) return <div className="p-8 max-w-7xl mx-auto">Loading product data...</div>;
-  
-  if (error) return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="bg-red-50 text-red-600 p-4 rounded-lg">
-        {error}
+  if (loading) return <div className="p-8 max-w-7xl mx-auto text-xs text-stone-400 font-medium">Loading product data...</div>;
+
+  if (error || !product) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="bg-rose-50 border border-rose-200 p-4 rounded-xl text-rose-700 text-sm font-bold">
+          {error || "Product not found"}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Edit Product</h1>
-        <p className="text-gray-500 mt-2">Modify existing product details.</p>
+    <div className="p-8 max-w-7xl mx-auto space-y-8">
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">Edit Product</h1>
+        <p className="text-xs sm:text-sm text-stone-500 mt-1">Update product specifications, prices, and variant options</p>
       </div>
+
       <ProductForm initialData={product} />
     </div>
   );

@@ -1,38 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { fetchAuditLogsAction } from "../../../actions/audit.actions";
-import { AuditLogType } from "../../../types/auditLog";
+import { useState, useEffect } from "react";
+import { fetchAuditLogsAction } from "@/actions/audit.actions";
 import Pagination from "@/components/ui/Pagination";
+import { FiSearch as FiSearchBase } from "react-icons/fi";
 
-const getActionColor = (action: string) => {
-  switch (action) {
-    case 'CREATE': return 'bg-emerald-50 text-emerald-700 border-emerald-200/60';
-    case 'UPDATE': return 'bg-sky-50 text-sky-700 border-sky-200/60';
-    case 'DELETE': return 'bg-rose-50 text-rose-700 border-rose-200/60';
-    default: return 'bg-stone-100 text-stone-700 border-stone-200';
-  }
-};
+const FiSearch = FiSearchBase as React.ElementType;
 
 export default function AuditLogsPage() {
-  const [logs, setLogs] = useState<AuditLogType[]>([]);
+  const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const limit = 10;
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const res = await fetchAuditLogsAction(token);
-        if (res.success) {
-          setLogs(res.data || []);
-        } else {
-          setLogs([]);
+        const data = await fetchAuditLogsAction(token);
+        if (data && data.success) {
+          setLogs(data.data || []);
         }
       } catch (err) {
-        console.error(err);
-        setLogs([]);
+        console.error("Failed to fetch audit logs", err);
       } finally {
         setLoading(false);
       }
@@ -43,8 +34,15 @@ export default function AuditLogsPage() {
 
   if (loading) return <div className="p-8 text-sm text-stone-400 font-medium">Loading security audit logs...</div>;
 
-  const paginatedLogs = logs.slice((page - 1) * limit, page * limit);
-  const total = logs.length;
+  const filteredLogs = logs.filter(log =>
+    (log.action || "").toLowerCase().includes(search.toLowerCase()) ||
+    (log.resource || "").toLowerCase().includes(search.toLowerCase()) ||
+    (log.user?.name || "").toLowerCase().includes(search.toLowerCase()) ||
+    (log.details || "").toLowerCase().includes(search.toLowerCase())
+  );
+
+  const paginatedLogs = filteredLogs.slice((page - 1) * limit, page * limit);
+  const total = filteredLogs.length;
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">
@@ -58,6 +56,20 @@ export default function AuditLogsPage() {
 
       {/* Table Container */}
       <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
+        {/* Search Bar */}
+        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40">
+          <div className="relative w-full sm:max-w-md">
+            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
+            <input
+              type="text"
+              placeholder="Search audit logs by action, user, or details..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm font-medium text-stone-900"
+            />
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-stone-100">
             <thead className="bg-stone-50/70">
@@ -70,31 +82,38 @@ export default function AuditLogsPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-stone-100">
-              {paginatedLogs.map((log) => (
-                <tr key={log._id} className="hover:bg-stone-50/50 transition-colors">
-                  <td className="px-6 py-4.5 whitespace-nowrap text-sm font-mono text-stone-500">
-                    {new Date(log.createdAt).toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-900">
-                    {log.user?.name || "System Automated"}
-                  </td>
-                  <td className="px-6 py-4.5 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs font-black rounded-full border ${getActionColor(log.action)}`}>
-                      {log.action}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-800">
-                    {log.resource}
-                  </td>
-                  <td className="px-6 py-4.5 text-xs text-stone-500 max-w-xs truncate font-mono">
-                    {log.details}
-                  </td>
-                </tr>
-              ))}
-              {logs.length === 0 && (
+              {paginatedLogs.length > 0 ? (
+                paginatedLogs.map((log) => (
+                  <tr key={log._id} className="hover:bg-stone-50/50 transition-colors">
+                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-mono text-stone-500">
+                      {new Date(log.createdAt).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-900">
+                      {log.user?.name || "System Automated"}
+                    </td>
+                    <td className="px-6 py-4.5 whitespace-nowrap">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-bold uppercase tracking-wider bg-stone-100 text-stone-700">
+                        {log.action}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-brand-600">
+                      {log.resource}
+                    </td>
+                    <td className="px-6 py-4.5 text-sm text-stone-600 font-medium max-w-xs truncate">
+                      {log.details || log.ipAddress || "System event logged"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-stone-400 text-sm font-medium">
-                    No security audit logs recorded yet.
+                  <td colSpan={5} className="px-6 py-12 text-center text-stone-400">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-12 h-12 bg-stone-100 rounded-2xl flex items-center justify-center mb-3 text-xl">
+                        📋
+                      </div>
+                      <p className="text-base font-bold text-stone-900">No audit logs found</p>
+                      <p className="text-xs text-stone-400 mt-0.5">No system events match your search filter.</p>
+                    </div>
                   </td>
                 </tr>
               )}
@@ -108,7 +127,7 @@ export default function AuditLogsPage() {
           limit={limit}
           total={total}
           onPageChange={setPage}
-          itemLabel="events"
+          itemLabel="audit events"
         />
       </div>
     </div>
