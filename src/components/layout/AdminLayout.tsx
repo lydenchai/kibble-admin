@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AuthGuard from "./AuthGuard";
-import Sidebar from "./Sidebar";
-import Header from "./Header";
+import AuthGuard from "@/components/auth/AuthGuard";
+import Sidebar from "@/components/layout/Sidebar";
+import Header from "@/components/layout/Header";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);

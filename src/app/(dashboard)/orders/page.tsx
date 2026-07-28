@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FiSearch as FiSearchBase, FiEye as FiEyeBase } from "react-icons/fi";
+import { FiSearch as FiSearchBase, FiEye as FiEyeBase, FiDownload as FiDownloadBase } from "react-icons/fi";
 import { updateOrderAction, fetchOrdersAction } from "@/actions/order.actions";
 import { Order } from "@/types/order";
 import Pagination from "@/components/ui/Pagination";
 
 const FiSearch = FiSearchBase as React.ElementType;
 const FiEye = FiEyeBase as React.ElementType;
+const FiDownload = FiDownloadBase as React.ElementType;
 
 export default function OrdersPage() {
   const router = useRouter();
@@ -55,6 +56,33 @@ export default function OrdersPage() {
     }
   };
 
+  const exportOrdersCSV = () => {
+    if (!orders.length) return;
+
+    const headers = ["Order ID", "Customer Name", "Customer Email", "Status", "Total Amount ($)", "Items Count", "Date"];
+    const rows = orders.map((o) => [
+      o._id,
+      o.user?.name || "Guest",
+      o.user?.email || "N/A",
+      o.status.toUpperCase(),
+      o.total.toFixed(2),
+      o.items?.length || 0,
+      new Date(o.createdAt).toLocaleDateString(),
+    ]);
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((e) => e.map((val) => `"${val}"`).join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `kibble_orders_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const filteredOrders = orders.filter(order => {
     const matchesSearch =
       order._id.toLowerCase().includes(search.toLowerCase()) ||
@@ -70,13 +98,20 @@ export default function OrdersPage() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Order Management</h1>
-          <p className="text-sm sm:text-base text-stone-500 mt-1">Review customer transactions and update order fulfillment statuses</p>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Order Management</h1>
+            <p className="text-sm sm:text-base text-stone-500 mt-1">Review customer transactions and update order fulfillment statuses</p>
+          </div>
+
+          <button
+            onClick={exportOrdersCSV}
+            className="bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl flex items-center gap-2 transition-all shadow-xs cursor-pointer shrink-0"
+          >
+            <FiDownload className="w-4 h-4" />
+            <span>Export CSV</span>
+          </button>
         </div>
-      </div>
 
       {/* Table Container */}
       <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">

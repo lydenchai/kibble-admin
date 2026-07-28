@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { fetchProductByIdAction } from "../../../../actions/product.actions";
-import ProductForm from "../_components/ProductForm";
+import { fetchProductByIdAction } from "@/actions/product.actions";
+import ProductForm from "@/components/features/products/ProductForm";
 
 export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);

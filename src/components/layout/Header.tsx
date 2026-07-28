@@ -7,20 +7,18 @@ import {
   FiMenu as FiMenuBase,
   FiSidebar as FiSidebarBase,
 } from "react-icons/fi";
+import { useNotifications } from "@/components/notifications/NotificationProvider";
+import { HeaderProps } from "@/types/components";
+import { Toast } from "@/types/toast";
+import { useAdminStore } from "@/store/useAdminStore";
 
 const FiBell = FiBellBase as React.ElementType;
 const FiExternalLink = FiExternalLinkBase as React.ElementType;
 const FiMenu = FiMenuBase as React.ElementType;
 const FiSidebar = FiSidebarBase as React.ElementType;
 
-import { useNotifications } from "@/components/notifications/NotificationProvider";
-
-interface HeaderProps {
-  onToggleSidebar?: () => void;
-  isSidebarCollapsed?: boolean;
-}
-
 export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderProps) {
+  const user = useAdminStore((s) => s.user);
   const { unreadCount, clearUnread, allNotifications } = useNotifications();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -43,7 +41,7 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
   };
 
   return (
-    <header className="h-16 bg-white/80 backdrop-blur-md border-b border-stone-200/80 flex items-center justify-between px-6 sticky top-0 z-10">
+    <header className="h-16 bg-white/80 backdrop-blur-md border-b border-stone-200/80 flex items-center justify-between px-6 sticky top-0 z-10 print:hidden">
       {/* Sidebar Toggle Button */}
       <div className="flex items-center gap-3">
         <button
@@ -104,7 +102,7 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
                     No new notifications
                   </div>
                 ) : (
-                  allNotifications.map((notif) => (
+                  allNotifications.map((notif: Toast) => (
                     <div
                       key={notif.id}
                       className="p-3.5 hover:bg-stone-50/80 transition-colors flex gap-3 items-start cursor-pointer"
@@ -124,6 +122,27 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
             </div>
           )}
         </div>
+
+        {/* User Role Profile Badge */}
+        {user && (
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-50 border border-stone-200/80 rounded-xl">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-brand-500 to-amber-600 text-white font-black text-[10px] flex items-center justify-center shrink-0">
+              {user.name?.slice(0, 2).toUpperCase() || "US"}
+            </div>
+            <div className="hidden md:block text-left">
+              <span className="text-xs font-bold text-stone-900 leading-none block truncate max-w-[120px]">
+                {user.name}
+              </span>
+              <span
+                className={`text-[9px] font-extrabold uppercase tracking-wider block ${
+                  user.role === "admin" ? "text-purple-600" : "text-emerald-600"
+                }`}
+              >
+                {user.role}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

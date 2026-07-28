@@ -2,9 +2,13 @@ import { z } from "zod";
 
 export const variantSchema = z.object({
   sku: z.string().optional(),
-  name: z.string().min(1, "Variant name is required"),
-  price: z.number({ message: "Price must be a number" }).positive("Price must be greater than 0"),
+  name: z.string().optional(),
+  price: z.number({ message: "Price must be a number" }).min(0, "Price cannot be negative"),
+  compareAtPrice: z.number().optional(),
   stock: z.number({ message: "Stock must be a number" }).int().min(0, "Stock cannot be negative"),
+  size: z.string().optional(),
+  weight: z.string().optional(),
+  flavor: z.string().optional(),
   attributes: z.record(z.string(), z.string()).optional(),
 });
 
@@ -17,9 +21,11 @@ export const productSchema = z.object({
   }),
   category: z.string().min(1, "Please select a category"),
   variants: z.array(variantSchema).min(1, "Product must have at least one variant"),
-  images: z.array(z.string().url("Must be a valid image URL")).optional(),
+  images: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
   isActive: z.boolean().optional(),
+  ratingAvg: z.number().optional(),
+  ratingCount: z.number().optional(),
 });
 
 export type ProductInput = z.infer<typeof productSchema>;

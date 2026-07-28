@@ -13,6 +13,9 @@ import {
   FiLogOut as FiLogOutBase,
   FiTag as FiTagBase,
 } from "react-icons/fi";
+import { logoutAction } from "@/actions/auth.actions";
+import { SidebarProps } from "@/types/components";
+import { useAdminStore } from "@/store/useAdminStore";
 
 const FiHome = FiHomeBase as React.ElementType;
 const FiBox = FiBoxBase as React.ElementType;
@@ -24,27 +27,27 @@ const FiStar = FiStarBase as React.ElementType;
 const LogOut = FiLogOutBase as React.ElementType;
 const FiTag = FiTagBase as React.ElementType;
 
-import { logoutAction } from "../../actions/auth.actions";
-
 const navItems = [
   { name: "Overview", href: "/", icon: FiHome },
   { name: "Products", href: "/products", icon: FiBox },
   { name: "Categories", href: "/categories", icon: FiTag },
   { name: "Orders", href: "/orders", icon: FiShoppingCart },
   { name: "Customers", href: "/customers", icon: FiUsers },
+  { name: "Staff & Team", href: "/staff", icon: FiUsers },
   { name: "Marketing", href: "/marketing", icon: FiStar },
   { name: "Analytics", href: "/analytics", icon: FiPieChart },
   { name: "Audit Logs", href: "/audit-logs", icon: FiPieChart },
   { name: "Settings", href: "/settings", icon: FiSettings },
 ];
 
-interface SidebarProps {
-  collapsed?: boolean;
-}
-
 export default function Sidebar({ collapsed = false }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const user = useAdminStore((s) => s.user);
+
+  const isStaff = user?.role === "staff";
+  const adminOnlyPaths = ["/customers", "/staff", "/audit-logs", "/settings"];
+  const visibleNavItems = navItems.filter((item) => !isStaff || !adminOnlyPaths.includes(item.href));
 
   const handleLogout = async () => {
     try {
@@ -62,7 +65,7 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
     <aside
       className={`${
         collapsed ? "w-20" : "w-64"
-      } bg-white text-stone-800 flex flex-col h-screen sticky top-0 border-r border-stone-200/80 z-20 transition-all duration-300 ease-in-out`}
+      } bg-white text-stone-800 flex flex-col h-screen sticky top-0 border-r border-stone-200/80 z-20 transition-all duration-300 ease-in-out print:hidden`}
     >
       {/* Brand Header */}
       <div className="h-16 flex items-center px-4 border-b border-stone-100 justify-between overflow-hidden">
@@ -76,7 +79,7 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
                 Kibble Admin
               </span>
               <span className="text-[10px] font-semibold text-stone-400 uppercase tracking-wider block -mt-0.5">
-                Workspace
+                {isStaff ? "Staff Workspace" : "Workspace"}
               </span>
             </div>
           )}
@@ -85,7 +88,7 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
 
       {/* Nav Menu */}
       <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
+        {visibleNavItems.map((item) => {
           const isActive =
             pathname === item.href ||
             (item.href !== "/" && pathname.startsWith(item.href));

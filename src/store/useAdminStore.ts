@@ -1,22 +1,7 @@
+import { AdminUser } from "@/types/admin-user";
+import { AdminState } from "@/types/store";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-interface AdminUser {
-  id?: string;
-  name?: string;
-  email?: string;
-  role?: string;
-}
-
-interface AdminState {
-  token: string | null;
-  user: AdminUser | null;
-  setAuth: (token: string | null, user?: AdminUser | null) => void;
-  logout: () => void;
-  // UI filter states
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-}
 
 export const useAdminStore = create<AdminState>()(
   persist(

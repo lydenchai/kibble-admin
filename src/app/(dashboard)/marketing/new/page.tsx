@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createCouponAction } from "../../../../actions/marketing.actions";
+import { createCouponAction } from "@/actions/marketing.actions";
 import { FiArrowLeft as FiArrowLeftBase, FiSave as FiSaveBase, FiTag as FiTagBase } from "react-icons/fi";
 import { couponSchema } from "@/lib/validations/coupon.schema";
 

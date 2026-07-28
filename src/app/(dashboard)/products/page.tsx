@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FiPlus as FiPlusBase, FiSearch as FiSearchBase, FiEdit, FiTrash } from "react-icons/fi";
-import { ProductType } from "../../../types/product";
-import { deleteProductAction, fetchProductsAction } from "../../../actions/product.actions";
+import { ProductType } from "@/types/product";
+import { deleteProductAction, fetchProductsAction } from "@/actions/product.actions";
 import Pagination from "@/components/ui/Pagination";
 import ConfirmModal from "@/components/ui/ConfirmModal";
+import toast from "react-hot-toast";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiSearch = FiSearchBase as React.ElementType;
@@ -47,10 +48,13 @@ export default function ProductsPage() {
 
     try {
       setIsDeleting(deleteTargetId);
-      await deleteProductAction(deleteTargetId);
+      const token = localStorage.getItem('accessToken');
+      await deleteProductAction(deleteTargetId, token);
       setProducts(products.filter(p => p._id !== deleteTargetId));
-    } catch (err) {
+      toast.success("Product deleted successfully");
+    } catch (err: any) {
       console.error("Failed to delete product", err);
+      toast.error(err?.message || "Failed to delete product. Please ensure you are logged in as Admin or Staff.");
     } finally {
       setIsDeleting(null);
       setDeleteTargetId(null);
@@ -168,8 +172,14 @@ export default function ProductsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-800">
-                        {totalStock} in stock
-                        <span className="block text-xs text-stone-400 font-medium">({product.variants.length} variants)</span>
+                        {totalStock <= 5 ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-black bg-rose-50 text-rose-700 border border-rose-200 shadow-2xs">
+                            ⚠️ Low Stock ({totalStock})
+                          </span>
+                        ) : (
+                          <span>{totalStock} in stock</span>
+                        )}
+                        <span className="block text-xs text-stone-400 font-medium mt-0.5">({product.variants.length} variants)</span>
                       </td>
                       <td className="px-6 py-4.5 whitespace-nowrap text-sm font-semibold text-stone-700">
                         {product.category?.name || "Uncategorized"}

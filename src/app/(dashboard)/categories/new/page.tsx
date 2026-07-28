@@ -1,6 +1,6 @@
 "use client";
 
-import CategoryForm from "../_components/CategoryForm";
+import CategoryForm from "@/components/features/categories/CategoryForm";
 
 export default function NewCategoryPage() {
   return (

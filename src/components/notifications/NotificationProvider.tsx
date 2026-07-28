@@ -1,6 +1,6 @@
 "use client";
 
-import { NotificationContextType } from '@/types/notificaton';
+import { NotificationContextType } from '@/types/notification';
 import { Toast } from '@/types/toast';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { MdOutlineNotificationsActive } from 'react-icons/md';

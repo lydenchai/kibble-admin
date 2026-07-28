@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { fetchCategoriesAction } from "../../../../actions/category.actions";
+import { fetchCategoriesAction } from "@/actions/category.actions";
 import { FiPlus as FiPlusBase, FiTrash2 as FiTrash2Base, FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase } from "react-icons/fi";
 import { CategoryType } from "@/types/category";
 import { createProductAction, updateProductAction } from "@/actions/product.actions";

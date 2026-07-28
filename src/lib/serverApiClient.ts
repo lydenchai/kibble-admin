@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { ServerResponse } from "@/types/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
@@ -8,13 +9,7 @@ export async function getAuthToken(token?: string | null): Promise<string | null
   return cookieStore.get("accessToken")?.value || null;
 }
 
-export interface ServerResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  isAuthError?: boolean;
-  pagination?: any;
-}
+export type { ServerResponse };
 
 async function refreshAccessTokenAdmin(): Promise<string | null> {
   try {
@@ -96,6 +91,7 @@ export async function serverFetch<T = any>(
   try {
     const url = endpoint.startsWith("http") ? endpoint : `${API_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
     let res = await fetch(url, {
+      cache: "no-store",
       headers: reqHeaders,
       ...restOptions,
     });
@@ -105,6 +101,7 @@ export async function serverFetch<T = any>(
       if (newToken) {
         reqHeaders.Authorization = `Bearer ${newToken}`;
         res = await fetch(url, {
+          cache: "no-store",
           headers: reqHeaders,
           ...restOptions,
         });

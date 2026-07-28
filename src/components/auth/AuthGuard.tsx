@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { fetchProfileAction } from "../../actions/auth.actions";
+import { fetchProfileAction } from "@/actions/auth.actions";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -18,7 +18,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        // Ping the /profile endpoint to verify the token is valid
         const res = await fetchProfileAction(token);
         if (res.success && (res.data.user.role === 'admin' || res.data.user.role === 'staff')) {
           setIsAuthenticated(true);

@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiSearch as FiSearchBase, FiFilter as FiFilterBase, FiUsers as FiUsersBase } from "react-icons/fi";
-import { fetchCustomersAction } from "../../../actions/customer.actions";
+import { FiSearch as FiSearchBase, FiFilter as FiFilterBase, FiUsers as FiUsersBase, FiDownload as FiDownloadBase } from "react-icons/fi";
+import { fetchCustomersAction } from "@/actions/customer.actions";
 import { useDebounce } from "use-debounce";
 import Pagination from "@/components/ui/Pagination";
+import AdminRouteGuard from "@/components/auth/AdminRouteGuard";
 
 const FiSearch = FiSearchBase as React.ElementType;
 const FiFilter = FiFilterBase as React.ElementType;
 const FiUsers = FiUsersBase as React.ElementType;
+const FiDownload = FiDownloadBase as React.ElementType;
 
 export default function CustomersPage() {
   const [search, setSearch] = useState("");
@@ -39,15 +41,50 @@ export default function CustomersPage() {
     fetchCustomers();
   }, [page, limit, debouncedSearch]);
 
+  const exportCustomersCSV = () => {
+    if (!customers.length) return;
+
+    const headers = ["Customer ID", "Full Name", "Email Address", "Phone", "Total Orders", "Total Spent ($)"];
+    const rows = customers.map((c) => [
+      c._id,
+      c.name,
+      c.email,
+      c.phone || "N/A",
+      c.totalOrders || 0,
+      (c.totalSpent || 0).toFixed(2),
+    ]);
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((e) => e.map((val) => `"${val}"`).join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `kibble_customers_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Customer Directory</h1>
-          <p className="text-sm sm:text-base text-stone-500 mt-1">Manage registered accounts and customer purchase history</p>
+    <AdminRouteGuard>
+      <div className="p-8 max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Customer Directory</h1>
+            <p className="text-sm sm:text-base text-stone-500 mt-1">Manage registered accounts and customer purchase history</p>
+          </div>
+
+          <button
+            onClick={exportCustomersCSV}
+            className="bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl flex items-center gap-2 transition-all shadow-xs cursor-pointer shrink-0"
+          >
+            <FiDownload className="w-4 h-4" />
+            <span>Export CSV</span>
+          </button>
         </div>
-      </div>
 
       {/* Table Container */}
       <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
@@ -114,7 +151,7 @@ export default function CustomersPage() {
                       {customer.email}
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-800">
-                      {customer.orderCount || 0} Orders
+                      {customer.totalOrders ?? customer.orderCount ?? customer.ordersCount ?? 0} {(customer.totalOrders ?? customer.orderCount ?? customer.ordersCount) === 1 ? 'Order' : 'Orders'}
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap text-sm font-black text-stone-900">
                       ${(customer.totalSpent || 0).toFixed(2)}
@@ -135,6 +172,7 @@ export default function CustomersPage() {
           itemLabel="customers"
         />
       </div>
-    </div>
+      </div>
+    </AdminRouteGuard>
   );
 }

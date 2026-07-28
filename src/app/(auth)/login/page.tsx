@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginAction } from "../../../actions/auth.actions";
+import { loginAction } from "@/actions/auth.actions";
 import { EyeOff, Eye, Mail, Lock, ShieldCheck } from "lucide-react";
 import { loginSchema } from "@/lib/validations/auth.schema";
 import { useAdminStore } from "@/store/useAdminStore";

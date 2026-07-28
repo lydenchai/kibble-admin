@@ -45,7 +45,7 @@ export async function deleteProductAction(id: string, token?: string | null) {
 
 export async function fetchProductsAction(page: number, limit: number, token?: string | null, search?: string) {
   const searchParam = search ? `&search=${encodeURIComponent(search)}` : "";
-  return serverFetch(`/products?page=${page}&limit=${limit}&showInactive=true${searchParam}`, {
+  return serverFetch(`/products?page=${page}&limit=${limit}&showInactive=true&sort=-createdAt${searchParam}`, {
     method: "GET",
     token,
   });

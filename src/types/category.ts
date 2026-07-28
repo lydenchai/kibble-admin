@@ -1,4 +1,4 @@
-import { MongoObjectId } from "./mongoObjectID";
+import { MongoObjectId } from "./mongo-object-id";
 
 export interface CategoryType extends MongoObjectId {
   name: string;

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createCategoryAction, updateCategoryAction } from "../../../../actions/category.actions";
+import { createCategoryAction, updateCategoryAction } from "@/actions/category.actions";
 import { FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase, FiImage as FiImageBase } from "react-icons/fi";
 import { categorySchema } from "@/lib/validations/category.schema";
 

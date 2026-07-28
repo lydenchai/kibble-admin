@@ -1,5 +1,11 @@
 export interface StoreSettings {
   storeName?: string;
   contactEmail?: string;
-  paymentGateways?: { stripeEnabled?: boolean; paypalEnabled?: boolean; codEnabled?: boolean };
+  paymentGateways?: {
+    abaPayEnabled?: boolean;
+    stripeEnabled?: boolean;
+    paypalEnabled?: boolean;
+    codEnabled?: boolean;
+    bankTransferEnabled?: boolean;
+  };
 }

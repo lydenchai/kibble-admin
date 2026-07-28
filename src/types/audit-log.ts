@@ -1,4 +1,4 @@
-import { MongoObjectId } from "./mongoObjectID";
+import { MongoObjectId } from "./mongo-object-id";
 
 export interface AuditLogType extends MongoObjectId {
   action: string;

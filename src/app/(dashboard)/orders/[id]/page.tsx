@@ -3,15 +3,17 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { FiArrowLeft as FiArrowLeftBase, FiPackage as FiPackageBase, FiTruck as FiTruckBase, FiCreditCard as FiCreditCardBase, FiCheckCircle as FiCheckCircleBase } from "react-icons/fi";
+import { FiArrowLeft as FiArrowLeftBase, FiPackage as FiPackageBase, FiTruck as FiTruckBase, FiCreditCard as FiCreditCardBase, FiCheckCircle as FiCheckCircleBase, FiPrinter as FiPrinterBase } from "react-icons/fi";
 import { fetchOrderByIdAction, updateOrderAction } from "@/actions/order.actions";
 import { Order } from "@/types/order";
+import PrintableAdminReceipt from "@/components/features/orders/PrintableAdminReceipt";
 
 const FiArrowLeft = FiArrowLeftBase as React.ElementType;
 const FiPackage = FiPackageBase as React.ElementType;
 const FiTruck = FiTruckBase as React.ElementType;
 const FiCreditCard = FiCreditCardBase as React.ElementType;
 const FiCheckCircle = FiCheckCircleBase as React.ElementType;
+const FiPrinter = FiPrinterBase as React.ElementType;
 
 export default function OrderDetailPage() {
   const { id } = useParams() as { id: string };
@@ -125,7 +127,9 @@ export default function OrderDetailPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8 pb-20">
+    <>
+      <PrintableAdminReceipt order={order} />
+      <div className="p-8 max-w-6xl mx-auto space-y-8 pb-20 print:hidden">
       {/* Back button & Order Header */}
       <div className="space-y-4">
         <Link href="/orders" className="text-xs font-bold text-stone-500 hover:text-stone-900 inline-flex items-center gap-1.5 transition-colors">
@@ -148,12 +152,36 @@ export default function OrderDetailPage() {
           </div>
           
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Update Status:</span>
+            {(() => {
+              const canPrint = order.status !== 'cancelled' && (order.paymentStatus === 'paid' || order.status === 'processing' || order.status === 'shipped' || order.status === 'delivered');
+              return (
+                <button
+                  type="button"
+                  onClick={() => canPrint && window.print()}
+                  disabled={!canPrint}
+                  title={
+                    order.status === 'cancelled'
+                      ? "Cannot print receipt for cancelled orders"
+                      : "Receipt print available after payment confirmation"
+                  }
+                  className={`flex items-center gap-2 font-bold text-xs px-4 py-2.5 rounded-xl transition-all shrink-0 print:hidden ${
+                    canPrint
+                      ? "bg-stone-900 hover:bg-stone-800 text-white cursor-pointer shadow-xs"
+                      : "bg-stone-200 text-stone-400 cursor-not-allowed opacity-60"
+                  }`}
+                >
+                  <FiPrinter className="w-3.5 h-3.5" />
+                  <span>Print Invoice</span>
+                </button>
+              );
+            })()}
+
+            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider print:hidden">Status:</span>
             <select
               value={order.status}
               onChange={(e) => handleStatusChange(e.target.value)}
               disabled={isUpdating}
-              className="border border-stone-200 rounded-xl px-3.5 py-2 text-xs font-bold focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none bg-stone-50/50 hover:bg-white text-stone-900 transition-colors disabled:opacity-50 cursor-pointer"
+              className="border border-stone-200 rounded-xl px-3.5 py-2 text-xs font-bold focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none bg-stone-50/50 hover:bg-white text-stone-900 transition-colors disabled:opacity-50 cursor-pointer print:hidden"
             >
               <option value="pending">Pending</option>
               <option value="processing">Processing</option>
@@ -234,9 +262,9 @@ export default function OrderDetailPage() {
             </h2>
             {order.user ? (
               <div className="text-xs space-y-1">
-                <p className="font-bold text-stone-900">{order.user.name}</p>
-                <p className="text-stone-500">{order.user.email}</p>
-                <p className="text-stone-400">{order.user.phone || "No phone provided"}</p>
+                <p className="">Name: <span className="text-stone-700 font-bold">{order.user.name}</span></p>
+                <p className="">Email: <span className="text-stone-700 font-bold">{order.user.email}</span></p>
+                <p className="">Phone: <span className="text-stone-700 font-bold">{order.user.phone || "No phone provided"}</span></p>
               </div>
             ) : (
               <p className="text-xs text-stone-400">Guest Checkout / Deleted User</p>
@@ -251,11 +279,16 @@ export default function OrderDetailPage() {
               <div className="text-xs text-stone-700 leading-relaxed font-medium">
                 <p>
                   {[
-                    order.shippingAddress?.street,
+                    (order.shippingAddress?.houseNumber || order.shippingAddress?.house) 
+                      ? `House No. ${order.shippingAddress?.houseNumber || order.shippingAddress?.house}` 
+                      : null,
+                    order.shippingAddress?.street 
+                      ? `St. ${order.shippingAddress.street}` 
+                      : null,
                     order.shippingAddress?.village,
                     order.shippingAddress?.commune,
                     order.shippingAddress?.district,
-                    order.shippingAddress?.province,
+                    order.shippingAddress?.province || order.shippingAddress?.city,
                     order.shippingAddress?.country
                   ].filter(Boolean).join(", ")}
                 </p> 
@@ -332,5 +365,6 @@ export default function OrderDetailPage() {
         </div>
       </div>
     </div>
+  </>
   );
 }

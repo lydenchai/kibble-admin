@@ -1,12 +1,6 @@
 "use client";
 
-interface PaginationProps {
-  page: number;
-  limit: number;
-  total: number;
-  onPageChange: (newPage: number) => void;
-  itemLabel?: string;
-}
+import { PaginationProps } from "@/types/components";
 
 export default function Pagination({
   page,

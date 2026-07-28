@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { fetchCouponsAction, deleteCouponAction } from "../../../actions/marketing.actions";
+import { fetchCouponsAction, deleteCouponAction } from "@/actions/marketing.actions";
 import { FiPlus as FiPlusBase, FiTag as FiTagBase, FiTrash2 as FiTrash2Base, FiSearch as FiSearchBase } from "react-icons/fi";
 import Pagination from "@/components/ui/Pagination";
 import ConfirmModal from "@/components/ui/ConfirmModal";

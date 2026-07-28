@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { fetchCategoriesAction, deleteCategoryAction } from "../../../actions/category.actions";
+import { fetchCategoriesAction, deleteCategoryAction } from "@/actions/category.actions";
 import { FiPlus as FiPlusBase, FiTag as FiTagBase, FiEdit as FiEditBase, FiTrash2 as FiTrash2Base, FiSearch as FiSearchBase } from "react-icons/fi";
-import { CategoryType } from "../../../types/category";
+import { CategoryType } from "@/types/category";
 import Pagination from "@/components/ui/Pagination";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 

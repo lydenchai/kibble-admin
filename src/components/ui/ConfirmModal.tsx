@@ -2,21 +2,10 @@
 
 import React from "react";
 import { FiAlertTriangle as FiAlertTriangleBase, FiX as FiXBase } from "react-icons/fi";
+import { ConfirmModalProps } from "@/types/components";
 
 const FiAlertTriangle = FiAlertTriangleBase as React.ElementType;
 const FiX = FiXBase as React.ElementType;
-
-interface ConfirmModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void | Promise<void>;
-  title?: string;
-  message?: string;
-  confirmText?: string;
-  cancelText?: string;
-  variant?: "danger" | "warning" | "info";
-  isLoading?: boolean;
-}
 
 export default function ConfirmModal({
   isOpen,
