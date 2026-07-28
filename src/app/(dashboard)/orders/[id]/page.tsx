@@ -23,9 +23,9 @@ export default function OrderDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUpdatingTracking, setIsUpdatingTracking] = useState(false);
-  const [trackingNumber, setTrackingNumber] = useState("");
+  const [tracking_number, settracking_number] = useState("");
   const [courier, setCourier] = useState("");
-  const [trackingUrl, setTrackingUrl] = useState("");
+  const [tracking_url, settracking_url] = useState("");
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -34,9 +34,9 @@ export default function OrderDetailPage() {
         const res = await fetchOrderByIdAction(id, token);
         if (res.success) {
           setOrder(res.data);
-          setTrackingNumber(res.data.trackingNumber || "");
+          settracking_number(res.data.tracking_number || "");
           setCourier(res.data.courier || "");
-          setTrackingUrl(res.data.trackingUrl || "");
+          settracking_url(res.data.tracking_url || "");
         } else {
           setError(res.error || "Failed to load order");
         }
@@ -76,12 +76,12 @@ export default function OrderDetailPage() {
     try {
       const token = localStorage.getItem('accessToken');
       const data = await updateOrderAction(order._id, { 
-        trackingNumber, 
+        tracking_number, 
         courier, 
-        trackingUrl 
+        tracking_url 
       }, token);
       if (data && data.success) {
-        setOrder({ ...order, trackingNumber, courier, trackingUrl });
+        setOrder({ ...order, tracking_number, courier, tracking_url });
         alert("Tracking info updated successfully!");
       } else {
         alert("Failed to update tracking");
@@ -153,7 +153,7 @@ export default function OrderDetailPage() {
           
           <div className="flex items-center gap-3">
             {(() => {
-              const canPrint = order.status !== 'cancelled' && (order.paymentStatus === 'paid' || order.status === 'processing' || order.status === 'shipped' || order.status === 'delivered');
+              const canPrint = order.status !== 'cancelled' && (order.payment_status === 'paid' || order.status === 'processing' || order.status === 'shipped' || order.status === 'delivered');
               return (
                 <button
                   type="button"
@@ -229,8 +229,8 @@ export default function OrderDetailPage() {
             </div>
             <div className="p-6 bg-stone-50/40 border-t border-stone-100 flex flex-col gap-2 items-end">
               <div className="flex justify-between w-full sm:w-64 text-xs font-medium text-stone-600">
-                <span>Subtotal</span>
-                <span>${(order.subtotal || 0).toFixed(2)}</span>
+                <span>sub_total</span>
+                <span>${(order.sub_total || 0).toFixed(2)}</span>
               </div>
               <div className="flex justify-between w-full sm:w-64 text-xs font-medium text-stone-600">
                 <span>Shipping</span>
@@ -248,7 +248,7 @@ export default function OrderDetailPage() {
               )}
               <div className="flex justify-between w-full sm:w-64 text-base font-black text-stone-900 mt-2 pt-2 border-t border-stone-200/80">
                 <span>Total</span>
-                <span>${(order.total || order.totalPrice || 0).toFixed(2)}</span>
+                <span>${(order.total || 0).toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -275,21 +275,21 @@ export default function OrderDetailPage() {
             <h2 className="text-sm font-extrabold text-stone-900 flex items-center gap-2">
               <FiTruck className="text-stone-400" /> Shipping Address
             </h2>
-            {order.shippingAddress ? (
+            {order.shipping_address ? (
               <div className="text-xs text-stone-700 leading-relaxed font-medium">
                 <p>
                   {[
-                    (order.shippingAddress?.houseNumber || order.shippingAddress?.house) 
-                      ? `House No. ${order.shippingAddress?.houseNumber || order.shippingAddress?.house}` 
+                    (order.shipping_address?.house_number || order.shipping_address?.house) 
+                      ? `House No. ${order.shipping_address?.house_number || order.shipping_address?.house}` 
                       : null,
-                    order.shippingAddress?.street 
-                      ? `St. ${order.shippingAddress.street}` 
+                    order.shipping_address?.street 
+                      ? `St. ${order.shipping_address.street}` 
                       : null,
-                    order.shippingAddress?.village,
-                    order.shippingAddress?.commune,
-                    order.shippingAddress?.district,
-                    order.shippingAddress?.province || order.shippingAddress?.city,
-                    order.shippingAddress?.country
+                    order.shipping_address?.village,
+                    order.shipping_address?.commune,
+                    order.shipping_address?.district,
+                    order.shipping_address?.province || order.shipping_address?.city,
+                    order.shipping_address?.country
                   ].filter(Boolean).join(", ")}
                 </p> 
               </div>
@@ -317,8 +317,8 @@ export default function OrderDetailPage() {
                 <label className="block text-[11px] font-extrabold text-stone-500 uppercase tracking-wider mb-1.5">Tracking Number</label>
                 <input
                   type="text"
-                  value={trackingNumber}
-                  onChange={(e) => setTrackingNumber(e.target.value)}
+                  value={tracking_number}
+                  onChange={(e) => settracking_number(e.target.value)}
                   placeholder="e.g. 1Z9999999999999999"
                   className="w-full bg-stone-50/50 border border-stone-200 rounded-xl px-3.5 py-2 text-xs font-mono font-medium focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none transition-all text-stone-900"
                 />
@@ -327,8 +327,8 @@ export default function OrderDetailPage() {
                 <label className="block text-[11px] font-extrabold text-stone-500 uppercase tracking-wider mb-1.5">Tracking URL</label>
                 <input
                   type="url"
-                  value={trackingUrl}
-                  onChange={(e) => setTrackingUrl(e.target.value)}
+                  value={tracking_url}
+                  onChange={(e) => settracking_url(e.target.value)}
                   placeholder="https://..."
                   className="w-full bg-stone-50/50 border border-stone-200 rounded-xl px-3.5 py-2 text-xs font-medium focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none transition-all text-stone-900"
                 />
@@ -350,14 +350,14 @@ export default function OrderDetailPage() {
             <div className="text-xs space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-stone-500">Method</span>
-                <span className="font-bold text-stone-900 capitalize">{order.paymentMethod}</span>
+                <span className="font-bold text-stone-900 capitalize">{order.payment_method}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-stone-500">Status</span>
                 <span className={`font-extrabold capitalize px-2 py-0.5 rounded-full text-[10px] ${
-                  order.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-amber-50 text-amber-700 border border-amber-200/60'
+                  order.payment_status === 'paid' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-amber-50 text-amber-700 border border-amber-200/60'
                 }`}>
-                  {order.paymentStatus}
+                  {order.payment_status}
                 </span>
               </div>
             </div>

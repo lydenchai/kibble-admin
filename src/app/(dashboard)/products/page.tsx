@@ -16,7 +16,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [petTypeFilter, setPetTypeFilter] = useState("all");
+  const [pet_typeFilter, setpet_typeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -64,12 +64,12 @@ export default function ProductsPage() {
   const filteredProducts = products.filter(p => {
     const matchesSearch =
       p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.brand.toLowerCase().includes(search.toLowerCase());
+      (p.brand || '').toLowerCase().includes(search.toLowerCase());
     
-    const matchesPetType = petTypeFilter === "all" || p.petType === petTypeFilter;
-    const matchesStatus = statusFilter === "all" || (statusFilter === "active" ? p.isActive : !p.isActive);
+    const matchespet_type = pet_typeFilter === "all" || p.pet_type === pet_typeFilter;
+    const matchesStatus = statusFilter === "all" || (statusFilter === "active" ? p.is_active : !p.is_active);
 
-    return matchesSearch && matchesPetType && matchesStatus;
+    return matchesSearch && matchespet_type && matchesStatus;
   });
 
   return (
@@ -109,8 +109,8 @@ export default function ProductsPage() {
           <div className="flex items-center gap-3">
             {/* Pet Type Filter Dropdown */}
             <select
-              value={petTypeFilter}
-              onChange={(e) => setPetTypeFilter(e.target.value)}
+              value={pet_typeFilter}
+              onChange={(e) => setpet_typeFilter(e.target.value)}
               className="px-3.5 py-2.5 border border-stone-200 rounded-xl bg-white text-xs font-bold text-stone-700 focus:outline-none focus:border-stone-400 transition-colors cursor-pointer"
             >
               <option value="all">All Pet Types</option>
@@ -167,7 +167,7 @@ export default function ProductsPage() {
                           </div>
                           <div>
                             <div className="text-sm font-bold text-stone-900">{product.name}</div>
-                            <div className="text-xs text-stone-500 font-semibold">{product.brand} • {product.petType}</div>
+                            <div className="text-xs text-stone-500 font-semibold">{product.brand} • {product.pet_type}</div>
                           </div>
                         </div>
                       </td>
@@ -189,9 +189,9 @@ export default function ProductsPage() {
                       </td>
                       <td className="px-6 py-4.5 whitespace-nowrap">
                         <span className={`px-3 py-1 inline-flex text-xs font-black rounded-full ${
-                          product.isActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-rose-50 text-rose-700 border border-rose-200/60'
+                          product.is_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-rose-50 text-rose-700 border border-rose-200/60'
                         }`}>
-                          {product.isActive ? 'Active' : 'Inactive'}
+                          {product.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </td>
                       <td className="px-6 py-4.5 whitespace-nowrap text-right text-sm font-medium">
@@ -255,7 +255,7 @@ export default function ProductsPage() {
         message="Are you sure you want to delete this product? This action cannot be undone."
         confirmText="Delete Product"
         variant="danger"
-        isLoading={Boolean(isDeleting)}
+        is_loading={Boolean(isDeleting)}
       />
     </div>
   );

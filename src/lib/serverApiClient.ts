@@ -14,18 +14,18 @@ export type { ServerResponse };
 async function refreshAccessTokenAdmin(): Promise<string | null> {
   try {
     const cookieStore = await cookies();
-    const refreshToken = cookieStore.get("admin_refresh_token")?.value;
-    if (!refreshToken) return null;
+    const refresh_token = cookieStore.get("admin_refresh_token")?.value;
+    if (!refresh_token) return null;
 
     const res = await fetch(`${API_URL}/auth/refresh-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-App-Type": "admin",
-        "x-refresh-token": refreshToken,
-        Cookie: `admin_refresh_token=${refreshToken}`,
+        "x-refresh-token": refresh_token,
+        Cookie: `admin_refresh_token=${refresh_token}`,
       },
-      body: JSON.stringify({ refreshToken }),
+      body: JSON.stringify({ refresh_token }),
     });
 
     if (!res.ok) {
@@ -37,7 +37,7 @@ async function refreshAccessTokenAdmin(): Promise<string | null> {
 
     const data = await res.json();
     const newAccessToken = data.data?.accessToken;
-    const newRefreshToken = data.data?.refreshToken;
+    const newrefresh_token = data.data?.refresh_token;
 
     if (newAccessToken) {
       cookieStore.set("accessToken", newAccessToken, {
@@ -48,8 +48,8 @@ async function refreshAccessTokenAdmin(): Promise<string | null> {
         maxAge: 7 * 24 * 60 * 60,
       });
 
-      if (newRefreshToken) {
-        cookieStore.set("admin_refresh_token", newRefreshToken, {
+      if (newrefresh_token) {
+        cookieStore.set("admin_refresh_token", newrefresh_token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: "lax",
@@ -77,7 +77,7 @@ export async function serverFetch<T = any>(
   if (requireAuth && !authToken) {
     authToken = await refreshAccessTokenAdmin();
     if (!authToken) {
-      return { success: false, error: "You must be logged in to perform this action", isAuthError: true };
+      return { success: false, error: "You must be logged in to perform this action", is_auth_error: true };
     }
   }
 
@@ -112,7 +112,7 @@ export async function serverFetch<T = any>(
       const errorJson = await res.json().catch(() => ({}));
       const msg = errorJson.error?.message || errorJson.message || `Request failed with status ${res.status}`;
       const isAuth = res.status === 401 || msg.toLowerCase().includes("token") || msg.toLowerCase().includes("expired");
-      return { success: false, error: msg, isAuthError: isAuth };
+      return { success: false, error: msg, is_auth_error: isAuth };
     }
 
     if (res.status === 204) {

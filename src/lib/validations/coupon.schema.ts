@@ -14,7 +14,7 @@ export const couponSchema = z.object({
   minOrderValue: z.number().min(0, "Minimum order value cannot be negative").optional(),
   usageLimit: z.number().min(1, "Usage limit must be at least 1").nullable().optional(),
   expiryDate: z.string().min(1, "Expiry date is required"),
-  isActive: z.boolean().optional(),
+  is_active: z.boolean().optional(),
 });
 
 export type CouponInput = z.infer<typeof couponSchema>;

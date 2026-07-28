@@ -89,7 +89,7 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
       {/* Nav Menu */}
       <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
         {visibleNavItems.map((item) => {
-          const isActive =
+          const is_active =
             pathname === item.href ||
             (item.href !== "/" && pathname.startsWith(item.href));
           const Icon = item.icon as any;
@@ -101,14 +101,14 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
               className={`flex items-center gap-3 px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all ${
                 collapsed ? "justify-center px-0" : ""
               } ${
-                isActive
+                is_active
                   ? "bg-brand-50 text-brand-600 font-extrabold shadow-xs"
                   : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 font-semibold"
               }`}
             >
               <Icon
                 className={`w-5 h-5 shrink-0 transition-colors ${
-                  isActive ? "text-brand-600" : "text-stone-400 group-hover:text-stone-700"
+                  is_active ? "text-brand-600" : "text-stone-400 group-hover:text-stone-700"
                 }`}
               />
               {!collapsed && <span className="truncate">{item.name}</span>}

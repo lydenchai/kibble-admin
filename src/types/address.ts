@@ -1,13 +1,13 @@
 export interface Address {
   street?: string;
   house?: string;
-  houseNumber?: string;
+  house_number?: string;
   village?: string;
   commune?: string;
   district?: string;
   province?: string;
   city?: string;
   country?: string;
-  zipCode?: string;
-  isDefault?: boolean;
+  zip_code?: string;
+  is_default?: boolean;
 }

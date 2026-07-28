@@ -32,7 +32,7 @@ export default function SettingsPage() {
         const res = await fetchSettingsAction(token);
         if (res.success) {
           setSettings(res.data);
-        } else if (res.isAuthError) {
+        } else if (res.is_auth_error) {
           localStorage.removeItem("accessToken");
           router.push("/login");
         }
@@ -55,7 +55,7 @@ export default function SettingsPage() {
       if (res.success) {
         toast.success("Store settings updated successfully!");
         setMessage({ type: "success", text: "Store settings saved successfully!" });
-      } else if (res.isAuthError) {
+      } else if (res.is_auth_error) {
         localStorage.removeItem("accessToken");
         router.push("/login");
       } else {
@@ -130,8 +130,8 @@ export default function SettingsPage() {
               </label>
               <input
                 type="text"
-                value={settings?.storeName || ""}
-                onChange={(e) => setSettings((prev) => ({ ...(prev || {}), storeName: e.target.value }))}
+                value={settings?.store_name || ""}
+                onChange={(e) => setSettings((prev) => ({ ...(prev || {}), store_name: e.target.value }))}
                 className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
               />
             </div>
@@ -141,8 +141,8 @@ export default function SettingsPage() {
               </label>
               <input
                 type="email"
-                value={settings?.contactEmail || ""}
-                onChange={(e) => setSettings((prev) => ({ ...(prev || {}), contactEmail: e.target.value }))}
+                value={settings?.contact_email || ""}
+                onChange={(e) => setSettings((prev) => ({ ...(prev || {}), contact_email: e.target.value }))}
                 className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
               />
             </div>
@@ -166,13 +166,13 @@ export default function SettingsPage() {
             <label className="flex items-start space-x-3.5 p-4 bg-stone-50/60 hover:bg-stone-50 rounded-xl border border-stone-200/80 cursor-pointer transition-colors">
               <input
                 type="checkbox"
-                checked={settings?.paymentGateways?.abaPayEnabled ?? true}
+                checked={settings?.payment_gateways?.aba_pay_enabled ?? true}
                 onChange={(e) =>
                   setSettings((prev) => ({
                     ...(prev || {}),
-                    paymentGateways: {
-                      ...(prev?.paymentGateways || {}),
-                      abaPayEnabled: e.target.checked,
+                    payment_gateways: {
+                      ...(prev?.payment_gateways || {}),
+                      aba_pay_enabled: e.target.checked,
                     },
                   }))
                 }
@@ -192,13 +192,13 @@ export default function SettingsPage() {
             <label className="flex items-start space-x-3.5 p-4 bg-stone-50/60 hover:bg-stone-50 rounded-xl border border-stone-200/80 cursor-pointer transition-colors">
               <input
                 type="checkbox"
-                checked={settings?.paymentGateways?.stripeEnabled ?? true}
+                checked={settings?.payment_gateways?.stripe_enabled ?? true}
                 onChange={(e) =>
                   setSettings((prev) => ({
                     ...(prev || {}),
-                    paymentGateways: {
-                      ...(prev?.paymentGateways || {}),
-                      stripeEnabled: e.target.checked,
+                    payment_gateways: {
+                      ...(prev?.payment_gateways || {}),
+                      stripe_enabled: e.target.checked,
                     },
                   }))
                 }
@@ -218,13 +218,13 @@ export default function SettingsPage() {
             <label className="flex items-start space-x-3.5 p-4 bg-stone-50/60 hover:bg-stone-50 rounded-xl border border-stone-200/80 cursor-pointer transition-colors">
               <input
                 type="checkbox"
-                checked={settings?.paymentGateways?.codEnabled ?? true}
+                checked={settings?.payment_gateways?.cod_enabled ?? true}
                 onChange={(e) =>
                   setSettings((prev) => ({
                     ...(prev || {}),
-                    paymentGateways: {
-                      ...(prev?.paymentGateways || {}),
-                      codEnabled: e.target.checked,
+                    payment_gateways: {
+                      ...(prev?.payment_gateways || {}),
+                      cod_enabled: e.target.checked,
                     },
                   }))
                 }
@@ -244,13 +244,13 @@ export default function SettingsPage() {
             <label className="flex items-start space-x-3.5 p-4 bg-stone-50/60 hover:bg-stone-50 rounded-xl border border-stone-200/80 cursor-pointer transition-colors">
               <input
                 type="checkbox"
-                checked={settings?.paymentGateways?.bankTransferEnabled ?? false}
+                checked={settings?.payment_gateways?.bank_transfer_enabled ?? false}
                 onChange={(e) =>
                   setSettings((prev) => ({
                     ...(prev || {}),
-                    paymentGateways: {
-                      ...(prev?.paymentGateways || {}),
-                      bankTransferEnabled: e.target.checked,
+                    payment_gateways: {
+                      ...(prev?.payment_gateways || {}),
+                      bank_transfer_enabled: e.target.checked,
                     },
                   }))
                 }

@@ -21,7 +21,7 @@ export default function CreateCouponPage() {
     minOrderValue: "",
     expiryDate: "",
     usageLimit: "",
-    isActive: true,
+    is_active: true,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -47,7 +47,7 @@ export default function CreateCouponPage() {
       usageLimit: formData.usageLimit ? Number(formData.usageLimit) : undefined,
       expiryDate: formData.expiryDate || undefined,
       expiry: formData.expiryDate || undefined,
-      isActive: formData.isActive,
+      is_active: formData.is_active,
     };
 
     // Zod Validation
@@ -217,8 +217,8 @@ export default function CreateCouponPage() {
             <label className="flex items-start space-x-3 p-4 bg-stone-50/50 rounded-xl border border-stone-200/60 cursor-pointer">
               <input
                 type="checkbox"
-                name="isActive"
-                checked={formData.isActive}
+                name="is_active"
+                checked={formData.is_active}
                 onChange={handleChange}
                 className="mt-0.5 w-4 h-4 text-brand-600 rounded border-stone-300 focus:ring-brand-500"
               />
@@ -237,8 +237,8 @@ export default function CreateCouponPage() {
               <span className="text-xs font-bold uppercase tracking-wider opacity-80 flex items-center gap-1.5">
                 <FiTag className="w-3.5 h-3.5" /> Coupon Preview
               </span>
-              <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${formData.isActive ? 'bg-emerald-400/30 text-emerald-100 border border-emerald-300/40' : 'bg-stone-400/30 text-stone-200'}`}>
-                {formData.isActive ? 'Active' : 'Inactive'}
+              <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${formData.is_active ? 'bg-emerald-400/30 text-emerald-100 border border-emerald-300/40' : 'bg-stone-400/30 text-stone-200'}`}>
+                {formData.is_active ? 'Active' : 'Inactive'}
               </span>
             </div>
 

@@ -3,6 +3,6 @@ export interface OrderItem {
   sku: string;
   quantity: number;
   price: number;
-  subtotal: number;
+  sub_total: number;
   image: string;
 }

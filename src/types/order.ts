@@ -6,21 +6,20 @@ import { PaymentStatus } from "./enums/payment-status.enum";
 
 export interface Order {
   _id: string;
-  user: User;
+  user?: User;
   total: number;
   status: OrderStatus;
-  paymentStatus: PaymentStatus;
+  payment_status: PaymentStatus;
   createdAt: string;
   items: OrderItem[];
-  shippingAddress: Address;
+  shipping_address: Address;
   discount: number;
   tax: number;
   shipping: number;
-  subtotal: number;
-  paymentMethod?: string;
-  trackingNumber?: string;
+  sub_total: number;
+  payment_method?: string;
+  tracking_number?: string;
   courier?: string;
-  trackingUrl?: string;
-  deliveredAt?: string;
-  totalPrice?: number;
+  tracking_url?: string;
+  delivered_at?: string;
 }

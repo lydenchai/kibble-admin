@@ -1,12 +1,12 @@
 export interface DashboardData {
   metrics: {
-    totalRevenue: number;
-    activeOrdersCount: number;
-    totalCustomers: number;
-    lowStockCount: number;
+    total_revenue: number;
+    active_orders_count: number;
+    total_customers: number;
+    low_stock_count: number;
   };
-  revenueByDay: { _id: string; revenue: number; orders: number }[];
-  topProducts: { name: string; totalSold: number; revenue: number }[];
-  ordersByStatus: { _id: string; count: number }[];
-  lowStockProducts: { name: string; variants: unknown[] }[];
+  revenue_by_day: { _id: string; revenue: number; orders: number }[];
+  top_products: { name: string; totalSold: number; revenue: number }[];
+  orders_by_status: { _id: string; count: number }[];
+  low_stock_products: { name: string; variants: unknown[] }[];
 }

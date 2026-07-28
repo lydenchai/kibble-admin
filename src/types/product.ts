@@ -3,9 +3,10 @@ import { PetType } from "./enums/pet-type.enum";
 
 export interface ProductType extends MongoObjectId {
   name: string;
-  brand: string;
-  petType: PetType;
-  isActive: boolean;
+  slug: string;
+  brand?: string;
+  pet_type?: PetType;
+  is_active?: boolean;
   category: { name: string } | null;
   variants: Record<string, unknown>[];
 }

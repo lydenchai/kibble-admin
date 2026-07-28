@@ -1,4 +1,3 @@
-import { AdminUser } from "@/types/admin-user";
 import { AdminState } from "@/types/store";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -8,7 +7,7 @@ export const useAdminStore = create<AdminState>()(
     (set) => ({
       token: null,
       user: null,
-      searchQuery: "",
+      search_query: "",
       setAuth: (token, user = null) => {
         if (typeof window !== "undefined") {
           if (token) {
@@ -23,9 +22,9 @@ export const useAdminStore = create<AdminState>()(
         if (typeof window !== "undefined") {
           localStorage.removeItem("accessToken");
         }
-        set({ token: null, user: null, searchQuery: "" });
+        set({ token: null, user: null, search_query: "" });
       },
-      setSearchQuery: (query) => set({ searchQuery: query }),
+      setSearchQuery: (query) => set({ search_query: query }),
     }),
     {
       name: "kibble-admin-storage",

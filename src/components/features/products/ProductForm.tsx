@@ -25,14 +25,14 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
     brand: initialData?.brand || "",
     description: initialData?.description || "",
     category: initialData?.category?._id || initialData?.category || "",
-    petType: initialData?.petType || "dog",
-    isActive: initialData?.isActive ?? true,
+    pet_type: initialData?.pet_type || "dog",
+    is_active: initialData?.is_active ?? true,
     tags: initialData?.tags?.join(", ") || "",
-    ratingAvg: initialData?.ratingAvg || 0,
-    ratingCount: initialData?.ratingCount || 0,
+    rating_avg: initialData?.rating_avg || 0,
+    rating_count: initialData?.rating_count || 0,
     images: initialData?.images || [""],
     variants: initialData?.variants || [
-      { sku: "", price: 0, compareAtPrice: 0, stock: 0, size: "", weight: "", flavor: "" }
+      { sku: "", price: 0, compare_at_price: 0, stock: 0, size: "", weight: "", flavor: "" }
     ],
   });
 
@@ -77,7 +77,7 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
   const addVariant = () => {
     setFormData(prev => ({
       ...prev,
-      variants: [...prev.variants, { sku: "", price: 0, compareAtPrice: 0, stock: 0, size: "", weight: "", flavor: "" }]
+      variants: [...prev.variants, { sku: "", price: 0, compare_at_price: 0, stock: 0, size: "", weight: "", flavor: "" }]
     }));
   };
 
@@ -93,8 +93,8 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
     try {
       const payload = {
         ...formData,
-        ratingAvg: Number(formData.ratingAvg),
-        ratingCount: Number(formData.ratingCount),
+        rating_avg: Number(formData.rating_avg),
+        rating_count: Number(formData.rating_count),
         tags: formData.tags ? formData.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : [],
         images: formData.images.filter((i: string) => i.trim() !== "")
       };
@@ -219,8 +219,8 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
                     step="0.1"
                     min="0"
                     max="5"
-                    name="ratingAvg"
-                    value={formData.ratingAvg}
+                    name="rating_avg"
+                    value={formData.rating_avg}
                     onChange={handleChange}
                     className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
                   />
@@ -230,8 +230,8 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
                   <input
                     type="number"
                     min="0"
-                    name="ratingCount"
-                    value={formData.ratingCount}
+                    name="rating_count"
+                    value={formData.rating_count}
                     onChange={handleChange}
                     className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
                   />
@@ -257,7 +257,7 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
             </div>
             
             <div className="space-y-6">
-              {formData.variants.map((variant: { sku: string, price: number, compareAtPrice?: number, stock: number, size?: string, weight?: string, flavor?: string }, index: number) => (
+              {formData.variants.map((variant: { sku: string, price: number, compare_at_price?: number, stock: number, size?: string, weight?: string, flavor?: string }, index: number) => (
                 <div key={index} className="p-5 border border-stone-200/80 rounded-2xl bg-stone-50/30 relative">
                   {formData.variants.length > 1 && (
                     <button
@@ -279,7 +279,7 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
                     </div>
                     <div>
                       <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">Compare At ($)</label>
-                      <input type="number" min="0" step="0.01" value={variant.compareAtPrice} onChange={(e) => handleVariantChange(index, 'compareAtPrice', Number(e.target.value))} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
+                      <input type="number" min="0" step="0.01" value={variant.compare_at_price} onChange={(e) => handleVariantChange(index, 'compare_at_price', Number(e.target.value))} className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none" />
                     </div>
                     <div>
                       <label className="block text-[11px] font-extrabold uppercase text-stone-500 mb-1">Stock *</label>
@@ -314,8 +314,8 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
             <label className="flex items-center space-x-3 cursor-pointer p-3 bg-stone-50/50 rounded-xl border border-stone-200/60">
               <input
                 type="checkbox"
-                name="isActive"
-                checked={formData.isActive}
+                name="is_active"
+                checked={formData.is_active}
                 onChange={handleChange}
                 className="w-4 h-4 text-brand-600 rounded border-stone-300 focus:ring-brand-500"
               />
@@ -325,8 +325,8 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
             <div>
               <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Pet Type Target *</label>
               <select
-                name="petType"
-                value={formData.petType}
+                name="pet_type"
+                value={formData.pet_type}
                 onChange={handleChange}
                 className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium cursor-pointer"
               >

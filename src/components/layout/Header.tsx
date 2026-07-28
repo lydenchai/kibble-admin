@@ -12,12 +12,15 @@ import { HeaderProps } from "@/types/components";
 import { Toast } from "@/types/toast";
 import { useAdminStore } from "@/store/useAdminStore";
 
+import { useRouter } from "next/navigation";
+
 const FiBell = FiBellBase as React.ElementType;
 const FiExternalLink = FiExternalLinkBase as React.ElementType;
 const FiMenu = FiMenuBase as React.ElementType;
 const FiSidebar = FiSidebarBase as React.ElementType;
 
 export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderProps) {
+  const router = useRouter();
   const user = useAdminStore((s) => s.user);
   const { unreadCount, clearUnread, allNotifications } = useNotifications();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -37,6 +40,17 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
     setIsDropdownOpen((prev) => !prev);
     if (!isDropdownOpen && unreadCount > 0) {
       clearUnread();
+    }
+  };
+
+  const handleNotifClick = (notif: Toast) => {
+    setIsDropdownOpen(false);
+    if (notif.order_id) {
+      router.push(`/orders/${notif.order_id}`);
+    } else if (notif.link) {
+      router.push(notif.link);
+    } else {
+      router.push("/orders");
     }
   };
 
@@ -105,11 +119,12 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
                   allNotifications.map((notif: Toast) => (
                     <div
                       key={notif.id}
-                      className="p-3.5 hover:bg-stone-50/80 transition-colors flex gap-3 items-start cursor-pointer"
+                      onClick={() => handleNotifClick(notif)}
+                      className="p-3.5 hover:bg-stone-50/80 transition-colors flex gap-3 items-start cursor-pointer group"
                     >
-                      <div className="w-2 h-2 rounded-full bg-brand-500 mt-1.5 shrink-0" />
+                      <div className="w-2 h-2 rounded-full bg-brand-500 mt-1.5 shrink-0 group-hover:scale-125 transition-transform" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-stone-900 leading-snug">{notif.title}</p>
+                        <p className="text-xs font-bold text-stone-900 leading-snug group-hover:text-brand-600 transition-colors">{notif.title}</p>
                         <p className="text-[11px] text-stone-500 truncate mt-0.5">{notif.message}</p>
                         <span className="text-[10px] text-stone-400 font-medium mt-1 block">
                           {(notif as any).time || "Just now"}

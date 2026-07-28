@@ -190,7 +190,7 @@ export default function CategoriesPage() {
         message="Are you sure you want to delete this category? Products associated with this category might break."
         confirmText="Delete Category"
         variant="danger"
-        isLoading={Boolean(isDeleting)}
+        is_loading={Boolean(isDeleting)}
       />
     </div>
   );

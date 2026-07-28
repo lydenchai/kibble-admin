@@ -16,7 +16,7 @@ export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [orders, setOrders] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [is_loading, setis_loading] = useState(true);
   const [page, setPage] = useState(1);
   const limit = 10;
 
@@ -27,27 +27,27 @@ export default function OrdersPage() {
         const data = await fetchOrdersAction(token);
         if (data && data.success) {
           setOrders(data.data);
-        } else if (data && data.isAuthError) {
+        } else if (data && data.is_auth_error) {
           localStorage.removeItem('accessToken');
           router.push('/login');
         }
       } catch (err) {
         console.error("Failed to fetch orders", err);
       } finally {
-        setIsLoading(false);
+        setis_loading(false);
       }
     };
 
     fetchOrders();
   }, [router]);
 
-  const handleStatusChange = async (orderId: string, newStatus: string) => {
+  const handleStatusChange = async (order_id: string, newStatus: string) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const data = await updateOrderAction(orderId, { status: newStatus }, token);
+      const data = await updateOrderAction(order_id, { status: newStatus }, token);
       if (data && data.success) {
-        setOrders(orders.map(o => o._id === orderId ? { ...o, status: newStatus as Order['status'] } : o));
-      } else if (data && data.isAuthError) {
+        setOrders(orders.map(o => o._id === order_id ? { ...o, status: newStatus as Order['status'] } : o));
+      } else if (data && data.is_auth_error) {
         localStorage.removeItem('accessToken');
         router.push('/login');
       }
@@ -163,7 +163,7 @@ export default function OrdersPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-stone-100">
-              {isLoading ? (
+              {is_loading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-sm text-stone-400 font-medium">Loading orders...</td>
                 </tr>
@@ -178,7 +178,7 @@ export default function OrdersPage() {
                       <div className="text-xs text-stone-500 font-medium">{order.user?.email || "N/A"}</div>
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap text-sm font-black text-stone-900">
-                      ${(order.totalPrice || 0).toFixed(2)}
+                      ${(order.total || 0).toFixed(2)}
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap">
                       <select

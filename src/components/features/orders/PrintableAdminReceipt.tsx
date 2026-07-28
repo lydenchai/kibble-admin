@@ -2,8 +2,8 @@ import React from "react";
 import { Order } from "@/types/order";
 
 export function formatAddressString(addr: any): string {
-  if (!addr) return "Phnom Penh, Cambodia";
-  if (typeof addr === "string") return addr;
+  if (!addr) return "St. 2004, Sangkat Kakab, Khan Sen Sok, Phnom Penh, Cambodia";
+  if (typeof addr === "string" && addr.trim().length > 5) return addr;
 
   const isInvalid = (val?: string) =>
     !val ||
@@ -18,10 +18,10 @@ export function formatAddressString(addr: any): string {
   if (!isInvalid(addr.fullAddress)) return addr.fullAddress.trim();
   if (!isInvalid(addr.address)) parts.push(addr.address.trim());
 
-  const houseVal = addr.houseNumber || addr.house;
+  const houseVal = addr.house_number || addr.house;
   if (!isInvalid(houseVal)) {
     const h = houseVal.trim();
-    parts.push(h.toLowerCase().startsWith("house") || h.toLowerCase().startsWith("#") ? h : `House ${h}`);
+    parts.push(h.toLowerCase().startsWith("house") || h.toLowerCase().startsWith("#") ? h : `House No. ${h}`);
   }
 
   if (!isInvalid(addr.street)) {
@@ -38,10 +38,16 @@ export function formatAddressString(addr: any): string {
   const provVal = addr.province || addr.city || addr.state;
   if (!isInvalid(provVal)) parts.push(provVal.trim());
 
-  if (!isInvalid(addr.zipCode || addr.zip)) parts.push(addr.zipCode || addr.zip);
+  if (!isInvalid(addr.zip_code || addr.zip)) parts.push(addr.zip_code || addr.zip);
   if (!isInvalid(addr.country)) parts.push(addr.country.trim());
 
-  return parts.length > 0 ? parts.join(", ") : "Orchide Village, Sangkat Ou Baek K'am, Khan Sen Sok, Phnom Penh, Cambodia";
+  const result = parts.join(", ").trim();
+
+  if (!result || result.toLowerCase() === "cambodia" || parts.length < 2) {
+    return "St. 2004, Sangkat Kakab, Khan Sen Sok, Phnom Penh, Cambodia";
+  }
+
+  return result;
 }
 
 export function getPaymentMethodLabel(method?: string): string {
@@ -59,21 +65,21 @@ export default function PrintableAdminReceipt({ order }: { order: Order }) {
 
   const customerName =
     order.user?.name ||
-    (order.shippingAddress as any)?.fullName ||
-    (order.shippingAddress as any)?.recipientName ||
+    (order.shipping_address as any)?.fullName ||
+    (order.shipping_address as any)?.recipientName ||
     "Customer";
 
   const customerEmail =
     order.user?.email ||
-    (order.shippingAddress as any)?.email ||
+    (order.shipping_address as any)?.email ||
     null;
 
   const customerPhone =
     order.user?.phone ||
-    (order.shippingAddress as any)?.phone ||
+    (order.shipping_address as any)?.phone ||
     null;
 
-  const formattedAddress = formatAddressString(order.shippingAddress);
+  const formattedAddress = formatAddressString(order.shipping_address);
 
   return (
     <div className="hidden print:block p-8 bg-white text-stone-900 font-sans text-xs leading-normal">
@@ -84,7 +90,7 @@ export default function PrintableAdminReceipt({ order }: { order: Order }) {
             KIBBLE PET STORE
           </h1>
           <p className="text-xs font-bold text-stone-600">Official Admin Sales Receipt & Tax Invoice</p>
-          <p className="text-[11px] text-stone-500 mt-1">Phnom Penh, Cambodia • Contact: admin@kibble.com</p>
+          <p className="text-[11px] text-stone-500 mt-1">St. 2004, Phnom Penh, Cambodia • Contact: admin@kibble.com</p>
         </div>
 
         <div className="text-right">
@@ -119,10 +125,10 @@ export default function PrintableAdminReceipt({ order }: { order: Order }) {
         <div>
           <h3 className="font-extrabold text-xs uppercase tracking-wider text-stone-500 mb-1">Payment Method</h3>
           <p className="font-black text-sm text-stone-900">
-            {getPaymentMethodLabel(order.paymentMethod)}
+            {getPaymentMethodLabel(order.payment_method)}
           </p>
           <p className="text-stone-600 text-[11px] mt-1">
-            Payment Status: <span className="font-black text-stone-900 uppercase">{order.paymentStatus || "Pending"}</span>
+            Payment Status: <span className="font-black text-stone-900 uppercase">{order.payment_status || "Pending"}</span>
           </p>
         </div>
       </div>
@@ -134,7 +140,7 @@ export default function PrintableAdminReceipt({ order }: { order: Order }) {
             <th className="py-2">Item Name & SKU</th>
             <th className="py-2 text-center">Qty</th>
             <th className="py-2 text-right">Price</th>
-            <th className="py-2 text-right">Subtotal</th>
+            <th className="py-2 text-right">sub_total</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-stone-200">
@@ -158,25 +164,25 @@ export default function PrintableAdminReceipt({ order }: { order: Order }) {
         <div className="w-64 space-y-2 text-xs">
           <div className="flex justify-between text-stone-700">
             <span>Subtotal:</span>
-            <span className="font-mono font-bold">${order.subtotal.toFixed(2)}</span>
+            <span className="font-mono font-bold">${(order.sub_total ?? 0).toFixed(2)}</span>
           </div>
-          {order.discount > 0 && (
+          {(order.discount ?? 0) > 0 && (
             <div className="flex justify-between text-stone-900 font-bold">
               <span>Discount:</span>
-              <span className="font-mono">-${order.discount.toFixed(2)}</span>
+              <span className="font-mono">-${(order.discount ?? 0).toFixed(2)}</span>
             </div>
           )}
           <div className="flex justify-between text-stone-700">
             <span>Shipping:</span>
-            <span className="font-mono font-bold">${order.shipping.toFixed(2)}</span>
+            <span className="font-mono font-bold">${(order.shipping ?? 0).toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-stone-700">
             <span>Tax (8%):</span>
-            <span className="font-mono font-bold">${order.tax.toFixed(2)}</span>
+            <span className="font-mono font-bold">${(order.tax ?? 0).toFixed(2)}</span>
           </div>
           <div className="flex justify-between border-t border-stone-900 pt-2 text-sm font-black">
             <span>TOTAL PAID:</span>
-            <span className="font-mono text-base">${order.total.toFixed(2)}</span>
+            <span className="font-mono text-base">${(order.total ?? 0).toFixed(2)}</span>
           </div>
         </div>
       </div>

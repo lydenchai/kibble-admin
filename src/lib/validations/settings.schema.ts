@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 export const storeSettingsSchema = z.object({
-  storeName: z.string().min(2, "Store name must be at least 2 characters"),
-  contactEmail: z.string().email("Please enter a valid support email address"),
-  paymentGateways: z.object({
-    stripeEnabled: z.boolean().optional(),
-    codEnabled: z.boolean().optional(),
+  store_name: z.string().min(2, "Store name must be at least 2 characters"),
+  contact_email: z.string().email("Please enter a valid support email address"),
+  payment_gateways: z.object({
+    stripe_enabled: z.boolean().optional(),
+    cod_enabled: z.boolean().optional(),
   }).optional(),
 });
 

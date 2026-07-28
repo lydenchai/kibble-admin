@@ -103,7 +103,7 @@ export default function Home() {
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
-              ${data.metrics.totalRevenue.toFixed(2)}
+              ${data.metrics.total_revenue.toFixed(2)}
             </span>
             <span className="inline-flex items-center text-xs font-extrabold text-emerald-600 gap-0.5">
               <TrendingUp className="w-3.5 h-3.5" /> +12.4%
@@ -123,7 +123,7 @@ export default function Home() {
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
-              {data.metrics.activeOrdersCount}
+              {data.metrics.active_orders_count}
             </span>
             <span className="text-xs text-stone-400 font-semibold">Processing</span>
           </div>
@@ -141,7 +141,7 @@ export default function Home() {
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
-              {data.metrics.totalCustomers}
+              {data.metrics.total_customers}
             </span>
             <span className="text-xs text-stone-400 font-semibold">Verified Accounts</span>
           </div>
@@ -159,7 +159,7 @@ export default function Home() {
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-rose-600 tracking-tight">
-              {data.metrics.lowStockCount}
+              {data.metrics.low_stock_count}
             </span>
             <span className="text-xs text-rose-500 font-bold">Needs Restock</span>
           </div>
@@ -178,7 +178,7 @@ export default function Home() {
           </div>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data.revenueByDay}>
+              <AreaChart data={data.revenue_by_day}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#ea580c" stopOpacity={0.25} />
@@ -208,7 +208,7 @@ export default function Home() {
             <ResponsiveContainer width="100%" height="80%">
               <PieChart>
                 <Pie
-                  data={data.ordersByStatus}
+                  data={data.orders_by_status}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
@@ -217,7 +217,7 @@ export default function Home() {
                   dataKey="count"
                   nameKey="_id"
                 >
-                  {data.ordersByStatus.map((entry, index) => (
+                  {data.orders_by_status.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                   ))}
                 </Pie>
@@ -225,7 +225,7 @@ export default function Home() {
               </PieChart>
             </ResponsiveContainer>
             <div className="flex justify-center gap-4 flex-wrap pb-2">
-              {data.ordersByStatus.map((entry, index) => (
+              {data.orders_by_status.map((entry, index) => (
                 <div key={entry._id} className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }} />
                   <span className="text-xs font-bold text-stone-700 capitalize">{entry._id}</span>
@@ -244,7 +244,7 @@ export default function Home() {
         </div>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data.topProducts} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+            <BarChart data={data.top_products} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
               <XAxis type="number" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} />
               <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#334155', fontSize: 12 }} width={160} />

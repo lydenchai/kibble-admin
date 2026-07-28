@@ -14,9 +14,9 @@ export function proxy(request: NextRequest) {
   }
 
   // Check for our custom auth cookie
-  const isAuthenticated = request.cookies.has('is_authenticated');
+  const is_authenticated = request.cookies.has('is_authenticated');
 
-  if (!isAuthenticated) {
+  if (!is_authenticated) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);

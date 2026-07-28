@@ -24,5 +24,5 @@ export interface ConfirmModalProps {
   confirmText?: string;
   cancelText?: string;
   variant?: "danger" | "warning" | "info";
-  isLoading?: boolean;
+  is_loading?: boolean;
 }

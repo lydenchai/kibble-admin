@@ -2,8 +2,8 @@
 
 import { serverFetch } from "@/lib/serverApiClient";
 
-export async function updateOrderAction(orderId: string, updates: any, token?: string | null) {
-  return serverFetch(`/orders/${orderId}/status`, {
+export async function updateOrderAction(order_id: string, updates: any, token?: string | null) {
+  return serverFetch(`/orders/${order_id}/status`, {
     method: "PUT",
     body: JSON.stringify(updates),
     token,
@@ -23,8 +23,8 @@ export async function fetchOrdersAction(token?: string | null) {
   };
 }
 
-export async function fetchOrderByIdAction(orderId: string, token?: string | null) {
-  return serverFetch(`/orders/${orderId}`, {
+export async function fetchOrderByIdAction(order_id: string, token?: string | null) {
+  return serverFetch(`/orders/${order_id}`, {
     method: "GET",
     token,
     requireAuth: true,

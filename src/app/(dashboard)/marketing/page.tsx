@@ -136,12 +136,12 @@ export default function MarketingPage() {
                     <td className="px-6 py-4.5 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
-                          coupon.isActive
+                          coupon.is_active
                             ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60"
                             : "bg-stone-100 text-stone-600 border border-stone-200"
                         }`}
                       >
-                        {coupon.isActive ? "Active" : "Disabled"}
+                        {coupon.is_active ? "Active" : "Disabled"}
                       </span>
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap text-right text-sm font-medium">
@@ -198,7 +198,7 @@ export default function MarketingPage() {
         message="Are you sure you want to delete this coupon code? Customers will no longer be able to redeem it."
         confirmText="Delete Coupon"
         variant="danger"
-        isLoading={Boolean(isDeleting)}
+        is_loading={Boolean(isDeleting)}
       />
     </div>
   );
