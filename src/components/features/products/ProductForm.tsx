@@ -3,21 +3,38 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchCategoriesAction } from "@/actions/category.actions";
-import { FiPlus as FiPlusBase, FiTrash2 as FiTrash2Base, FiSave as FiSaveBase, FiArrowLeft as FiArrowLeftBase } from "react-icons/fi";
+import { uploadImageClient } from "@/lib/uploadClient";
+import {
+  FiPlus as FiPlusBase,
+  FiTrash2 as FiTrash2Base,
+  FiSave as FiSaveBase,
+  FiArrowLeft as FiArrowLeftBase,
+  FiUploadCloud as FiUploadCloudBase,
+  FiLoader as FiLoaderBase,
+  FiImage as FiImageBase,
+  FiStar as FiStarBase,
+} from "react-icons/fi";
 import { CategoryType } from "@/types/category";
 import { createProductAction, updateProductAction } from "@/actions/product.actions";
 import { productSchema } from "@/lib/validations/product.schema";
+import toast from "react-hot-toast";
+import Button from "@/components/ui/Button";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiTrash2 = FiTrash2Base as React.ElementType;
 const FiSave = FiSaveBase as React.ElementType;
 const FiArrowLeft = FiArrowLeftBase as React.ElementType;
+const FiUploadCloud = FiUploadCloudBase as React.ElementType;
+const FiLoader = FiLoaderBase as React.ElementType;
+const FiImage = FiImageBase as React.ElementType;
+const FiStar = FiStarBase as React.ElementType;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function ProductForm({ initialData }: { initialData?: any }) {
   const router = useRouter();
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
@@ -48,6 +65,26 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        name: initialData.name || "",
+        brand: initialData.brand || "",
+        description: initialData.description || "",
+        category: initialData.category?._id || initialData.category || "",
+        pet_type: initialData.pet_type || "",
+        is_active: initialData.is_active ?? true,
+        tags: initialData.tags?.join(", ") || "",
+        rating_avg: initialData.rating_avg || 0,
+        rating_count: initialData.rating_count || 0,
+        images: initialData.images && initialData.images.length > 0 ? initialData.images : [""],
+        variants: initialData.variants && initialData.variants.length > 0
+          ? initialData.variants
+          : [{ sku: "", price: 0, compare_at_price: 0, stock: 0, size: "", weight: "", flavor: "" }],
+      });
+    }
+  }, [initialData]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
@@ -62,10 +99,61 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
     setFormData(prev => ({ ...prev, images: newImages }));
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const fileList = Array.from(files);
+    setUploading(true);
+
+    // Instant zero-latency local blob preview
+    const localPreviews = fileList.map((file) => URL.createObjectURL(file));
+
+    setFormData((prev) => {
+      const current = prev.images.filter((img: string) => img.trim() !== "");
+      return { ...prev, images: [...current, ...localPreviews] };
+    });
+
+    const uploadedUrls: { localUrl: string; serverUrl: string }[] = [];
+
+    try {
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        const localUrl = localPreviews[i];
+        const serverUrl = await uploadImageClient(file);
+        uploadedUrls.push({ localUrl, serverUrl });
+      }
+
+      // Replace local blob URLs with permanent server URLs
+      setFormData((prev) => {
+        let updated = [...prev.images];
+        uploadedUrls.forEach(({ localUrl, serverUrl }) => {
+          updated = updated.map((img) => (img === localUrl ? serverUrl : img));
+        });
+        return { ...prev, images: updated };
+      });
+
+      toast.success(`${uploadedUrls.length} image(s) uploaded successfully!`);
+    } catch (err: any) {
+      console.error("Product image upload failed:", err);
+      toast.error(err.message || "Failed to upload product images");
+    } finally {
+      setUploading(false);
+      if (e.target) e.target.value = "";
+    }
+  };
+
   const addImage = () => setFormData(prev => ({ ...prev, images: [...prev.images, ""] }));
   const removeImage = (index: number) => {
     const newImages = formData.images.filter((_: unknown, i: number) => i !== index);
     setFormData(prev => ({ ...prev, images: newImages.length ? newImages : [""] }));
+  };
+
+  const removeImageByUrl = (url: string) => {
+    setFormData(prev => {
+      const filtered = prev.images.filter((img: string) => img !== url);
+      return { ...prev, images: filtered.length ? filtered : [""] };
+    });
   };
 
   const handleVariantChange = (index: number, field: string, value: string | number) => {
@@ -111,13 +199,16 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
 
       if (initialData?._id) {
         await updateProductAction(initialData._id, payload, token);
+        toast.success("Product updated successfully!");
       } else {
         await createProductAction(payload, token);
+        toast.success("Product created successfully!");
       }
-      
+
       router.push("/products");
       router.refresh();
     } catch (err: any) {
+      toast.error(err.message || "Failed to save product");
       setError(err.message || "An error occurred while saving the product");
     } finally {
       setSaving(false);
@@ -134,22 +225,24 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
 
       {/* Top Action Header */}
       <div className="flex items-center justify-between gap-4 border-b border-stone-200/80 pb-6">
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-xs font-bold text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
+          leftIcon={<FiArrowLeft className="w-4 h-4" />}
         >
-          <FiArrowLeft className="w-4 h-4" />
-          <span>Back to Products</span>
-        </button>
-        <button 
-          type="submit" 
-          disabled={saving}
-          className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+          Back to Products
+        </Button>
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          isLoading={saving}
+          leftIcon={<FiSave className="w-4 h-4" />}
         >
-          <FiSave className="w-4 h-4" />
-          <span>{saving ? "Saving..." : (initialData ? "Save Product Changes" : "Create New Product")}</span>
-        </button>
+          {initialData ? "Save Product Changes" : "Create New Product"}
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -255,7 +348,7 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
                 <FiPlus className="w-3.5 h-3.5" /> Add Variant
               </button>
             </div>
-            
+
             <div className="space-y-6">
               {formData.variants.map((variant: { sku: string, price: number, compare_at_price?: number, stock: number, size?: string, weight?: string, flavor?: string }, index: number) => (
                 <div key={index} className="p-5 border border-stone-200/80 rounded-2xl bg-stone-50/30 relative">
@@ -310,7 +403,7 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
         <div className="space-y-8">
           <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-6">
             <h2 className="text-lg font-extrabold text-stone-900">Organization & Visibility</h2>
-            
+
             <label className="flex items-center space-x-3 cursor-pointer p-3 bg-stone-50/50 rounded-xl border border-stone-200/60">
               <input
                 type="checkbox"
@@ -354,40 +447,116 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
             </div>
           </div>
 
-          {/* Media Images */}
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-4">
+          {/* Media Images Upload */}
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-5">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg font-extrabold text-stone-900">Product Images</h2>
-              <button
-                type="button"
-                onClick={addImage}
-                className="text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1 cursor-pointer"
-              >
-                <FiPlus className="w-3.5 h-3.5" /> Add Image URL
-              </button>
+              <div>
+                <h2 className="text-lg font-extrabold text-stone-900">Product Images</h2>
+                <p className="text-xs text-stone-400 mt-0.5">Upload product gallery photos (First image is primary)</p>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              {formData.images.map((img: string, idx: number) => (
-                <div key={idx} className="flex gap-2 items-center">
-                  <input
-                    type="url"
-                    value={img}
-                    onChange={(e) => handleImageChange(idx, e.target.value)}
-                    placeholder="https://images.unsplash.com/..."
-                    className="flex-1 px-3 py-2 bg-stone-50/50 border border-stone-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all"
-                  />
-                  {formData.images.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeImage(idx)}
-                      className="text-stone-400 hover:text-rose-600 transition-colors p-2 cursor-pointer"
-                    >
-                      <FiTrash2 className="w-4 h-4" />
-                    </button>
-                  )}
+            {/* File Upload Dropzone */}
+            <label className="border-2 border-dashed border-stone-300 hover:border-brand-500 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer bg-stone-50/50 hover:bg-brand-50/20 transition-all text-center group">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileUpload}
+                disabled={uploading}
+                className="hidden"
+              />
+              {uploading ? (
+                <div className="flex flex-col items-center gap-2 text-brand-600">
+                  <FiLoader className="w-7 h-7 animate-spin" />
+                  <span className="text-xs font-bold">Uploading Images...</span>
                 </div>
-              ))}
+              ) : (
+                <>
+                  <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                    <FiUploadCloud className="w-5 h-5" />
+                  </div>
+                  <p className="text-xs font-bold text-stone-900">
+                    Click to upload product image(s)
+                  </p>
+                  <p className="text-[11px] text-stone-400 mt-0.5">
+                    Select single or multiple files (PNG, JPG, WebP)
+                  </p>
+                </>
+              )}
+            </label>
+
+            {/* Image Gallery Grid */}
+            {formData.images.filter((img: string) => img.trim() !== "").length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                {formData.images
+                  .filter((img: string) => img.trim() !== "")
+                  .map((img: string, idx: number) => (
+                    <div
+                      key={idx}
+                      className="relative group aspect-square rounded-xl overflow-hidden border border-stone-200 bg-stone-50 shadow-2xs"
+                    >
+                      <img
+                        src={img}
+                        alt={`Product image ${idx + 1}`}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      {idx === 0 && (
+                        <span className="absolute top-2 left-2 bg-brand-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1">
+                          <FiStar className="w-3 h-3 fill-current" /> Main
+                        </span>
+                      )}
+                      <div className="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-xs">
+                        <button
+                          type="button"
+                          onClick={() => removeImageByUrl(img)}
+                          className="p-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg shadow-md transition-transform hover:scale-110 cursor-pointer"
+                          title="Remove image"
+                        >
+                          <FiTrash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            {/* External URL Fallback */}
+            <div className="pt-2">
+              <details className="text-xs text-stone-400 cursor-pointer">
+                <summary className="hover:text-stone-600 font-medium select-none flex items-center gap-1">
+                  Or manage image URLs manually
+                </summary>
+                <div className="space-y-2 mt-3">
+                  {formData.images.map((img: string, idx: number) => (
+                    <div key={idx} className="flex gap-2 items-center">
+                      <input
+                        type="url"
+                        value={img}
+                        onChange={(e) => handleImageChange(idx, e.target.value)}
+                        placeholder="https://images.unsplash.com/..."
+                        className="flex-1 px-3 py-2 bg-stone-50/50 border border-stone-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900"
+                      />
+                      {formData.images.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeImage(idx)}
+                          className="text-stone-400 hover:text-rose-600 transition-colors p-2 cursor-pointer"
+                        >
+                          <FiTrash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addImage}
+                    className="text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1 cursor-pointer mt-2"
+                  >
+                    <FiPlus className="w-3.5 h-3.5" /> Add URL Field
+                  </button>
+                </div>
+              </details>
             </div>
           </div>
         </div>

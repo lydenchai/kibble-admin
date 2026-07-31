@@ -5,6 +5,7 @@ import { Toast } from '@/types/toast';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { MdOutlineNotificationsActive } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
+import { Toaster } from 'react-hot-toast';
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
@@ -86,7 +87,47 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
     <NotificationContext.Provider value={{ addToast, unreadCount, clearUnread, allNotifications }}>
       {children}
       
-      {/* Toast Container */}
+      {/* react-hot-toast Toaster */}
+      <Toaster 
+        position="bottom-right"
+        containerStyle={{
+          top: 24,
+          bottom: 24,
+          left: 24,
+          right: 24,
+        }}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: 'rgba(255, 255, 255, 0.98)',
+            backdropFilter: 'blur(16px)',
+            color: '#0f172a',
+            padding: '14px 18px',
+            borderRadius: '14px',
+            boxShadow: '0 20px 35px -10px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06)',
+            fontSize: '14px',
+            fontWeight: 600,
+            width: '360px',
+            minWidth: '360px',
+            maxWidth: '360px',
+            overflow: 'hidden',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#ffffff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#ffffff',
+            },
+          },
+        }}
+      />
+
+      {/* SSE Order Toast Container */}
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
         {toasts.map((toast) => (
           <div

@@ -3,6 +3,7 @@
 import React from "react";
 import { FiAlertTriangle as FiAlertTriangleBase, FiX as FiXBase } from "react-icons/fi";
 import { ConfirmModalProps } from "@/types/components";
+import Button from "@/components/ui/Button";
 
 const FiAlertTriangle = FiAlertTriangleBase as React.ElementType;
 const FiX = FiXBase as React.ElementType;
@@ -68,29 +69,25 @@ export default function ConfirmModal({
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-stone-100">
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={onClose}
             disabled={is_loading}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold text-stone-600 hover:bg-stone-100 transition-colors disabled:opacity-50 cursor-pointer"
           >
             {cancelText}
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
+            variant={variant === "danger" ? "danger" : "primary"}
+            size="sm"
             onClick={handleConfirm}
-            disabled={is_loading}
-            className={`px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-xs flex items-center gap-2 cursor-pointer disabled:opacity-50 ${
-              variant === "danger"
-                ? "bg-rose-600 hover:bg-rose-700 shadow-rose-600/20"
-                : variant === "warning"
-                ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/20"
-                : "bg-brand-600 hover:bg-brand-700 shadow-brand-600/20"
-            }`}
+            isLoading={is_loading}
           >
-            {is_loading ? "Processing..." : confirmText}
-          </button>
+            {confirmText}
+          </Button>
         </div>
       </div>
     </div>

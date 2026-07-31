@@ -87,8 +87,8 @@ export default function CustomersPage() {
         </div>
 
       {/* Table Container */}
-      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
-        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40">
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden flex flex-col">
+        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40 shrink-0">
           <div className="relative w-full sm:max-w-md">
             <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
             <input
@@ -105,9 +105,9 @@ export default function CustomersPage() {
           </button>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
           <table className="min-w-full divide-y divide-stone-100">
-            <thead className="bg-stone-50/70">
+            <thead className="bg-stone-50/95 backdrop-blur-xs sticky top-0 z-10 shadow-2xs">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Customer</th>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Email Address</th>

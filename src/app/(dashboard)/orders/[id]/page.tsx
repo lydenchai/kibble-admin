@@ -7,6 +7,8 @@ import { FiArrowLeft as FiArrowLeftBase, FiPackage as FiPackageBase, FiTruck as 
 import { fetchOrderByIdAction, updateOrderAction } from "@/actions/order.actions";
 import { Order } from "@/types/order";
 import PrintableAdminReceipt from "@/components/features/orders/PrintableAdminReceipt";
+import Button from "@/components/ui/Button";
+import toast from "react-hot-toast";
 
 const FiArrowLeft = FiArrowLeftBase as React.ElementType;
 const FiPackage = FiPackageBase as React.ElementType;
@@ -58,12 +60,13 @@ export default function OrderDetailPage() {
       const data = await updateOrderAction(order._id, { status: newStatus }, token);
       if (data && data.success) {
         setOrder({ ...order, status: newStatus as Order['status'] });
+        toast.success("Order status updated successfully!");
       } else {
-        alert("Failed to update status");
+        toast.error(data.error || "Failed to update status");
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Failed to update order status", err);
-      alert("Failed to update status");
+      toast.error(err instanceof Error ? err.message : "Failed to update status");
     } finally {
       setIsUpdating(false);
     }
@@ -82,13 +85,13 @@ export default function OrderDetailPage() {
       }, token);
       if (data && data.success) {
         setOrder({ ...order, tracking_number, courier, tracking_url });
-        alert("Tracking info updated successfully!");
+        toast.success("Tracking info updated successfully!");
       } else {
-        alert("Failed to update tracking");
+        toast.error(data.error || "Failed to update tracking");
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Failed to update tracking", err);
-      alert("Failed to update tracking");
+      toast.error(err instanceof Error ? err.message : "Failed to update tracking");
     } finally {
       setIsUpdatingTracking(false);
     }
@@ -132,8 +135,10 @@ export default function OrderDetailPage() {
       <div className="p-8 max-w-6xl mx-auto space-y-8 pb-20 print:hidden">
       {/* Back button & Order Header */}
       <div className="space-y-4">
-        <Link href="/orders" className="text-xs font-bold text-stone-500 hover:text-stone-900 inline-flex items-center gap-1.5 transition-colors">
-          <FiArrowLeft className="w-3.5 h-3.5" /> Back to Orders
+        <Link href="/orders">
+          <Button variant="ghost" size="sm" leftIcon={<FiArrowLeft className="w-3.5 h-3.5" />}>
+            Back to Orders
+          </Button>
         </Link>
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200/80 pb-6">
@@ -145,6 +150,17 @@ export default function OrderDetailPage() {
               <span className={`text-[11px] font-extrabold px-3 py-1 rounded-full border ${getStatusColor(order.status)}`}>
                 {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
               </span>
+              <span
+                className={`text-[11px] font-extrabold px-3 py-1 rounded-full border ${
+                  order.payment_status === "paid"
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
+                    : order.payment_status === "refunded"
+                    ? "bg-rose-50 text-rose-700 border-rose-200/60"
+                    : "bg-amber-50 text-amber-700 border-amber-200/60"
+                }`}
+              >
+                Payment: {(order.payment_status || "pending").toUpperCase()}
+              </span>
             </div>
             <p className="text-xs sm:text-sm text-stone-500 mt-1">
               Placed on {new Date(order.createdAt).toLocaleString()}
@@ -155,24 +171,21 @@ export default function OrderDetailPage() {
             {(() => {
               const canPrint = order.status !== 'cancelled' && (order.payment_status === 'paid' || order.status === 'processing' || order.status === 'shipped' || order.status === 'delivered');
               return (
-                <button
+                <Button
                   type="button"
+                  variant="dark"
+                  size="sm"
                   onClick={() => canPrint && window.print()}
                   disabled={!canPrint}
+                  leftIcon={<FiPrinter className="w-3.5 h-3.5" />}
                   title={
                     order.status === 'cancelled'
                       ? "Cannot print receipt for cancelled orders"
                       : "Receipt print available after payment confirmation"
                   }
-                  className={`flex items-center gap-2 font-bold text-xs px-4 py-2.5 rounded-xl transition-all shrink-0 print:hidden ${
-                    canPrint
-                      ? "bg-stone-900 hover:bg-stone-800 text-white cursor-pointer shadow-xs"
-                      : "bg-stone-200 text-stone-400 cursor-not-allowed opacity-60"
-                  }`}
                 >
-                  <FiPrinter className="w-3.5 h-3.5" />
-                  <span>Print Invoice</span>
-                </button>
+                  Print Invoice
+                </Button>
               );
             })()}
 
@@ -229,7 +242,7 @@ export default function OrderDetailPage() {
             </div>
             <div className="p-6 bg-stone-50/40 border-t border-stone-100 flex flex-col gap-2 items-end">
               <div className="flex justify-between w-full sm:w-64 text-xs font-medium text-stone-600">
-                <span>sub_total</span>
+                <span>Subtotal</span>
                 <span>${(order.sub_total || 0).toFixed(2)}</span>
               </div>
               <div className="flex justify-between w-full sm:w-64 text-xs font-medium text-stone-600">

@@ -2,14 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FiSearch as FiSearchBase, FiEye as FiEyeBase, FiDownload as FiDownloadBase } from "react-icons/fi";
+import {
+  FiSearch as FiSearchBase,
+  FiEye as FiEyeBase,
+  FiDownload as FiDownloadBase,
+  FiShoppingBag as FiShoppingBagBase,
+  FiDollarSign as FiDollarSignBase,
+  FiClock as FiClockBase,
+  FiTruck as FiTruckBase,
+} from "react-icons/fi";
 import { updateOrderAction, fetchOrdersAction } from "@/actions/order.actions";
 import { Order } from "@/types/order";
 import Pagination from "@/components/ui/Pagination";
+import Button from "@/components/ui/Button";
+import toast from "react-hot-toast";
 
 const FiSearch = FiSearchBase as React.ElementType;
 const FiEye = FiEyeBase as React.ElementType;
 const FiDownload = FiDownloadBase as React.ElementType;
+const FiShoppingBag = FiShoppingBagBase as React.ElementType;
+const FiDollarSign = FiDollarSignBase as React.ElementType;
+const FiClock = FiClockBase as React.ElementType;
+const FiTruck = FiTruckBase as React.ElementType;
 
 export default function OrdersPage() {
   const router = useRouter();
@@ -47,12 +61,16 @@ export default function OrdersPage() {
       const data = await updateOrderAction(order_id, { status: newStatus }, token);
       if (data && data.success) {
         setOrders(orders.map(o => o._id === order_id ? { ...o, status: newStatus as Order['status'] } : o));
+        toast.success("Order status updated successfully!");
       } else if (data && data.is_auth_error) {
         localStorage.removeItem('accessToken');
         router.push('/login');
+      } else {
+        toast.error(data?.error || "Failed to update status");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to update order status", err);
+      toast.error(err.message || "Failed to update order status");
     }
   };
 
@@ -81,6 +99,7 @@ export default function OrdersPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    toast.success("Orders exported to CSV!");
   };
 
   const filteredOrders = orders.filter(order => {
@@ -96,26 +115,77 @@ export default function OrdersPage() {
   const total = filteredOrders.length;
   const paginatedOrders = filteredOrders.slice((page - 1) * limit, page * limit);
 
+  // Executive Stat Metrics
+  const totalOrdersCount = orders.length;
+  const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+  const pendingCount = orders.filter((o) => o.status === "pending").length;
+  const inTransitCount = orders.filter((o) => o.status === "processing" || o.status === "shipped").length;
+
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Order Management</h1>
-            <p className="text-sm sm:text-base text-stone-500 mt-1">Review customer transactions and update order fulfillment statuses</p>
-          </div>
-
-          <button
-            onClick={exportOrdersCSV}
-            className="bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl flex items-center gap-2 transition-all shadow-xs cursor-pointer shrink-0"
-          >
-            <FiDownload className="w-4 h-4" />
-            <span>Export CSV</span>
-          </button>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Order Management</h1>
+          <p className="text-sm sm:text-base text-stone-500 mt-1">Review customer transactions and update order fulfillment statuses</p>
         </div>
 
+        <Button
+          type="button"
+          variant="dark"
+          size="md"
+          onClick={exportOrdersCSV}
+          leftIcon={<FiDownload className="w-4 h-4" />}
+        >
+          Export CSV
+        </Button>
+      </div>
+
+      {/* Analytical KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+            <FiShoppingBag className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Total Orders</p>
+            <p className="text-2xl font-black text-stone-900">{totalOrdersCount}</p>
+          </div>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+            <FiDollarSign className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Gross Sales</p>
+            <p className="text-2xl font-black text-stone-900">${totalRevenue.toFixed(2)}</p>
+          </div>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold">
+            <FiClock className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Pending Action</p>
+            <p className="text-2xl font-black text-stone-900">{pendingCount}</p>
+          </div>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+            <FiTruck className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">In Transit</p>
+            <p className="text-2xl font-black text-stone-900">{inTransitCount}</p>
+          </div>
+        </div>
+      </div>
+
       {/* Table Container */}
-      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
-        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40">
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden flex flex-col">
+        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40 shrink-0">
           <div className="relative w-full sm:max-w-md">
             <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
             <input
@@ -150,9 +220,9 @@ export default function OrdersPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
           <table className="min-w-full divide-y divide-stone-100">
-            <thead className="bg-stone-50/70">
+            <thead className="bg-stone-50/95 backdrop-blur-xs sticky top-0 z-10 shadow-2xs">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Order ID</th>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Customer</th>

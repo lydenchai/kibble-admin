@@ -7,6 +7,8 @@ import { FiPlus as FiPlusBase, FiTag as FiTagBase, FiEdit as FiEditBase, FiTrash
 import { CategoryType } from "@/types/category";
 import Pagination from "@/components/ui/Pagination";
 import ConfirmModal from "@/components/ui/ConfirmModal";
+import Button from "@/components/ui/Button";
+import toast from "react-hot-toast";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiTag = FiTagBase as React.ElementType;
@@ -48,8 +50,10 @@ export default function CategoriesPage() {
       setIsDeleting(deleteTargetId);
       await deleteCategoryAction(deleteTargetId);
       setCategories(categories.filter(c => c._id !== deleteTargetId));
-    } catch (err) {
+      toast.success("Category deleted successfully!");
+    } catch (err: any) {
       console.error("Failed to delete category", err);
+      toast.error(err.message || "Failed to delete category");
     } finally {
       setIsDeleting(null);
       setDeleteTargetId(null);
@@ -69,19 +73,17 @@ export default function CategoriesPage() {
           <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Categories</h1>
           <p className="text-sm sm:text-base text-stone-500 mt-1">Organize products into pet supplies categories</p>
         </div>
-        <Link 
-          href="/categories/new"
-          className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-xs"
-        >
-          <FiPlus className="w-4.5 h-4.5" />
-          <span>Add Category</span>
+        <Link href="/categories/new">
+          <Button variant="primary" size="md" leftIcon={<FiPlus className="w-4.5 h-4.5" />}>
+            Add Category
+          </Button>
         </Link>
       </div>
 
       {/* Table Container */}
-      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden flex flex-col">
         {/* Search Bar */}
-        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40">
+        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40 shrink-0">
           <div className="relative w-full sm:max-w-md">
             <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
             <input
@@ -94,9 +96,9 @@ export default function CategoriesPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
           <table className="min-w-full divide-y divide-stone-100">
-            <thead className="bg-stone-50/70">
+            <thead className="bg-stone-50/95 backdrop-blur-xs sticky top-0 z-10 shadow-2xs">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">No.</th>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Image</th>

@@ -140,7 +140,7 @@ export default function PrintableAdminReceipt({ order }: { order: Order }) {
             <th className="py-2">Item Name & SKU</th>
             <th className="py-2 text-center">Qty</th>
             <th className="py-2 text-right">Price</th>
-            <th className="py-2 text-right">sub_total</th>
+            <th className="py-2 text-right">Subtotal</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-stone-200">

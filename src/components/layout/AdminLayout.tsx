@@ -10,7 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     const checkScreenSize = () => {
-      if (window.innerWidth <= 1440) {
+      if (window.innerWidth <= 1024) {
         setIsSidebarCollapsed(true);
       } else {
         setIsSidebarCollapsed(false);

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { loginAction } from "@/actions/auth.actions";
 import { EyeOff, Eye, Mail, Lock, ShieldCheck } from "lucide-react";
 import { loginSchema } from "@/lib/validations/auth.schema";
 import { useAdminStore } from "@/store/useAdminStore";
+import Button from "@/components/ui/Button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +16,12 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.search.includes("expired=true")) {
+      setError("Your admin session has expired. Please log in again.");
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +40,10 @@ export default function LoginPage() {
       const response = await loginAction({ email, password });
 
       if (response.success && response.data?.accessToken) {
+        if (response.data.refresh_token) {
+          localStorage.setItem("refresh_token", response.data.refresh_token);
+          localStorage.setItem("admin_refresh_token", response.data.refresh_token);
+        }
         setAuth(response.data.accessToken, response.data.user);
         router.push("/");
       } else {
@@ -138,14 +149,16 @@ export default function LoginPage() {
           </div>
 
           {/* Submit Button */}
-          <button
+          <Button
             type="submit"
-            disabled={loading}
-            className="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold rounded-xl py-3.5 text-sm shadow-md shadow-brand-600/20 hover:shadow-lg transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+            variant="primary"
+            size="lg"
+            fullWidth
+            isLoading={loading}
+            leftIcon={<ShieldCheck className="w-5 h-5" />}
           >
-            <ShieldCheck className="w-4.5 h-4.5" />
-            <span>{loading ? "Signing in..." : "Sign in to Dashboard"}</span>
-          </button>
+            Sign in to Dashboard
+          </Button>
         </form>
 
         {/* Footer info */}

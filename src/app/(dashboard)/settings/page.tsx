@@ -12,6 +12,7 @@ import {
   FiShield as FiShieldBase,
 } from "react-icons/fi";
 import toast from "react-hot-toast";
+import Button from "@/components/ui/Button";
 
 const FiSave = FiSaveBase as React.ElementType;
 const FiCreditCard = FiCreditCardBase as React.ElementType;
@@ -89,14 +90,15 @@ export default function SettingsPage() {
               Configure general store details and payment gateway integrations
             </p>
           </div>
-          <button
+          <Button
             type="submit"
-            disabled={saving}
-            className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+            variant="primary"
+            size="md"
+            isLoading={saving}
+            leftIcon={<FiSave className="w-4 h-4" />}
           >
-            <FiSave className="w-4 h-4" />
-            <span>{saving ? "Saving..." : "Save Settings"}</span>
-          </button>
+            Save Settings
+          </Button>
         </div>
 
         {message && (
@@ -119,11 +121,11 @@ export default function SettingsPage() {
             </div>
             <div>
               <h2 className="text-lg font-extrabold text-stone-900">General Information</h2>
-              <p className="text-xs text-stone-400">Primary store name and support email details</p>
+              <p className="text-xs text-stone-400">Primary store name, support email, and contact phone details</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
                 Store Name
@@ -143,6 +145,18 @@ export default function SettingsPage() {
                 type="email"
                 value={settings?.contact_email || ""}
                 onChange={(e) => setSettings((prev) => ({ ...(prev || {}), contact_email: e.target.value }))}
+                className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                Contact Phone
+              </label>
+              <input
+                type="tel"
+                placeholder="(+855) 012 345 678"
+                value={settings?.contact_phone || ""}
+                onChange={(e) => setSettings((prev) => ({ ...(prev || {}), contact_phone: e.target.value }))}
                 className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
               />
             </div>

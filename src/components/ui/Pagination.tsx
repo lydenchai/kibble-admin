@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/ui/Button";
 import { PaginationProps } from "@/types/components";
 
 export default function Pagination({
@@ -24,22 +25,24 @@ export default function Pagination({
         <span className="font-bold text-stone-900">{total}</span> {itemLabel}
       </div>
       <div className="flex items-center gap-2">
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           disabled={isFirstPage}
           onClick={() => onPageChange(page - 1)}
-          className="px-3.5 py-1.5 border border-stone-200 rounded-xl bg-white hover:bg-stone-50 disabled:opacity-40 font-bold transition-colors cursor-pointer disabled:cursor-not-allowed"
         >
           Previous
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           disabled={isLastPage}
           onClick={() => onPageChange(page + 1)}
-          className="px-3.5 py-1.5 border border-stone-200 rounded-xl bg-white hover:bg-stone-50 disabled:opacity-40 font-bold transition-colors cursor-pointer disabled:cursor-not-allowed"
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );

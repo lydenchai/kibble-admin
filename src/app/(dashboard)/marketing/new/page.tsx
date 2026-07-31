@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { createCouponAction } from "@/actions/marketing.actions";
 import { FiArrowLeft as FiArrowLeftBase, FiSave as FiSaveBase, FiTag as FiTagBase } from "react-icons/fi";
 import { couponSchema } from "@/lib/validations/coupon.schema";
+import Button from "@/components/ui/Button";
+import toast from "react-hot-toast";
 
 const FiArrowLeft = FiArrowLeftBase as React.ElementType;
 const FiSave = FiSaveBase as React.ElementType;
@@ -61,10 +63,12 @@ export default function CreateCouponPage() {
 
     try {
       await createCouponAction(payload);
+      toast.success("Promo coupon created successfully!");
       router.push("/marketing");
       router.refresh();
     } catch (err: any) {
       console.error("Failed to create coupon:", err);
+      toast.error(err.message || "Failed to create coupon");
       setError(err.message || "Failed to create coupon");
     } finally {
       setLoading(false);
@@ -88,22 +92,24 @@ export default function CreateCouponPage() {
       
       {/* Top Action Header */}
       <div className="flex items-center justify-between gap-4 border-b border-stone-200/80 pb-6">
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => router.back()}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
+          leftIcon={<FiArrowLeft className="w-4 h-4" />}
         >
-          <FiArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Marketing</span>
-        </button>
-        <button
+          Back to Marketing
+        </Button>
+        <Button
           type="submit"
-          disabled={loading}
-          className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-xs disabled:opacity-50 cursor-pointer shrink-0"
+          variant="primary"
+          size="md"
+          isLoading={loading}
+          leftIcon={<FiSave className="w-4 h-4" />}
         >
-          <FiSave className="w-4 h-4" />
-          <span>{loading ? "Creating..." : "Create Coupon"}</span>
-        </button>
+          Create Coupon
+        </Button>
       </div>
 
       {/* 2-Column Grid matching ProductForm layout */}

@@ -8,6 +8,7 @@ import { deleteProductAction, fetchProductsAction } from "@/actions/product.acti
 import Pagination from "@/components/ui/Pagination";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 import toast from "react-hot-toast";
+import Button from "@/components/ui/Button";
 
 const FiPlus = FiPlusBase as React.ElementType;
 const FiSearch = FiSearchBase as React.ElementType;
@@ -80,18 +81,16 @@ export default function ProductsPage() {
           <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Products Catalog</h1>
           <p className="text-sm sm:text-base text-stone-500 mt-1">Manage pet food, treats, and accessories inventory</p>
         </div>
-        <Link 
-          href="/products/new"
-          className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-xs"
-        >
-          <FiPlus className="w-4.5 h-4.5" />
-          <span>Add Product</span>
+        <Link href="/products/new">
+          <Button variant="primary" size="md" leftIcon={<FiPlus className="w-4.5 h-4.5" />}>
+            Add Product
+          </Button>
         </Link>
       </div>
 
       {/* Table Container */}
-      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden">
-        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40">
+      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden flex flex-col">
+        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40 shrink-0">
           <div className="relative w-full sm:max-w-md">
             <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
             <input
@@ -134,9 +133,9 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
           <table className="min-w-full divide-y divide-stone-100">
-            <thead className="bg-stone-50/70">
+            <thead className="bg-stone-50/95 backdrop-blur-xs sticky top-0 z-10 shadow-2xs">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">No.</th>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Product Info</th>
@@ -162,9 +161,17 @@ export default function ProductsPage() {
                       <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-400">{(page - 1) * limit + index + 1}</td>
                       <td className="px-6 py-4.5">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center text-stone-700 font-bold text-base shrink-0">
-                            🐾
-                          </div>
+                          {product.images && product.images[0] ? (
+                            <img
+                              src={product.images[0]}
+                              alt={product.name}
+                              className="w-10 h-10 rounded-xl object-cover border border-stone-200 shadow-2xs shrink-0 bg-stone-50"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center text-stone-700 font-bold text-base shrink-0">
+                              🐾
+                            </div>
+                          )}
                           <div>
                             <div className="text-sm font-bold text-stone-900">{product.name}</div>
                             <div className="text-xs text-stone-500 font-semibold">{product.brand} • {product.pet_type}</div>
@@ -172,14 +179,20 @@ export default function ProductsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-800">
-                        {totalStock <= 5 ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-black bg-rose-50 text-rose-700 border border-rose-200 shadow-2xs">
+                        {totalStock <= 0 ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black bg-rose-50 text-rose-700 border border-rose-200/70 shadow-2xs">
+                            🔴 Out of Stock
+                          </span>
+                        ) : totalStock <= 5 ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-50 text-amber-700 border border-amber-200/70 shadow-2xs">
                             ⚠️ Low Stock ({totalStock})
                           </span>
                         ) : (
-                          <span>{totalStock} in stock</span>
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+                            🟢 {totalStock} in stock
+                          </span>
                         )}
-                        <span className="block text-xs text-stone-400 font-medium mt-0.5">({product.variants.length} variants)</span>
+                        <span className="block text-xs text-stone-400 font-medium mt-1">({product.variants.length} variants)</span>
                       </td>
                       <td className="px-6 py-4.5 whitespace-nowrap text-sm font-semibold text-stone-700">
                         {product.category?.name || "Uncategorized"}

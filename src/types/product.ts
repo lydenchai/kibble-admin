@@ -9,4 +9,5 @@ export interface ProductType extends MongoObjectId {
   is_active?: boolean;
   category: { name: string } | null;
   variants: Record<string, unknown>[];
+  images: string[];
 }
