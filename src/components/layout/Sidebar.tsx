@@ -98,19 +98,15 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
               key={item.name}
               href={item.href}
               title={collapsed ? item.name : undefined}
-              className={`flex items-center gap-3 px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all ${
+              className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
                 collapsed ? "justify-center px-0" : ""
               } ${
                 is_active
-                  ? "bg-brand-50 text-brand-600 font-extrabold shadow-xs"
-                  : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 font-semibold"
+                  ? 'bg-brand-50 text-brand-600'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
               }`}
             >
-              <Icon
-                className={`w-5 h-5 shrink-0 transition-colors ${
-                  is_active ? "text-brand-600" : "text-stone-400 group-hover:text-stone-700"
-                }`}
-              />
+              <Icon className="w-5 h-5"/>
               {!collapsed && <span className="truncate">{item.name}</span>}
             </Link>
           );
