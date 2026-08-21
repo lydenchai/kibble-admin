@@ -99,35 +99,40 @@ export default function AuditLogsPage() {
 
   return (
     <AdminRouteGuard>
-      <div className="p-8 max-w-7xl mx-auto space-y-8">
+      <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full glass-pill bg-brand-50 text-brand-700 text-xs font-extrabold mb-2 border border-brand-100 shadow-xs">
+              <FiShield className="w-3.5 h-3.5 text-brand-600" />
+              <span>Compliance & Security</span>
+            </span>
             <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
               Security Audit Logs
             </h1>
-            <p className="text-sm sm:text-base text-stone-500 mt-1">
+            <p className="text-sm sm:text-base text-stone-500 mt-1 font-medium">
               Trace all system administrative events, resource mutations, and security audit logs
             </p>
           </div>
         </div>
 
         {/* Table Container */}
-        <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden flex flex-col">
+        <div className="glass-panel bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-white/90 overflow-hidden flex flex-col relative">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
           {/* Search Bar */}
-          <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40 shrink-0">
+          <div className="p-5 border-b border-stone-100/80 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/30 shrink-0">
             <div className="relative w-full sm:max-w-md">
-              <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
+              <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search audit logs by action, user, or details..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm font-medium text-stone-900"
+                className="w-full pl-10 pr-4 py-2.5 glass-input rounded-2xl text-xs font-bold text-stone-900 placeholder:text-stone-400 placeholder:font-normal"
               />
             </div>
 
-            <div className="flex items-center gap-2 text-xs font-bold text-stone-500 bg-stone-100 px-3.5 py-2 rounded-xl">
+            <div className="flex items-center gap-2 text-xs font-extrabold text-stone-600 glass-pill bg-white/80 px-4 py-2.5 rounded-2xl border border-stone-200/80 shadow-xs">
               <FiShield className="text-brand-600 w-4 h-4" />
               <span>Audit Logging Active</span>
             </div>
@@ -135,32 +140,32 @@ export default function AuditLogsPage() {
 
           <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
             <table className="min-w-full divide-y divide-stone-100">
-              <thead className="bg-stone-50/95 backdrop-blur-xs sticky top-0 z-10 shadow-2xs">
+              <thead className="bg-stone-50/80 backdrop-blur-md sticky top-0 z-10">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">
                     Timestamp
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">
                     Admin User
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">
                     Action
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">
                     Resource
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">
                     Details Preview
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-black text-stone-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-right text-xs font-black text-stone-400 uppercase tracking-widest">
                     Log Detail
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-stone-100">
+              <tbody className="bg-white/40 divide-y divide-stone-100/60">
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-sm text-stone-400 font-medium">
+                    <td colSpan={6} className="px-6 py-12 text-center text-xs text-stone-400 font-bold uppercase tracking-wider">
                       Loading security audit logs...
                     </td>
                   </tr>
@@ -169,22 +174,22 @@ export default function AuditLogsPage() {
                     <tr
                       key={log._id}
                       onClick={() => setSelectedLog(log)}
-                      className="hover:bg-stone-50/80 transition-colors cursor-pointer group"
+                      className="hover:bg-amber-50/30 transition-colors cursor-pointer group"
                     >
-                      <td className="px-6 py-4.5 whitespace-nowrap text-sm font-mono text-stone-500">
+                      <td className="px-6 py-4.5 whitespace-nowrap text-xs font-mono font-extrabold text-stone-500">
                         {new Date(log.createdAt).toLocaleString()}
                       </td>
                       <td className="px-6 py-4.5 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-stone-100 font-bold text-xs text-stone-700 flex items-center justify-center border border-stone-200">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black text-xs flex items-center justify-center shadow-xs border border-white/40">
                             {log.user?.name?.slice(0, 2).toUpperCase() || "SY"}
                           </div>
                           <div>
-                            <span className="text-sm font-bold text-stone-900 block leading-tight">
+                            <span className="text-xs font-black text-stone-900 block leading-tight">
                               {log.user?.name || "System Automated"}
                             </span>
                             {log.user?.email && (
-                              <span className="text-[11px] font-medium text-stone-400 block">
+                              <span className="text-[11px] font-extrabold text-stone-400 block">
                                 {log.user.email}
                               </span>
                             )}
@@ -193,7 +198,7 @@ export default function AuditLogsPage() {
                       </td>
                       <td className="px-6 py-4.5 whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-extrabold uppercase tracking-wider border ${getActionBadgeColor(
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-mono font-black uppercase tracking-wider glass-pill ${getActionBadgeColor(
                             log.action
                           )}`}
                         >

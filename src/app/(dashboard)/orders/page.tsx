@@ -142,52 +142,57 @@ export default function OrdersPage() {
 
       {/* Analytical KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-            <FiShoppingBag className="w-6 h-6" />
+        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-brand-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40">
+            <FiShoppingBag className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Total Orders</p>
-            <p className="text-2xl font-black text-stone-900">{totalOrdersCount}</p>
+            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Total Orders</p>
+            <p className="text-2xl font-black text-stone-900 tracking-tight">{totalOrdersCount}</p>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-            <FiDollarSign className="w-6 h-6" />
+        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40">
+            <FiDollarSign className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Gross Sales</p>
-            <p className="text-2xl font-black text-stone-900">${totalRevenue.toFixed(2)}</p>
+            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Gross Sales</p>
+            <p className="text-2xl font-black text-stone-900 tracking-tight">${totalRevenue.toFixed(2)}</p>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold">
-            <FiClock className="w-6 h-6" />
+        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-rose-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40">
+            <FiClock className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Pending Action</p>
-            <p className="text-2xl font-black text-stone-900">{pendingCount}</p>
+            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Pending Action</p>
+            <p className="text-2xl font-black text-stone-900 tracking-tight">{pendingCount}</p>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-            <FiTruck className="w-6 h-6" />
+        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40">
+            <FiTruck className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">In Transit</p>
-            <p className="text-2xl font-black text-stone-900">{inTransitCount}</p>
+            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">In Transit</p>
+            <p className="text-2xl font-black text-stone-900 tracking-tight">{inTransitCount}</p>
           </div>
         </div>
       </div>
 
       {/* Table Container */}
-      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden flex flex-col">
-        <div className="p-4.5 border-b border-stone-100 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/40 shrink-0">
+      <div className="glass-panel bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-white/90 overflow-hidden flex flex-col relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+        <div className="p-5 border-b border-stone-100/80 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/30 shrink-0">
           <div className="relative w-full sm:max-w-md">
-            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4.5 h-4.5" />
+            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Search orders by ID or customer..."
@@ -196,7 +201,7 @@ export default function OrdersPage() {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm font-medium text-stone-900"
+              className="w-full pl-10 pr-4 py-2.5 glass-input rounded-2xl text-xs font-bold text-stone-900 placeholder:text-stone-400 placeholder:font-normal"
             />
           </div>
 
@@ -208,7 +213,7 @@ export default function OrdersPage() {
                 setStatusFilter(e.target.value);
                 setPage(1);
               }}
-              className="px-3.5 py-2.5 border border-stone-200 rounded-xl bg-white text-xs font-bold text-stone-700 focus:outline-none focus:border-stone-400 transition-colors cursor-pointer"
+              className="px-4 py-2.5 glass-pill bg-white/80 border border-stone-200/80 rounded-2xl text-xs font-extrabold text-stone-700 focus:outline-none focus:border-brand-500 transition-all cursor-pointer shadow-xs"
             >
               <option value="all">All Order Statuses</option>
               <option value="pending">Pending</option>
@@ -222,30 +227,30 @@ export default function OrdersPage() {
 
         <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
           <table className="min-w-full divide-y divide-stone-100">
-            <thead className="bg-stone-50/95 backdrop-blur-xs sticky top-0 z-10 shadow-2xs">
+            <thead className="bg-stone-50/80 backdrop-blur-md sticky top-0 z-10">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Order ID</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Total Amount</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-4 text-right text-xs font-black text-stone-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Order ID</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Customer</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Total Amount</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Date</th>
+                <th className="px-6 py-4 text-right text-xs font-black text-stone-400 uppercase tracking-widest">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-stone-100">
+            <tbody className="bg-white/40 divide-y divide-stone-100/60">
               {is_loading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-stone-400 font-medium">Loading orders...</td>
+                  <td colSpan={6} className="px-6 py-12 text-center text-xs text-stone-400 font-bold uppercase tracking-wider">Loading orders...</td>
                 </tr>
               ) : paginatedOrders.length > 0 ? (
                 paginatedOrders.map((order) => (
-                  <tr key={order._id} className="hover:bg-stone-50/50 transition-colors">
-                    <td className="px-6 py-4.5 whitespace-nowrap text-sm font-mono font-bold text-stone-900">
+                  <tr key={order._id} className="hover:bg-amber-50/30 transition-colors">
+                    <td className="px-6 py-4.5 whitespace-nowrap text-xs font-mono font-extrabold text-stone-900">
                       #{order._id.substring(order._id.length - 6).toUpperCase()}
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap">
-                      <div className="text-sm font-bold text-stone-900">{order.user?.name || "Guest Customer"}</div>
-                      <div className="text-xs text-stone-500 font-medium">{order.user?.email || "N/A"}</div>
+                      <div className="text-sm font-black text-stone-900">{order.user?.name || "Guest Customer"}</div>
+                      <div className="text-xs text-stone-500 font-bold">{order.user?.email || "N/A"}</div>
                     </td>
                     <td className="px-6 py-4.5 whitespace-nowrap text-sm font-black text-stone-900">
                       ${(order.total || 0).toFixed(2)}

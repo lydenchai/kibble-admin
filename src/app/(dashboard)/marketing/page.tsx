@@ -171,54 +171,59 @@ export default function MarketingPage() {
       </div>
 
       {/* Stat Cards Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-2xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0">
-            <FiTag className="w-6 h-6" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-brand-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40 shrink-0">
+            <FiTag className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Active Coupons</p>
-            <h3 className="text-2xl font-black text-stone-900 mt-0.5">{metrics.active}</h3>
+            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Active Coupons</p>
+            <h3 className="text-2xl font-black text-stone-900 mt-0.5 tracking-tight">{metrics.active}</h3>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-2xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
-            <FiTrendingUp className="w-6 h-6" />
+        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40 shrink-0">
+            <FiTrendingUp className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Total Redemptions</p>
-            <h3 className="text-2xl font-black text-stone-900 mt-0.5">{metrics.redemptions}</h3>
+            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Redemptions</p>
+            <h3 className="text-2xl font-black text-stone-900 mt-0.5 tracking-tight">{metrics.redemptions}</h3>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-2xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl shrink-0">
-            <FiPercent className="w-6 h-6" />
+        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40 shrink-0">
+            <FiPercent className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Percentage Off</p>
-            <h3 className="text-2xl font-black text-stone-900 mt-0.5">{metrics.percentageCount}</h3>
+            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Percentage Off</p>
+            <h3 className="text-2xl font-black text-stone-900 mt-0.5 tracking-tight">{metrics.percentageCount}</h3>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-2xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
-            <FiClock className="w-6 h-6" />
+        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40 shrink-0">
+            <FiClock className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Expired / Disabled</p>
-            <h3 className="text-2xl font-black text-stone-900 mt-0.5">{metrics.expired}</h3>
+            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Expired / Disabled</p>
+            <h3 className="text-2xl font-black text-stone-900 mt-0.5 tracking-tight">{metrics.expired}</h3>
           </div>
         </div>
       </div>
 
       {/* Main Container */}
-      <div className="bg-white rounded-2xl shadow-xs border border-stone-200/80 overflow-hidden flex flex-col">
+      <div className="glass-panel bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-white/90 overflow-hidden flex flex-col relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
         {/* Toolbar & Filter Tabs */}
-        <div className="p-4.5 border-b border-stone-100 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-stone-50/40 shrink-0">
+        <div className="p-5 border-b border-stone-100/80 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-stone-50/30 shrink-0">
           {/* Filter Pills */}
-          <div className="flex flex-wrap gap-1.5 bg-stone-100/70 p-1 rounded-xl">
+          <div className="flex flex-wrap gap-1.5 glass-pill bg-stone-100/80 p-1.5 rounded-2xl border border-stone-200/60 shadow-xs">
             {[
               { id: "all", label: "All Coupons" },
               { id: "active", label: "Active Only" },
@@ -229,9 +234,9 @@ export default function MarketingPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
                   activeTab === tab.id
-                    ? "bg-white text-stone-900 shadow-2xs"
+                    ? "bg-white text-stone-900 shadow-xs border border-stone-200/80"
                     : "text-stone-500 hover:text-stone-900 hover:bg-white/50"
                 }`}
               >
@@ -248,7 +253,7 @@ export default function MarketingPage() {
               placeholder="Search code or type..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-white border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-xs font-medium text-stone-900"
+              className="w-full pl-10 pr-4 py-2.5 glass-input rounded-2xl text-xs font-bold text-stone-900 placeholder:text-stone-400 placeholder:font-normal"
             />
           </div>
         </div>
@@ -256,7 +261,7 @@ export default function MarketingPage() {
         {/* Table */}
         <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
           <table className="min-w-full divide-y divide-stone-100">
-            <thead className="bg-stone-50/95 backdrop-blur-xs sticky top-0 z-10 shadow-2xs">
+            <thead className="bg-stone-50/80 backdrop-blur-md sticky top-0 z-10">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
                   Coupon Code

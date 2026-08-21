@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { loginAction } from "@/actions/auth.actions";
-import { EyeOff, Eye, Mail, Lock, ShieldCheck } from "lucide-react";
+import { EyeOff, Eye, Mail, Lock, ShieldCheck, Dog } from "lucide-react";
 import { loginSchema } from "@/lib/validations/auth.schema";
 import { useAdminStore } from "@/store/useAdminStore";
 import Button from "@/components/ui/Button";
@@ -57,17 +57,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-stone-100 via-stone-50 to-amber-50/30 p-6 relative overflow-hidden font-sans">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50/40 via-stone-50 to-orange-50/20 p-6 relative overflow-hidden font-sans">
       {/* Background Decorative Ambient Glows */}
-      <div className="w-96 h-96 bg-brand-500/10 rounded-full blur-3xl absolute -top-20 -left-20 pointer-events-none" />
-      <div className="w-96 h-96 bg-amber-500/10 rounded-full blur-3xl absolute -bottom-20 -right-20 pointer-events-none" />
+      <div className="w-96 h-96 bg-amber-500/15 rounded-full blur-3xl absolute -top-20 -left-20 pointer-events-none" />
+      <div className="w-96 h-96 bg-orange-500/15 rounded-full blur-3xl absolute -bottom-20 -right-20 pointer-events-none" />
 
       {/* Login Card */}
-      <div className="max-w-md w-full bg-white/90 backdrop-blur-xl p-8 sm:p-10 rounded-3xl shadow-xl shadow-stone-900/5 border border-stone-200/80 space-y-8 relative z-10">
+      <div className="max-w-md w-full glass-panel bg-white/80 backdrop-blur-2xl p-8 sm:p-10 rounded-3xl shadow-xl border border-white/90 space-y-8 relative z-10 overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
         {/* Brand Header */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-brand-600 text-white text-2xl font-black shadow-md shadow-brand-600/20">
-            🐾
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 via-brand-500 to-orange-600 text-white text-2xl font-black shadow-lg shadow-brand-600/20 border border-white/40">
+            <Dog className="w-7 h-7 text-white" />
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
@@ -82,7 +83,7 @@ export default function LoginPage() {
         {/* Form */}
         <form className="space-y-5" onSubmit={handleSubmit}>
           {error && (
-            <div className="p-4 bg-rose-50 border border-rose-200/80 text-rose-700 text-xs font-bold rounded-2xl flex items-center gap-2">
+            <div className="p-4 glass-pill bg-rose-50/90 border border-rose-200/80 text-rose-700 text-xs font-extrabold rounded-2xl flex items-center gap-2 shadow-xs">
               <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
               <span>{error}</span>
             </div>
@@ -91,13 +92,13 @@ export default function LoginPage() {
           {/* Email Input */}
           <div>
             <label
-              className="block text-xs font-black text-stone-700 uppercase tracking-wider mb-2"
+              className="block text-xs font-black text-stone-700 uppercase tracking-widest mb-2"
               htmlFor="email-address"
             >
               Email Address
             </label>
             <div className="relative group">
-              <Mail className="w-4.5 h-4.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 group-focus-within:text-brand-600 transition-colors" />
+              <Mail className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 group-focus-within:text-brand-600 transition-colors" />
               <input
                 id="email-address"
                 name="email"

@@ -16,6 +16,7 @@ import {
 import { logoutAction } from "@/actions/auth.actions";
 import { SidebarProps } from "@/types/components";
 import { useAdminStore } from "@/store/useAdminStore";
+import { Package, Dog } from "lucide-react";
 
 const FiHome = FiHomeBase as React.ElementType;
 const FiBox = FiBoxBase as React.ElementType;
@@ -65,20 +66,23 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
     <aside
       className={`${
         collapsed ? "w-20" : "w-64"
-      } bg-white text-stone-800 flex flex-col h-screen sticky top-0 border-r border-stone-200/80 z-20 transition-all duration-300 ease-in-out print:hidden`}
+      } bg-white/80 backdrop-blur-2xl text-stone-800 flex flex-col h-screen sticky top-0 border-r border-white/90 shadow-[4px_0_24px_-10px_rgba(0,0,0,0.03)] z-20 transition-all duration-300 ease-in-out print:hidden`}
     >
+      {/* Specular sheen highlight border line */}
+      <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-white/90 via-amber-200/30 to-transparent pointer-events-none" />
+
       {/* Brand Header */}
-      <div className="h-16 flex items-center px-4 border-b border-stone-100 justify-between overflow-hidden">
+      <div className="h-16 flex items-center px-4 border-b border-stone-200/50 justify-between overflow-hidden relative">
         <Link href="/" className="flex items-center gap-3 group w-full justify-start">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-brand-600 text-white flex items-center justify-center text-base font-black shadow-xs group-hover:scale-105 transition-transform shrink-0">
-            🐾
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 via-brand-500 to-orange-600 text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-all duration-300 shrink-0 border border-white/40">
+            <Dog className="w-5 h-5 text-white" />
           </div>
           {!collapsed && (
             <div className="truncate">
               <span className="text-base font-black text-stone-900 tracking-tight block truncate">
                 Kibble Admin
               </span>
-              <span className="text-[10px] font-semibold text-stone-400 uppercase tracking-wider block -mt-0.5">
+              <span className="text-[10px] font-extrabold text-amber-600 uppercase tracking-widest block -mt-0.5">
                 {isStaff ? "Staff Workspace" : "Workspace"}
               </span>
             </div>
@@ -87,7 +91,7 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
       </div>
 
       {/* Nav Menu */}
-      <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+      <nav className="flex-1 py-4 px-3 space-y-1.5 overflow-y-auto">
         {visibleNavItems.map((item) => {
           const is_active =
             pathname === item.href ||
@@ -98,32 +102,34 @@ export default function Sidebar({ collapsed = false }: SidebarProps) {
               key={item.name}
               href={item.href}
               title={collapsed ? item.name : undefined}
-              className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+              className={`flex items-center gap-3 px-3 py-3 text-xs font-bold rounded-2xl transition-all duration-200 ${
                 collapsed ? "justify-center px-0" : ""
               } ${
                 is_active
-                  ? 'bg-brand-50 text-brand-600'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'glass-pill bg-gradient-to-r from-brand-500/10 via-amber-500/10 to-transparent text-brand-600 border border-brand-200/80 shadow-xs font-black'
+                  : 'text-stone-600 hover:bg-stone-100/80 hover:text-stone-900'
               }`}
             >
-              <Icon className="w-5 h-5"/>
-              {!collapsed && <span className="truncate">{item.name}</span>}
+              <div className={`p-1.5 rounded-xl transition-colors ${is_active ? 'bg-brand-500 text-white shadow-xs' : 'text-stone-500 group-hover:text-stone-800'}`}>
+                <Icon className="w-4 h-4"/>
+              </div>
+              {!collapsed && <span className="truncate tracking-wide">{item.name}</span>}
             </Link>
           );
         })}
       </nav>
 
       {/* Logout */}
-      <div className="p-3 border-t border-stone-100">
+      <div className="p-3 border-t border-stone-200/50">
         <button
           onClick={handleLogout}
           title={collapsed ? "Sign out" : undefined}
-          className={`flex items-center gap-3 px-3.5 py-2.5 w-full rounded-xl text-sm font-bold text-stone-500 hover:bg-rose-50 hover:text-rose-600 transition-colors cursor-pointer ${
+          className={`flex items-center gap-3 px-3.5 py-2.5 w-full rounded-2xl text-xs font-extrabold text-stone-500 hover:bg-rose-50/80 hover:text-rose-600 border border-transparent hover:border-rose-200/60 transition-all duration-200 cursor-pointer ${
             collapsed ? "justify-center px-0" : ""
           }`}
         >
-          <LogOut className="h-5 w-5 shrink-0" />
-          {!collapsed && <span>Sign out</span>}
+          <LogOut className="h-4 w-4 shrink-0" />
+          {!collapsed && <span className="uppercase tracking-wider">Sign out</span>}
         </button>
       </div>
     </aside>

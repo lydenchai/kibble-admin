@@ -55,19 +55,22 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
   };
 
   return (
-    <header className="h-16 bg-white/80 backdrop-blur-md border-b border-stone-200/80 flex items-center justify-between px-6 sticky top-0 z-10 print:hidden">
+    <header className="h-16 bg-white/70 backdrop-blur-2xl border-b border-white/90 flex items-center justify-between px-6 sticky top-0 z-10 print:hidden relative shadow-[0_4px_20px_-8px_rgba(0,0,0,0.02)]">
+      {/* Specular sheen highlight line */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-90 pointer-events-none" />
+
       {/* Sidebar Toggle Button */}
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={onToggleSidebar}
           title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition-colors cursor-pointer flex items-center justify-center border border-stone-200/60"
+          className="p-2.5 rounded-2xl text-stone-600 hover:text-stone-900 glass-pill bg-white/80 hover:bg-white transition-all duration-200 cursor-pointer flex items-center justify-center border border-white/90 shadow-xs"
         >
           {isSidebarCollapsed ? (
-            <FiMenu className="w-5 h-5" />
+            <FiMenu className="w-4 h-4" />
           ) : (
-            <FiSidebar className="w-5 h-5" />
+            <FiSidebar className="w-4 h-4" />
           )}
         </button>
       </div>
@@ -76,25 +79,25 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
       <div className="flex items-center gap-3">
         {/* Storefront Button */}
         <a
-          href="http://localhost:3001"
+          href="http://localhost:3000"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-bold rounded-full transition-colors"
+          className="hidden sm:flex items-center gap-1.5 px-4 py-2 glass-pill bg-white/80 hover:bg-brand-50 hover:text-brand-600 text-stone-700 text-xs font-extrabold rounded-full transition-all duration-200 border border-white/90 shadow-xs uppercase tracking-wider"
         >
           <span>Storefront</span>
-          <FiExternalLink className="w-3.5 h-3.5 text-stone-500" />
+          <FiExternalLink className="w-3.5 h-3.5 text-stone-400" />
         </a>
 
-        <div className="h-4 w-px bg-stone-200"></div>
+        <div className="h-4 w-px bg-stone-200/80"></div>
 
         {/* Notifications */}
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={toggleDropdown}
-            className="p-2.5 text-stone-500 hover:text-stone-800 hover:bg-stone-100 rounded-full transition-colors relative cursor-pointer"
+            className="p-2.5 text-stone-600 hover:text-stone-900 glass-pill bg-white/80 hover:bg-white rounded-full transition-all duration-200 relative cursor-pointer border border-white/90 shadow-xs"
             aria-label="Notifications"
           >
-            <FiBell className="w-5 h-5" />
+            <FiBell className="w-4 h-4" />
             {unreadCount > 0 && (
               <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white animate-pulse" />
             )}
@@ -102,17 +105,17 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
 
           {/* Notifications Dropdown */}
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-stone-100 py-3 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="px-4 pb-3 border-b border-stone-100 flex justify-between items-center">
-                <h3 className="font-extrabold text-stone-900 text-sm">Notifications</h3>
-                <span className="text-[11px] font-bold bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full">
+            <div className="absolute right-0 mt-3 w-80 sm:w-96 glass-panel bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/90 py-3 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="px-5 pb-3 border-b border-stone-100/80 flex justify-between items-center">
+                <h3 className="font-black text-stone-900 text-sm tracking-tight">Notifications</h3>
+                <span className="text-[10px] font-extrabold glass-pill bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded-full border border-brand-100">
                   {allNotifications.length} Total
                 </span>
               </div>
 
-              <div className="max-h-80 overflow-y-auto divide-y divide-stone-50">
+              <div className="max-h-80 overflow-y-auto divide-y divide-stone-100/60">
                 {allNotifications.length === 0 ? (
-                  <div className="p-6 text-center text-xs text-stone-400 font-medium">
+                  <div className="p-8 text-center text-xs text-stone-400 font-semibold">
                     No new notifications
                   </div>
                 ) : (
@@ -120,13 +123,13 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
                     <div
                       key={notif.id}
                       onClick={() => handleNotifClick(notif)}
-                      className="p-3.5 hover:bg-stone-50/80 transition-colors flex gap-3 items-start cursor-pointer group"
+                      className="p-4 hover:bg-amber-50/40 transition-colors flex gap-3 items-start cursor-pointer group"
                     >
-                      <div className="w-2 h-2 rounded-full bg-brand-500 mt-1.5 shrink-0 group-hover:scale-125 transition-transform" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-brand-500 mt-1 shrink-0 group-hover:scale-125 transition-transform shadow-xs" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-stone-900 leading-snug group-hover:text-brand-600 transition-colors">{notif.title}</p>
-                        <p className="text-[11px] text-stone-500 truncate mt-0.5">{notif.message}</p>
-                        <span className="text-[10px] text-stone-400 font-medium mt-1 block">
+                        <p className="text-xs font-black text-stone-900 leading-snug group-hover:text-brand-600 transition-colors">{notif.title}</p>
+                        <p className="text-[11px] text-stone-500 font-medium truncate mt-0.5">{notif.message}</p>
+                        <span className="text-[10px] text-stone-400 font-bold mt-1 block uppercase tracking-wider">
                           {(notif as any).time || "Just now"}
                         </span>
                       </div>
@@ -140,16 +143,16 @@ export default function Header({ onToggleSidebar, isSidebarCollapsed }: HeaderPr
 
         {/* User Role Profile Badge */}
         {user && (
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-50 border border-stone-200/80 rounded-xl">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-brand-500 to-amber-600 text-white font-black text-[10px] flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-2.5 px-3.5 py-1.5 glass-pill bg-white/80 border border-white/90 rounded-full shadow-xs">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 via-amber-500 to-orange-600 text-white font-black text-[11px] flex items-center justify-center shrink-0 shadow-xs border border-white/40">
               {user.name?.slice(0, 2).toUpperCase() || "US"}
             </div>
-            <div className="hidden md:block text-left">
-              <span className="text-xs font-bold text-stone-900 leading-none block truncate max-w-[120px]">
+            <div className="hidden md:block text-left pr-1">
+              <span className="text-xs font-black text-stone-900 leading-none block truncate max-w-[120px]">
                 {user.name}
               </span>
               <span
-                className={`text-[9px] font-extrabold uppercase tracking-wider block ${
+                className={`text-[9px] font-black uppercase tracking-widest block mt-0.5 ${
                   user.role === "admin" ? "text-purple-600" : "text-emerald-600"
                 }`}
               >
