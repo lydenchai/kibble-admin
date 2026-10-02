@@ -81,16 +81,16 @@ export default function SettingsPage() {
     <AdminRouteGuard>
       <form onSubmit={handleSave} className="p-6 sm:p-8 max-w-7xl mx-auto space-y-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200/60 pb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-6">
           <div>
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full glass-pill bg-brand-50 text-brand-700 text-xs font-extrabold mb-2 border border-brand-100 shadow-xs">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-brand-50 text-brand-700 text-xs font-semibold mb-2 border border-brand-200">
               <FiGlobe className="w-3.5 h-3.5 text-brand-600" />
               <span>Platform Administration</span>
             </span>
-            <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
               Store Settings
             </h1>
-            <p className="text-sm sm:text-base text-stone-500 mt-1 font-medium">
+            <p className="text-sm text-slate-500 mt-1 font-medium">
               Configure general store details and payment gateway integrations
             </p>
           </div>
@@ -99,7 +99,6 @@ export default function SettingsPage() {
             variant="primary"
             size="md"
             isLoading={saving}
-            className="glass-btn-primary rounded-2xl shadow-md font-extrabold text-xs uppercase tracking-wider"
             leftIcon={<FiSave className="w-4 h-4" />}
           >
             Save Settings
@@ -108,10 +107,10 @@ export default function SettingsPage() {
 
         {message && (
           <div
-            className={`p-4 rounded-2xl text-xs font-extrabold glass-pill ${
+            className={`p-3.5 rounded-lg text-xs font-semibold ${
               message.type === "success"
-                ? "bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-xs"
-                : "bg-rose-50 text-rose-700 border border-rose-200/80 shadow-xs"
+                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                : "bg-rose-50 text-rose-700 border border-rose-200"
             }`}
           >
             {message.text}
@@ -119,43 +118,42 @@ export default function SettingsPage() {
         )}
 
         {/* General Information Card */}
-        <div className="glass-panel bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-white/90 shadow-sm space-y-6 relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
-          <div className="flex items-center gap-3.5 border-b border-stone-100/80 pb-4">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40">
-              <FiGlobe className="w-5 h-5 text-white" />
+        <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 space-y-6">
+          <div className="flex items-center gap-3.5 border-b border-slate-100 pb-4">
+            <div className="w-10 h-10 rounded-lg bg-brand-50 text-brand-600 border border-brand-200 flex items-center justify-center font-bold">
+              <FiGlobe className="w-5 h-5 text-brand-600" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-stone-900 tracking-tight">General Information</h2>
-              <p className="text-xs text-stone-500 font-medium">Primary store name, support email, and contact phone details</p>
+              <h2 className="text-base font-bold text-slate-900 tracking-tight">General Information</h2>
+              <p className="text-xs text-slate-500 font-medium">Primary store name, support email, and contact phone details</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div>
-              <label className="block text-xs font-black text-stone-700 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
                 Store Name
               </label>
               <input
                 type="text"
                 value={settings?.store_name || ""}
                 onChange={(e) => setSettings((prev) => ({ ...(prev || {}), store_name: e.target.value }))}
-                className="w-full pl-4 pr-4 py-2.5 glass-input rounded-2xl text-xs font-bold text-stone-900"
+                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 focus:bg-white focus:outline-none focus:border-brand-500 transition-colors"
               />
             </div>
             <div>
-              <label className="block text-xs font-black text-stone-700 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
                 Contact Email
               </label>
               <input
                 type="email"
                 value={settings?.contact_email || ""}
                 onChange={(e) => setSettings((prev) => ({ ...(prev || {}), contact_email: e.target.value }))}
-                className="w-full pl-4 pr-4 py-2.5 glass-input rounded-2xl text-xs font-bold text-stone-900"
+                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 focus:bg-white focus:outline-none focus:border-brand-500 transition-colors"
               />
             </div>
             <div>
-              <label className="block text-xs font-black text-stone-700 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
                 Contact Phone
               </label>
               <input
@@ -163,28 +161,27 @@ export default function SettingsPage() {
                 placeholder="(+855) 012 345 678"
                 value={settings?.contact_phone || ""}
                 onChange={(e) => setSettings((prev) => ({ ...(prev || {}), contact_phone: e.target.value }))}
-                className="w-full pl-4 pr-4 py-2.5 glass-input rounded-2xl text-xs font-bold text-stone-900"
+                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 focus:bg-white focus:outline-none focus:border-brand-500 transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Payment Gateways Card */}
-        <div className="glass-panel bg-white/80 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-white/90 shadow-sm space-y-6 relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
-          <div className="flex items-center gap-3.5 border-b border-stone-100/80 pb-4">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand-500 to-amber-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40">
-              <FiCreditCard className="w-5 h-5 text-white" />
+        <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 space-y-6">
+          <div className="flex items-center gap-3.5 border-b border-slate-100 pb-4">
+            <div className="w-10 h-10 rounded-lg bg-brand-50 text-brand-600 border border-brand-200 flex items-center justify-center font-bold">
+              <FiCreditCard className="w-5 h-5 text-brand-600" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-stone-900 tracking-tight">Payment Gateways & Checkout Methods</h2>
-              <p className="text-xs text-stone-500 font-medium">Toggle active customer payment providers on storefront</p>
+              <h2 className="text-base font-bold text-slate-900 tracking-tight">Payment Gateways & Checkout Methods</h2>
+              <p className="text-xs text-slate-500 font-medium">Toggle active customer payment providers on storefront</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* ABA Pay / KHQR */}
-            <label className="flex items-start space-x-3.5 p-4 bg-stone-50/60 hover:bg-stone-50 rounded-xl border border-stone-200/80 cursor-pointer transition-colors">
+            <label className="flex items-start space-x-3.5 p-4 bg-slate-50 hover:bg-slate-100/70 rounded-lg border border-slate-200 cursor-pointer transition-colors">
               <input
                 type="checkbox"
                 checked={settings?.payment_gateways?.aba_pay_enabled ?? true}
@@ -197,20 +194,20 @@ export default function SettingsPage() {
                     },
                   }))
                 }
-                className="w-4 h-4 mt-0.5 text-brand-600 rounded border-stone-300 focus:ring-brand-500 cursor-pointer"
+                className="w-4 h-4 mt-0.5 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer"
               />
               <div>
-                <span className="text-sm font-extrabold text-stone-900 block leading-tight">
+                <span className="text-sm font-semibold text-slate-900 block leading-tight">
                   ABA Pay & KHQR Instant Checkout
                 </span>
-                <span className="text-xs text-stone-500 mt-0.5 block">
+                <span className="text-xs text-slate-500 mt-0.5 block">
                   Allow customers to scan ABA KHQR code for instant mobile banking payment.
                 </span>
               </div>
             </label>
 
             {/* Stripe Credit/Debit Card */}
-            <label className="flex items-start space-x-3.5 p-4 bg-stone-50/60 hover:bg-stone-50 rounded-xl border border-stone-200/80 cursor-pointer transition-colors">
+            <label className="flex items-start space-x-3.5 p-4 bg-slate-50 hover:bg-slate-100/70 rounded-lg border border-slate-200 cursor-pointer transition-colors">
               <input
                 type="checkbox"
                 checked={settings?.payment_gateways?.stripe_enabled ?? true}
@@ -223,20 +220,20 @@ export default function SettingsPage() {
                     },
                   }))
                 }
-                className="w-4 h-4 mt-0.5 text-brand-600 rounded border-stone-300 focus:ring-brand-500 cursor-pointer"
+                className="w-4 h-4 mt-0.5 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer"
               />
               <div>
-                <span className="text-sm font-extrabold text-stone-900 block leading-tight">
+                <span className="text-sm font-semibold text-slate-900 block leading-tight">
                   Credit / Debit Card (Stripe)
                 </span>
-                <span className="text-xs text-stone-500 mt-0.5 block">
+                <span className="text-xs text-slate-500 mt-0.5 block">
                   Accept Visa, Mastercard, American Express via Stripe checkout integration.
                 </span>
               </div>
             </label>
 
             {/* Cash on Delivery (COD) */}
-            <label className="flex items-start space-x-3.5 p-4 bg-stone-50/60 hover:bg-stone-50 rounded-xl border border-stone-200/80 cursor-pointer transition-colors">
+            <label className="flex items-start space-x-3.5 p-4 bg-slate-50 hover:bg-slate-100/70 rounded-lg border border-slate-200 cursor-pointer transition-colors">
               <input
                 type="checkbox"
                 checked={settings?.payment_gateways?.cod_enabled ?? true}
@@ -249,20 +246,20 @@ export default function SettingsPage() {
                     },
                   }))
                 }
-                className="w-4 h-4 mt-0.5 text-brand-600 rounded border-stone-300 focus:ring-brand-500 cursor-pointer"
+                className="w-4 h-4 mt-0.5 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer"
               />
               <div>
-                <span className="text-sm font-extrabold text-stone-900 block leading-tight">
+                <span className="text-sm font-semibold text-slate-900 block leading-tight">
                   Cash on Delivery (COD)
                 </span>
-                <span className="text-xs text-stone-500 mt-0.5 block">
+                <span className="text-xs text-slate-500 mt-0.5 block">
                   Allow customers to pay cash directly to the courier upon product delivery.
                 </span>
               </div>
             </label>
 
             {/* Direct Bank Wire Transfer */}
-            <label className="flex items-start space-x-3.5 p-4 bg-stone-50/60 hover:bg-stone-50 rounded-xl border border-stone-200/80 cursor-pointer transition-colors">
+            <label className="flex items-start space-x-3.5 p-4 bg-slate-50 hover:bg-slate-100/70 rounded-lg border border-slate-200 cursor-pointer transition-colors">
               <input
                 type="checkbox"
                 checked={settings?.payment_gateways?.bank_transfer_enabled ?? false}
@@ -275,13 +272,13 @@ export default function SettingsPage() {
                     },
                   }))
                 }
-                className="w-4 h-4 mt-0.5 text-brand-600 rounded border-stone-300 focus:ring-brand-500 cursor-pointer"
+                className="w-4 h-4 mt-0.5 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer"
               />
               <div>
-                <span className="text-sm font-extrabold text-stone-900 block leading-tight">
+                <span className="text-sm font-semibold text-slate-900 block leading-tight">
                   Direct Bank Wire Transfer
                 </span>
-                <span className="text-xs text-stone-500 mt-0.5 block">
+                <span className="text-xs text-slate-500 mt-0.5 block">
                   Allow manual bank wire transfer with order reference number.
                 </span>
               </div>

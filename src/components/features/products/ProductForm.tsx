@@ -506,11 +506,11 @@ export default function ProductForm({ initialData }: { initialData?: any }) {
                           <FiStar className="w-3 h-3 fill-current" /> Main
                         </span>
                       )}
-                      <div className="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-xs">
+                      <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                         <button
                           type="button"
                           onClick={() => removeImageByUrl(img)}
-                          className="p-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg shadow-md transition-transform hover:scale-110 cursor-pointer"
+                          className="p-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg transition-colors cursor-pointer"
                           title="Remove image"
                         >
                           <FiTrash2 className="w-3.5 h-3.5" />

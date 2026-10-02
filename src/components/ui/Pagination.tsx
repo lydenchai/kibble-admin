@@ -18,11 +18,11 @@ export default function Pagination({
   const isLastPage = page * limit >= total;
 
   return (
-    <div className="px-6 py-4 border-t border-stone-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-stone-50/40 text-xs">
-      <div className="text-stone-500 font-medium">
-        Showing <span className="font-bold text-stone-900">{startItem}</span> to{" "}
-        <span className="font-bold text-stone-900">{endItem}</span> of{" "}
-        <span className="font-bold text-stone-900">{total}</span> {itemLabel}
+    <div className="px-6 py-3.5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 text-xs">
+      <div className="text-slate-500 font-medium">
+        Showing <span className="font-semibold text-slate-900">{startItem}</span> to{" "}
+        <span className="font-semibold text-slate-900">{endItem}</span> of{" "}
+        <span className="font-semibold text-slate-900">{total}</span> {itemLabel}
       </div>
       <div className="flex items-center gap-2">
         <Button

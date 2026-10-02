@@ -85,13 +85,14 @@ export default function CreateCouponPage() {
 
       {/* Top Header & Action Section */} 
       {/* Title + Subtitle on Left, Save Button on Right */}
+      {/* Top Header & Action Section */} 
       <div className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Create Promo Coupon</h1>
-          <p className="text-sm text-stone-500 mt-1">Configure discount codes, usage limits, and minimum order requirements</p>
+        <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Create Promo Coupon</h1>
+        <p className="text-sm text-slate-500 mt-1">Configure discount codes, usage limits, and minimum order requirements</p>
       </div>
       
       {/* Top Action Header */}
-      <div className="flex items-center justify-between gap-4 border-b border-stone-200/80 pb-6">
+      <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <Button
           type="button"
           variant="ghost"
@@ -112,17 +113,17 @@ export default function CreateCouponPage() {
         </Button>
       </div>
 
-      {/* 2-Column Grid matching ProductForm layout */}
+      {/* 2-Column Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column (2/3 width) */}
         <div className="lg:col-span-2 space-y-8">
           {/* Card 1: Discount Configuration */}
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-6">
-            <h2 className="text-lg font-extrabold text-stone-900">Discount Configuration</h2>
+          <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 space-y-6">
+            <h2 className="text-base font-bold text-slate-900">Discount Configuration</h2>
 
             <div className="space-y-5">
               <div>
-                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Coupon Code *</label>
+                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Coupon Code *</label>
                 <input
                   type="text"
                   name="code"
@@ -130,19 +131,19 @@ export default function CreateCouponPage() {
                   placeholder="e.g. KIBBLE15"
                   value={formData.code}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-mono font-bold uppercase tracking-wider"
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-colors text-slate-900 font-mono font-bold uppercase tracking-wider"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Discount Type *</label>
+                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Discount Type *</label>
                   <select
                     name="discountType"
                     required
                     value={formData.discountType}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium cursor-pointer"
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-colors text-slate-900 font-medium cursor-pointer"
                   >
                     <option value="percentage">Percentage (%)</option>
                     <option value="fixed">Fixed Amount ($)</option>
@@ -150,7 +151,7 @@ export default function CreateCouponPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Discount Value *</label>
+                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Discount Value *</label>
                   <input
                     type="number"
                     name="value"
@@ -160,7 +161,7 @@ export default function CreateCouponPage() {
                     placeholder={formData.discountType === "percentage" ? "e.g. 15" : "e.g. 10.00"}
                     value={formData.value}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-colors text-slate-900 font-medium"
                   />
                 </div>
               </div>
@@ -168,12 +169,12 @@ export default function CreateCouponPage() {
           </div>
 
           {/* Card 2: Usage Restrictions */}
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-6">
-            <h2 className="text-lg font-extrabold text-stone-900">Usage & Expiry Restrictions</h2>
+          <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 space-y-6">
+            <h2 className="text-base font-bold text-slate-900">Usage & Expiry Restrictions</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Min. Order Value ($)</label>
+                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Min. Order Value ($)</label>
                 <input
                   type="number"
                   name="minOrderValue"
@@ -182,24 +183,24 @@ export default function CreateCouponPage() {
                   placeholder="0.00"
                   value={formData.minOrderValue}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-colors text-slate-900 font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Expiry Date *</label>
+                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Expiry Date *</label>
                 <input
                   type="date"
                   name="expiryDate"
                   required
                   value={formData.expiryDate}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium cursor-pointer"
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-colors text-slate-900 font-medium cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Usage Limit (Total)</label>
+                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Usage Limit (Total)</label>
                 <input
                   type="number"
                   name="usageLimit"
@@ -207,7 +208,7 @@ export default function CreateCouponPage() {
                   placeholder="Unlimited"
                   value={formData.usageLimit}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white transition-all text-stone-900 font-medium"
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-colors text-slate-900 font-medium"
                 />
               </div>
             </div>
@@ -217,20 +218,20 @@ export default function CreateCouponPage() {
         {/* Right Sidebar Column (1/3 width) */}
         <div className="space-y-8">
           {/* Card 3: Status & Visibility */}
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/80 shadow-xs space-y-6">
-            <h2 className="text-lg font-extrabold text-stone-900">Status & Availability</h2>
+          <div className="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 space-y-6">
+            <h2 className="text-base font-bold text-slate-900">Status & Availability</h2>
 
-            <label className="flex items-start space-x-3 p-4 bg-stone-50/50 rounded-xl border border-stone-200/60 cursor-pointer">
+            <label className="flex items-start space-x-3 p-4 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer">
               <input
                 type="checkbox"
                 name="is_active"
                 checked={formData.is_active}
                 onChange={handleChange}
-                className="mt-0.5 w-4 h-4 text-brand-600 rounded border-stone-300 focus:ring-brand-500"
+                className="mt-0.5 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer"
               />
               <div>
-                <span className="text-xs font-bold text-stone-900 block">Active Coupon Code</span>
-                <span className="text-[11px] text-stone-500 block mt-0.5">
+                <span className="text-xs font-semibold text-slate-900 block">Active Coupon Code</span>
+                <span className="text-[11px] text-slate-500 block mt-0.5">
                   Customers can immediately redeem this promo code at storefront checkout.
                 </span>
               </div>
@@ -238,21 +239,21 @@ export default function CreateCouponPage() {
           </div>
 
           {/* Card 4: Coupon Preview Card */}
-          <div className="bg-gradient-to-br from-brand-500 to-amber-600 p-6 rounded-2xl text-white shadow-md space-y-4">
+          <div className="bg-slate-900 p-6 rounded-xl text-white border border-slate-800 space-y-4 shadow-sm">
             <div className="flex justify-between items-center">
-              <span className="text-xs font-bold uppercase tracking-wider opacity-80 flex items-center gap-1.5">
-                <FiTag className="w-3.5 h-3.5" /> Coupon Preview
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                <FiTag className="w-3.5 h-3.5 text-brand-400" /> Coupon Preview
               </span>
-              <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${formData.is_active ? 'bg-emerald-400/30 text-emerald-100 border border-emerald-300/40' : 'bg-stone-400/30 text-stone-200'}`}>
+              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md border ${formData.is_active ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' : 'bg-slate-800 text-slate-400 border-slate-700'}`}>
                 {formData.is_active ? 'Active' : 'Inactive'}
               </span>
             </div>
 
             <div>
-              <p className="text-2xl font-black tracking-widest font-mono uppercase">
+              <p className="text-2xl font-bold tracking-widest font-mono uppercase text-brand-400">
                 {formData.code || "PROMO15"}
               </p>
-              <p className="text-sm font-bold opacity-90 mt-1">
+              <p className="text-sm font-semibold text-slate-200 mt-1">
                 {formData.value
                   ? formData.discountType === "percentage"
                     ? `${formData.value}% OFF Total Order`
@@ -262,7 +263,7 @@ export default function CreateCouponPage() {
             </div>
 
             {formData.minOrderValue && Number(formData.minOrderValue) > 0 && (
-              <p className="text-xs opacity-75 border-t border-white/20 pt-2">
+              <p className="text-xs text-slate-400 border-t border-slate-800 pt-2 font-medium">
                 Min. order: ${Number(formData.minOrderValue).toFixed(2)}
               </p>
             )}

@@ -79,26 +79,25 @@ export default function ProductsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full glass-pill bg-brand-50 text-brand-700 text-xs font-extrabold mb-2 border border-brand-100 shadow-xs">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-brand-50 text-brand-700 text-xs font-semibold mb-2 border border-brand-200">
             <Package className="w-3.5 h-3.5 text-brand-600" />
             <span>Inventory Management</span>
           </span>
-          <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Products Catalog</h1>
-          <p className="text-sm sm:text-base text-stone-500 mt-1 font-medium">Manage pet food, treats, and accessories inventory</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Products Catalog</h1>
+          <p className="text-sm text-slate-500 mt-1 font-medium">Manage pet food, treats, and accessories inventory</p>
         </div>
         <Link href="/products/new">
-          <Button variant="primary" size="md" className="glass-btn-primary rounded-2xl shadow-md font-extrabold text-xs uppercase tracking-wider" leftIcon={<FiPlus className="w-4 h-4" />}>
+          <Button variant="primary" size="md" leftIcon={<FiPlus className="w-4 h-4" />}>
             Add Product
           </Button>
         </Link>
       </div>
 
       {/* Table Container */}
-      <div className="glass-panel bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-white/90 overflow-hidden flex flex-col relative">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
-        <div className="p-5 border-b border-stone-100/80 flex flex-col sm:flex-row gap-4 justify-between bg-stone-50/30 shrink-0">
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden flex flex-col">
+        <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row gap-3 justify-between bg-white shrink-0">
           <div className="relative w-full sm:max-w-md">
-            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Search products by title or brand..."
@@ -107,7 +106,7 @@ export default function ProductsPage() {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-10 pr-4 py-2.5 glass-input rounded-2xl text-xs font-bold text-stone-900 placeholder:text-stone-400 placeholder:font-normal"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-brand-500 transition-colors"
             />
           </div>
 
@@ -116,7 +115,7 @@ export default function ProductsPage() {
             <select
               value={pet_typeFilter}
               onChange={(e) => setpet_typeFilter(e.target.value)}
-              className="px-4 py-2.5 glass-pill bg-white/80 border border-stone-200/80 rounded-2xl text-xs font-extrabold text-stone-700 focus:outline-none focus:border-brand-500 transition-all cursor-pointer shadow-xs"
+              className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-700 focus:bg-white focus:outline-none focus:border-brand-500 transition-colors cursor-pointer"
             >
               <option value="all">All Pet Types</option>
               <option value="dog">Dog</option>
@@ -130,7 +129,7 @@ export default function ProductsPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2.5 glass-pill bg-white/80 border border-stone-200/80 rounded-2xl text-xs font-extrabold text-stone-700 focus:outline-none focus:border-brand-500 transition-all cursor-pointer shadow-xs"
+              className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-700 focus:bg-white focus:outline-none focus:border-brand-500 transition-colors cursor-pointer"
             >
               <option value="all">All Statuses</option>
               <option value="active">Active Only</option>
@@ -140,22 +139,22 @@ export default function ProductsPage() {
         </div>
 
         <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
-          <table className="min-w-full divide-y divide-stone-100">
-            <thead className="bg-stone-50/80 backdrop-blur-md sticky top-0 z-10">
+          <table className="min-w-full divide-y divide-slate-200">
+            <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">No.</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Product Info</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Inventory</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Category</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Base Price</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-400 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-right text-xs font-black text-stone-400 uppercase tracking-widest">Actions</th>
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">No.</th>
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Product Info</th>
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Inventory</th>
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</th>
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Base Price</th>
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white/40 divide-y divide-stone-100/60">
+            <tbody className="bg-white divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-xs text-stone-400 font-bold tracking-wider uppercase">Loading catalog...</td>
+                  <td colSpan={7} className="px-6 py-12 text-center text-xs text-slate-400 font-semibold tracking-wider uppercase">Loading catalog...</td>
                 </tr>
               ) : filteredProducts.length > 0 ? (
                 filteredProducts.map((product, index) => {
@@ -163,71 +162,71 @@ export default function ProductsPage() {
                   const basePrice = product.variants.length > 0 ? (product.variants[0].price as number) : 0;
                   
                   return (
-                    <tr key={product._id} className="hover:bg-amber-50/30 transition-colors">
-                      <td className="px-6 py-4.5 whitespace-nowrap text-xs font-extrabold text-stone-400">{(page - 1) * limit + index + 1}</td>
-                      <td className="px-6 py-4.5">
-                        <div className="flex items-center gap-3.5">
+                    <tr key={product._id} className="hover:bg-slate-50/70 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-slate-400">{(page - 1) * limit + index + 1}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
                           {product.images && product.images[0] ? (
                             <img
                               src={product.images[0]}
                               alt=""
-                              className="w-11 h-11 rounded-2xl object-cover border border-white/90 shadow-xs shrink-0 bg-stone-50"
+                              className="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0 bg-slate-50"
                             />
                           ) : (
-                            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-stone-100 to-amber-50 border border-stone-200/80 flex items-center justify-center text-stone-400 shrink-0 shadow-2xs">
-                              <Package className="w-5 h-5 text-stone-400" />
+                            <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 shrink-0">
+                              <Package className="w-5 h-5 text-slate-400" />
                             </div>
                           )}
                           <div>
-                            <div className="text-sm font-black text-stone-900 tracking-tight">{product.name}</div>
-                            <div className="text-xs text-stone-500 font-extrabold capitalize">{product.brand} • {product.pet_type}</div>
+                            <div className="text-sm font-semibold text-slate-900">{product.name}</div>
+                            <div className="text-xs text-slate-500 capitalize">{product.brand} • {product.pet_type}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4.5 whitespace-nowrap text-sm font-bold text-stone-800">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                         {totalStock <= 0 ? (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black glass-pill bg-rose-50 text-rose-700 border border-rose-200/80 shadow-2xs">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
                             <XCircle className="w-3.5 h-3.5 text-rose-600" />
                             <span>Out of Stock</span>
                           </span>
                         ) : totalStock <= 5 ? (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black glass-pill bg-amber-50 text-amber-700 border border-amber-200/80 shadow-2xs">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
                             <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
                             <span>Low Stock ({totalStock})</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black glass-pill bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                             <span>{totalStock} in stock</span>
                           </span>
                         )}
-                        <span className="block text-[11px] text-stone-400 font-bold mt-1">({product.variants.length} variants)</span>
+                        <span className="block text-[11px] text-slate-400 font-medium mt-0.5">({product.variants.length} variants)</span>
                       </td>
-                      <td className="px-6 py-4.5 whitespace-nowrap text-xs font-extrabold text-stone-700">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-slate-700">
                         {product.category?.name || "Uncategorized"}
                       </td>
-                      <td className="px-6 py-4.5 whitespace-nowrap text-sm font-black text-stone-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">
                         ${basePrice.toFixed(2)}
                       </td>
-                      <td className="px-6 py-4.5 whitespace-nowrap">
-                        <span className={`px-3 py-1 inline-flex text-xs font-black rounded-full glass-pill ${
-                          product.is_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/80' : 'bg-rose-50 text-rose-700 border border-rose-200/80'
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2.5 py-0.5 inline-flex text-xs font-medium rounded-md border ${
+                          product.is_active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
                         }`}>
                           {product.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </td>
-                      <td className="px-6 py-4.5 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex justify-end gap-2">
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex justify-end gap-1.5">
                           <Link
                             href={`/products/${product._id}`}
-                            className="p-2 text-stone-400 hover:text-brand-600 glass-pill bg-white/80 hover:bg-brand-50 rounded-xl transition-all cursor-pointer border border-stone-200/60 shadow-xs"
+                            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                             title="Edit Product"
                           >
                             <FiEdit size={16} />
                           </Link>
                           <button
                             onClick={() => setDeleteTargetId(product._id)}
-                            className="p-2 text-stone-400 hover:text-rose-600 glass-pill bg-white/80 hover:bg-rose-50 rounded-xl transition-all cursor-pointer border border-stone-200/60 shadow-xs"
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                             title="Delete Product"
                             disabled={isDeleting === product._id}
                           >
@@ -240,15 +239,17 @@ export default function ProductsPage() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-6 py-16 text-center text-stone-400">
+                  <td colSpan={7} className="px-6 py-16 text-center text-slate-400">
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-14 h-14 glass-panel bg-stone-50 rounded-3xl flex items-center justify-center mb-3 text-stone-400 border border-stone-200/80 shadow-xs">
-                        <Search className="w-6 h-6 text-stone-400" />
+                      <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-3 text-slate-400">
+                        <Search className="w-6 h-6 text-slate-400" />
                       </div>
-                      <p className="text-base font-black text-stone-900">No products found</p>
-                      <p className="text-xs text-stone-400 mt-0.5 mb-5 font-medium">No products match your search and filter criteria.</p>
-                      <Link href="/products/new" className="px-5 py-2.5 glass-btn-primary text-white text-xs font-black rounded-2xl shadow-md uppercase tracking-wider">
-                        Add New Product
+                      <p className="text-sm font-semibold text-slate-900">No products found</p>
+                      <p className="text-xs text-slate-400 mt-0.5 mb-4">No products match your search and filter criteria.</p>
+                      <Link href="/products/new">
+                        <Button variant="primary" size="sm">
+                          Add New Product
+                        </Button>
                       </Link>
                     </div>
                   </td>

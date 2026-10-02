@@ -172,58 +172,53 @@ export default function MarketingPage() {
 
       {/* Stat Cards Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-brand-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40 shrink-0">
-            <FiTag className="w-6 h-6 text-white" />
+        <div className="bg-white p-5 rounded-xl border border-slate-200 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center font-bold shrink-0">
+            <FiTag className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Active Coupons</p>
-            <h3 className="text-2xl font-black text-stone-900 mt-0.5 tracking-tight">{metrics.active}</h3>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Coupons</p>
+            <h3 className="text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">{metrics.active}</h3>
           </div>
         </div>
 
-        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40 shrink-0">
-            <FiTrendingUp className="w-6 h-6 text-white" />
+        <div className="bg-white p-5 rounded-xl border border-slate-200 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center font-bold shrink-0">
+            <FiTrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Redemptions</p>
-            <h3 className="text-2xl font-black text-stone-900 mt-0.5 tracking-tight">{metrics.redemptions}</h3>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Redemptions</p>
+            <h3 className="text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">{metrics.redemptions}</h3>
           </div>
         </div>
 
-        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40 shrink-0">
-            <FiPercent className="w-6 h-6 text-white" />
+        <div className="bg-white p-5 rounded-xl border border-slate-200 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center font-bold shrink-0">
+            <FiPercent className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Percentage Off</p>
-            <h3 className="text-2xl font-black text-stone-900 mt-0.5 tracking-tight">{metrics.percentageCount}</h3>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Percentage Off</p>
+            <h3 className="text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">{metrics.percentageCount}</h3>
           </div>
         </div>
 
-        <div className="glass-card bg-white/80 backdrop-blur-xl p-5 rounded-3xl border border-white/90 shadow-sm flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 text-white flex items-center justify-center font-bold shadow-md border border-white/40 shrink-0">
-            <FiClock className="w-6 h-6 text-white" />
+        <div className="bg-white p-5 rounded-xl border border-slate-200 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center font-bold shrink-0">
+            <FiClock className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Expired / Disabled</p>
-            <h3 className="text-2xl font-black text-stone-900 mt-0.5 tracking-tight">{metrics.expired}</h3>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Expired / Disabled</p>
+            <h3 className="text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">{metrics.expired}</h3>
           </div>
         </div>
       </div>
 
       {/* Main Container */}
-      <div className="glass-panel bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-white/90 overflow-hidden flex flex-col relative">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none" />
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden flex flex-col">
         {/* Toolbar & Filter Tabs */}
-        <div className="p-5 border-b border-stone-100/80 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-stone-50/30 shrink-0">
+        <div className="p-4 border-b border-slate-200 flex flex-col md:flex-row gap-3 justify-between items-start md:items-center bg-white shrink-0">
           {/* Filter Pills */}
-          <div className="flex flex-wrap gap-1.5 glass-pill bg-stone-100/80 p-1.5 rounded-2xl border border-stone-200/60 shadow-xs">
+          <div className="flex flex-wrap gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
             {[
               { id: "all", label: "All Coupons" },
               { id: "active", label: "Active Only" },
@@ -234,10 +229,10 @@ export default function MarketingPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   activeTab === tab.id
-                    ? "bg-white text-stone-900 shadow-xs border border-stone-200/80"
-                    : "text-stone-500 hover:text-stone-900 hover:bg-white/50"
+                    ? "bg-white text-slate-900 shadow-xs border border-slate-200"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {tab.label}
@@ -247,43 +242,43 @@ export default function MarketingPage() {
 
           {/* Search Bar */}
           <div className="relative w-full md:w-72">
-            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Search code or type..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 glass-input rounded-2xl text-xs font-bold text-stone-900 placeholder:text-stone-400 placeholder:font-normal"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-brand-500 transition-colors"
             />
           </div>
         </div>
 
         {/* Table */}
         <div className="overflow-auto scroll-smooth max-h-[calc(100vh-390px)] min-h-[250px]">
-          <table className="min-w-full divide-y divide-stone-100">
-            <thead className="bg-stone-50/80 backdrop-blur-md sticky top-0 z-10">
+          <table className="min-w-full divide-y divide-slate-200">
+            <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Coupon Code
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Discount Value
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Usage Progress
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Expiry Date
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-black text-stone-500 uppercase tracking-wider">
+                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-black text-stone-500 uppercase tracking-wider">
+                <th className="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-stone-100">
+            <tbody className="bg-white divide-y divide-slate-100">
               {loading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-sm text-stone-400 font-medium">

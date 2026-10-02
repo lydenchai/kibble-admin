@@ -24,26 +24,26 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white shadow-md shadow-brand-500/20 hover:shadow-lg hover:shadow-brand-500/30 border border-brand-500/30 active:scale-[0.98]",
+    "bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white border border-brand-600/30",
   secondary:
-    "bg-stone-100 hover:bg-stone-200/90 text-stone-800 border border-stone-200/80 shadow-2xs hover:shadow-xs active:scale-[0.98]",
+    "bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 border border-slate-300",
   outline:
-    "bg-white/90 hover:bg-stone-50 text-stone-700 border border-stone-300/80 shadow-2xs hover:border-stone-400 active:scale-[0.98]",
+    "bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 border border-slate-300",
   ghost:
-    "bg-transparent text-stone-600 hover:bg-stone-100 hover:text-stone-900 active:scale-[0.98]",
+    "bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900",
   danger:
-    "bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-md shadow-rose-500/20 hover:shadow-lg hover:shadow-rose-500/30 border border-rose-500/30 active:scale-[0.98]",
+    "bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white border border-rose-700",
   success:
-    "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/30 border border-emerald-500/30 active:scale-[0.98]",
+    "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white border border-emerald-700",
   dark:
-    "bg-stone-900 hover:bg-stone-800 text-white shadow-md shadow-stone-900/20 hover:shadow-lg border border-stone-800 active:scale-[0.98]",
+    "bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white border border-slate-950",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  xs: "px-2.5 py-1 text-xs gap-1 rounded-lg font-medium",
-  sm: "px-3.5 py-1.5 text-xs gap-1.5 rounded-xl font-semibold",
-  md: "px-4 py-2.5 text-sm gap-2 rounded-xl font-semibold",
-  lg: "px-5.5 py-3 text-base gap-2.5 rounded-2xl font-bold",
+  xs: "px-2.5 py-1 text-xs gap-1 rounded-md font-medium",
+  sm: "px-3 py-1.5 text-xs gap-1.5 rounded-lg font-semibold",
+  md: "px-4 py-2 text-sm gap-2 rounded-lg font-semibold",
+  lg: "px-5 py-2.5 text-base gap-2.5 rounded-lg font-semibold",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
